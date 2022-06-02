@@ -4,6 +4,7 @@
   "description": "Common types, patterns and utilities for TypeScript projects.",
   "main": "src/index.ts",
   "scripts": {
+    "doc": "typedoc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/mantlebee/ts-core/issues"
   },
-  "homepage": "https://github.com/mantlebee/ts-core#readme"
+  "homepage": "https://github.com/mantlebee/ts-core#readme",
+  "devDependencies": {
+    "typedoc": "0.22.17"
+  }
 }
