@@ -1,0 +1,24 @@
+{
+  "name": "ts-core",
+  "version": "1.0.0",
+  "description": "Common types, patterns and utilities for TypeScript projects.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mantlebee/ts-core.git"
+  },
+  "keywords": [
+    "typescript",
+    "common",
+    "utilities"
+  ],
+  "author": "MantleBee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mantlebee/ts-core/issues"
+  },
+  "homepage": "https://github.com/mantlebee/ts-core#readme"
+}
