@@ -22,10 +22,7 @@ export class Builder<T> implements IBuilder<T> {
 
   /** @inheritdoc */
   public create(): T {
-    if (debug.isEnabled) {
-      return this._factory.createDebug();
-    } else {
-      return this._factory.createRelease();
-    }
+    if (debug.isEnabled) return this._factory.createDebug();
+    else return this._factory.createRelease();
   }
 }
