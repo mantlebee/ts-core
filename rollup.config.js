@@ -1,10 +1,22 @@
+import path from "path";
+
+import alias from "@rollup/plugin-alias";
+import cleaner from "rollup-plugin-cleaner";
 import typescript from '@rollup/plugin-typescript';
+
+const outDir = "dist"
 
 export default {
     input: 'src/index.ts',
     output: {
-        dir: 'dist',
-        format: 'cjs'
+        dir: outDir,
+        format: "es",
     },
-    plugins: [typescript()]
+    plugins: [
+        cleaner({ targets: [outDir] }),
+        alias({
+            resolve: [".ts"],
+            entries: { "@/": path.resolve(__dirname, "src/") }
+        }),
+        typescript()]
 };

@@ -3,17 +3,20 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "dist/src",
+    "esModuleInterop": true,
     "experimentalDecorators": true,
+    "importHelpers": true,
+    "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
-    "outDir": "dist",
-    "sourceMap": true,
-    "strict": true,
-    "target": "esnext",
+    "outDir": "dist/src",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "src/**/*.spec.ts"]
