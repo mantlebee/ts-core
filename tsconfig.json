@@ -8,7 +8,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "jsx": "preserve",
-    "module": "esnext",
+    "module": "ES6",
     "moduleResolution": "node",
     "outDir": "dist/src",
     "paths": {
@@ -16,7 +16,7 @@
     },
     "sourceMap": true,
     "strict": true,
-    "target": "esnext"
+    "target": "ES6"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "src/**/*.spec.ts"]
