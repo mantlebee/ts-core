@@ -1,6 +1,6 @@
 {
   "name": "@mantlebee/ts-core",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Common types, patterns and utilities for TypeScript projects.",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",

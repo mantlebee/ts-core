@@ -39,7 +39,8 @@ export function listToDictionary<T>(
   key: KeyOf<T>
 ): Dictionary<T> {
   return list.reduce((result, current) => {
-    result[key] = current;
+    const mapKey = `${current[key]}`;
+    result[mapKey] = current;
     return result;
   }, {} as Dictionary<T>);
 }
