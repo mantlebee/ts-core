@@ -1,4 +1,4 @@
-import { getLowerCaseChars, getNumberChars, getUpperCaseChars } from "../chars";
+import { getLowercaseChars, getNumberChars, getUppercaseChars } from "../chars";
 import { formatString, generateRandomString } from "../strings";
 
 describe("common", () => {
@@ -33,7 +33,7 @@ describe("common", () => {
           expect(/^[0-9]{5}$/.test(random)).toBeTruthy();
         });
         it("Generates a string of 10 letters, upper and lower case", () => {
-          const chars = getLowerCaseChars() + getUpperCaseChars();
+          const chars = getLowercaseChars() + getUppercaseChars();
           const random = generateRandomString(chars, 10);
           expect(/^([a-z]|[A-Z]){10}$/.test(random)).toBeTruthy();
         });

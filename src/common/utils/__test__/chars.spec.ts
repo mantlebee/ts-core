@@ -1,9 +1,9 @@
 import {
   getCharsFromCharCodesRange,
-  getLowerCaseChars,
+  getLowercaseChars,
   getNumberChars,
   getSpecialChars,
-  getUpperCaseChars,
+  getUppercaseChars,
 } from "../chars";
 
 const specialCharsGroups = [
@@ -26,9 +26,9 @@ describe("common", () => {
           expect(str).toBe(specialCharsGroups[0]);
         });
       });
-      describe("getLowerCaseChars", () => {
+      describe("getLowercaseChars", () => {
         it("String of the lowercase alphabet, orderd alphabetically", () => {
-          const str = getLowerCaseChars();
+          const str = getLowercaseChars();
           expect(str).toBe("abcdefghijklmnopqrstuvwxyz");
         });
       });
@@ -38,9 +38,9 @@ describe("common", () => {
           expect(str).toBe("0123456789");
         });
       });
-      describe("getUpperCaseChars", () => {
+      describe("getUppercaseChars", () => {
         it("String of the upper alphabet, orderd alphabetically", () => {
-          const str = getUpperCaseChars();
+          const str = getUppercaseChars();
           expect(str).toBe("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         });
       });

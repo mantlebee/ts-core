@@ -18,7 +18,7 @@ export function getCharsFromCharCodesRange(
  * Creates a lowercase string of the alphabet.
  * @returns a lowercase string of the alphabet.
  */
-export function getLowerCaseChars(): string {
+export function getLowercaseChars(): string {
   return getCharsFromCharCodesRange(97, 26);
 }
 
@@ -34,7 +34,7 @@ export function getNumberChars(): string {
  * Creates a uppercase string of the alphabet.
  * @returns a uppercase string of the alphabet.
  */
-export function getUpperCaseChars(): string {
+export function getUppercaseChars(): string {
   return getCharsFromCharCodesRange(65, 26);
 }
 
