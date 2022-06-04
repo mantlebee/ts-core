@@ -14,9 +14,6 @@ describe("common", () => {
             randoms.push(generateRandomNumber(min, max));
           expect(randoms.every((a) => a >= min && a <= max)).toBeTruthy();
         });
-        it("Generates number 5", () => {
-          expect(generateRandomNumber(5, 5)).toBe(5);
-        });
       });
     });
   });
