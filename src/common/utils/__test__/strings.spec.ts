@@ -1,14 +1,27 @@
-import {
-  getLowerCaseChars,
-  getNumberChars,
-  getSpecialChars,
-  getUpperCaseChars,
-} from "../chars";
-import { generateRandomString } from "../strings";
+import { getLowerCaseChars, getNumberChars, getUpperCaseChars } from "../chars";
+import { formatString, generateRandomString } from "../strings";
 
 describe("common", () => {
   describe("utils", () => {
     describe("strings", () => {
+      describe("formatString", () => {
+        it("Replaces placeholders with given data", () => {
+          const formattedString = formatString(
+            "Hi {0}, this is {1}!",
+            "John",
+            "Jane"
+          );
+          expect(formattedString).toBe("Hi John, this is Jane!");
+        });
+        it("Same placeholder is replaced by the same data", () => {
+          const formattedString = formatString(
+            "Hi {0}, this is {1}. Goodbye, {0}.",
+            "John",
+            "Jane"
+          );
+          expect(formattedString).toBe("Hi John, this is Jane. Goodbye, John.");
+        });
+      });
       describe("generateRandomString", () => {
         it("Generates `aaa`", () => {
           const random = generateRandomString("a", 3);
