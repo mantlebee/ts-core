@@ -1,5 +1,5 @@
 import { getLowercaseChars, getNumberChars, getUppercaseChars } from "../chars";
-import { formatString, generateRandomString } from "../strings";
+import { formatString, generateRandomString, isString } from "../strings";
 
 describe("common", () => {
   describe("utils", () => {
@@ -36,6 +36,16 @@ describe("common", () => {
           const chars = getLowercaseChars() + getUppercaseChars();
           const random = generateRandomString(chars, 10);
           expect(/^([a-z]|[A-Z]){10}$/.test(random)).toBeTruthy();
+        });
+      });
+      describe("isString", () => {
+        it("Item is a string", () => {
+          const is = isString("Hello, World!");
+          expect(is).toBeTruthy();
+        });
+        it("Item is not a string", () => {
+          const is = isString(5);
+          expect(is).toBeFalsy();
         });
       });
     });

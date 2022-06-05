@@ -1,6 +1,6 @@
 import { List } from "@/common";
 
-import { generateRandomNumber, numberIsInteger } from "../numbers";
+import { generateRandomNumber, isNumber, numberIsInteger } from "../numbers";
 
 describe("common", () => {
   describe("utils", () => {
@@ -32,6 +32,16 @@ describe("common", () => {
           expect(randoms.every((a) => a >= min && a <= max)).toBeTruthy();
           expect(randoms.some((a) => `${a}`.length === 5)).toBeTruthy();
           expect(randoms.some((a) => !numberIsInteger(a))).toBeTruthy();
+        });
+      });
+      describe("isNumber", () => {
+        it("Item is a number", () => {
+          const is = isNumber(5);
+          expect(is).toBeTruthy();
+        });
+        it("Item is not a number", () => {
+          const is = isNumber("Hello, World!");
+          expect(is).toBeFalsy();
         });
       });
       describe("numberIsInteger", () => {

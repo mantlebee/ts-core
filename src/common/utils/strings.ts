@@ -1,4 +1,4 @@
-import { List, Stringable } from "@/common";
+import { Any, List, Stringable } from "@/common";
 
 /**
  * Formats a string replacing the placeholders with the given values.
@@ -32,4 +32,13 @@ export function generateRandomString(chars: string, length: number): string {
     str += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return str;
+}
+
+/**
+ * Checks if arg is a string.
+ * @param arg Item to check.
+ * @returns true if arg is a string.
+ */
+export function isString(arg: Any): boolean {
+  return typeof arg === "string";
 }

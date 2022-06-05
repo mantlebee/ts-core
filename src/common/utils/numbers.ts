@@ -1,3 +1,5 @@
+import { Any } from "@/common";
+
 /**
  * Generates a random integer/float number between the given min and max values, max included.
  * To return an integer leave `decimals` to 0.
@@ -20,6 +22,15 @@ export function generateRandomNumber(
   } else {
     return Math.floor(random);
   }
+}
+
+/**
+ * Checks if arg is a number.
+ * @param arg Item to check.
+ * @returns true if arg is a number.
+ */
+export function isNumber(arg: Any): boolean {
+  return typeof arg === "number";
 }
 
 /**
