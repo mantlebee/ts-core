@@ -1,6 +1,6 @@
 import { List } from "@/common";
 
-import { generateRandomDate } from "../dates";
+import { generateRandomDate } from "../utils";
 
 const endDate = new Date(1990, 12, 31, 23, 59, 59);
 const firstDate = new Date(1970, 0, 1, 0, 0, 0);
