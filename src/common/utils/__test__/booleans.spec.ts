@@ -4,7 +4,7 @@ import { generateRandomBoolean } from "../booleans";
 
 describe("common", () => {
   describe("utils", () => {
-    describe("boolean", () => {
+    describe("booleans", () => {
       describe("generateRandomBoolean", () => {
         it("Generates a random boolean", () => {
           const randoms: List<boolean> = [];

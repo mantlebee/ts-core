@@ -4,7 +4,7 @@ import { generateRandomNumber, numberIsInteger } from "../numbers";
 
 describe("common", () => {
   describe("utils", () => {
-    describe("number", () => {
+    describe("numbers", () => {
       describe("generateRandomNumber", () => {
         it("Generates an integer random number between 0 and the given max value, max included", () => {
           const max = 12;
