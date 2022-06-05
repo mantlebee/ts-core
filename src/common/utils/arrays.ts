@@ -1,4 +1,15 @@
 import { Dictionary, KeyOf, List, Nullable } from "@/common";
+import { generateRandomNumber } from "./numbers";
+
+/**
+ * Extracts a random item from a list of items.
+ * @param items Items from which to extract a random one.
+ * @returns a random item from a list.
+ */
+export function extractRandomItem<TItem>(items: List<TItem>): TItem {
+  const randomIndex = generateRandomNumber(items.length - 1);
+  return items[randomIndex];
+}
 
 /**
  * Looks for and returns an item in a list or a default on if no item is found.
