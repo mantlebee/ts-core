@@ -3,6 +3,7 @@ import {
   formatString,
   generateGuid,
   generateRandomString,
+  isEmail,
   isGuid,
   isString,
 } from "../strings";
@@ -48,6 +49,29 @@ describe("common", () => {
           const chars = getLowercaseChars() + getUppercaseChars();
           const random = generateRandomString(chars, 10);
           expect(/^([a-z]|[A-Z]){10}$/.test(random)).toBeTruthy();
+        });
+      });
+      describe("isEmail", () => {
+        it("Item is an email", () => {
+          const validEmails = [
+            "mysite@ourearth.com",
+            "my.ownsite@ourearth.org",
+            "mysite@you.me.net",
+          ];
+          expect(validEmails.every(isEmail)).toBeTruthy();
+        });
+        it("Item is not an email", () => {
+          const invalidEmails = [
+            "mysite.ourearth.com",
+            "mysite@.com.my",
+            "@you.me.net",
+            "mysite123@gmail.b",
+            "mysite@.org.org",
+            ".mysite@mysite.org",
+            "mysite()*@gmail.com",
+            "mysite..1234@yahoo.com",
+          ];
+          expect(invalidEmails.every(isEmail)).toBeFalsy();
         });
       });
       describe("isGuid", () => {

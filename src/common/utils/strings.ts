@@ -57,6 +57,15 @@ export function generateRandomString(chars: string, length: number): string {
 }
 
 /**
+ * Checks if arg is an email.
+ * @param arg Item to check.
+ * @returns true if arg is an email.
+ */
+export function isEmail(arg: string): boolean {
+  return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(arg);
+}
+
+/**
  * Checks if arg is a GUID.
  * @param arg Item to check.
  * @returns true if arg is a GUID.
