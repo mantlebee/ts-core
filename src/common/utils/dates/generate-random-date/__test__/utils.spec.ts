@@ -12,14 +12,14 @@ describe("common", () => {
       describe("generateRandomNDate", () => {
         it("Generates a random date between 1970/01/01 and now", () => {
           const randoms: List<Date> = [];
-          for (let i = 0; i < 99; ++i) randoms.push(generateRandomDate());
+          for (let i = 0; i < 100; ++i) randoms.push(generateRandomDate());
           expect(
             randoms.every((a) => a.getTime() <= Date.now() && a >= firstDate)
           ).toBeTruthy();
         });
         it("Generates a random date between 1970/01/01 and the given end date", () => {
           const randoms: List<Date> = [];
-          for (let i = 0; i < 99; ++i)
+          for (let i = 0; i < 100; ++i)
             randoms.push(generateRandomDate(endDate));
           expect(
             randoms.every((a) => a <= endDate && a >= firstDate)
@@ -27,7 +27,7 @@ describe("common", () => {
         });
         it("Generates a random date in the given range", () => {
           const randoms: List<Date> = [];
-          for (let i = 0; i < 99; ++i)
+          for (let i = 0; i < 100; ++i)
             randoms.push(generateRandomDate(endDate, startDate));
           expect(
             randoms.every((a) => a >= startDate && a <= endDate)
@@ -35,7 +35,7 @@ describe("common", () => {
         });
         it("Generates the same date, with hours from 9 to 18", () => {
           const randoms: List<Date> = [];
-          for (let i = 0; i < 99; ++i)
+          for (let i = 0; i < 100; ++i)
             randoms.push(
               generateRandomDate(endDate, endDate, {
                 hoursFrom: 9,
@@ -50,7 +50,7 @@ describe("common", () => {
         });
         it("Generates a random date in the given range with hours set to 01:02:03", () => {
           const randoms: List<Date> = [];
-          for (let i = 0; i < 99; ++i)
+          for (let i = 0; i < 100; ++i)
             randoms.push(
               generateRandomDate(endDate, startDate, {
                 hoursFrom: 1,

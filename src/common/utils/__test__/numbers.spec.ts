@@ -9,7 +9,7 @@ describe("common", () => {
         it("Generates an integer random number between 0 and the given max value, max included", () => {
           const max = 12;
           const randoms: List<number> = [];
-          for (let i = 0; i < 99; ++i) randoms.push(generateRandomNumber(max));
+          for (let i = 0; i < 100; ++i) randoms.push(generateRandomNumber(max));
           expect(randoms.every((a) => a <= max)).toBeTruthy();
           expect(randoms.every(numberIsInteger)).toBeTruthy();
         });
@@ -17,7 +17,7 @@ describe("common", () => {
           const max = 12;
           const min = 10;
           const randoms: List<number> = [];
-          for (let i = 0; i < 99; ++i)
+          for (let i = 0; i < 100; ++i)
             randoms.push(generateRandomNumber(max, min));
           expect(randoms.every((a) => a >= min && a <= max)).toBeTruthy();
           expect(randoms.every(numberIsInteger)).toBeTruthy();
@@ -27,7 +27,7 @@ describe("common", () => {
           const max = 12;
           const min = 10;
           const randoms: List<number> = [];
-          for (let i = 0; i < 99; ++i)
+          for (let i = 0; i < 100; ++i)
             randoms.push(generateRandomNumber(max, min, decimals));
           expect(randoms.every((a) => a >= min && a <= max)).toBeTruthy();
           expect(randoms.some((a) => `${a}`.length === 5)).toBeTruthy();
