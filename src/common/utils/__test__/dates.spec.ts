@@ -3,8 +3,8 @@ import { List } from "@/common";
 import { generateRandomDate } from "../dates";
 
 const endDate = new Date(1990, 12, 31, 23, 59, 59);
-const firstDate = new Date(1970, 1, 1, 0, 0, 0);
-const startDate = new Date(1990, 1, 1, 0, 0, 0);
+const firstDate = new Date(1970, 0, 1, 0, 0, 0);
+const startDate = new Date(1990, 0, 1, 0, 0, 0);
 
 describe("common", () => {
   describe("utils", () => {
