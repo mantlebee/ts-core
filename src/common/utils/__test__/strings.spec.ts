@@ -54,6 +54,8 @@ describe("common", () => {
       describe("isEmail", () => {
         it("Item is an email", () => {
           const validEmails = [
+            "vincenzo.bautista@live.info",
+            "dominic.johnston@live.co.uk",
             "mysite@ourearth.com",
             "my.ownsite@ourearth.org",
             "mysite@you.me.net",
