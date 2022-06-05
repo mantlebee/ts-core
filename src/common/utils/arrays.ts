@@ -1,4 +1,4 @@
-import { Delegate, Dictionary, KeyOf, List, Nullable } from "@/common";
+import { Dictionary, KeyOf, List, Nullable } from "@/common";
 
 /**
  * Looks for and returns an item in a list or a default on if no item is found.
@@ -14,7 +14,7 @@ import { Delegate, Dictionary, KeyOf, List, Nullable } from "@/common";
  */
 export function firstOrDefault<T>(
   list: List<T>,
-  delegate: Delegate<boolean, T>,
+  delegate: (a: T) => boolean,
   defaultItem: Nullable<T> = null
 ): Nullable<T> {
   return list.find(delegate) || defaultItem;
