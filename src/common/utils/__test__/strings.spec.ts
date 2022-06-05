@@ -1,5 +1,11 @@
 import { getLowercaseChars, getNumberChars, getUppercaseChars } from "../chars";
-import { formatString, generateRandomString, isString } from "../strings";
+import {
+  formatString,
+  generateGuid,
+  generateRandomString,
+  isGuid,
+  isString,
+} from "../strings";
 
 describe("common", () => {
   describe("utils", () => {
@@ -22,6 +28,12 @@ describe("common", () => {
           expect(formattedString).toBe("Hi John, this is Jane. Goodbye, John.");
         });
       });
+      describe("generateGuid", () => {
+        it("Generates a guid", () => {
+          const guid = generateGuid();
+          expect(isGuid(guid)).toBeTruthy();
+        });
+      });
       describe("generateRandomString", () => {
         it("Generates `aaa`", () => {
           const random = generateRandomString("a", 3);
@@ -36,6 +48,20 @@ describe("common", () => {
           const chars = getLowercaseChars() + getUppercaseChars();
           const random = generateRandomString(chars, 10);
           expect(/^([a-z]|[A-Z]){10}$/.test(random)).toBeTruthy();
+        });
+      });
+      describe("isGuid", () => {
+        it("Item is a GUID", () => {
+          const is = isGuid("4840f4e3-7e5e-4ed8-9066-5a6673b940b6");
+          expect(is).toBeTruthy();
+        });
+        it("Item is a GUID, case sensitive search", () => {
+          const is = isGuid("4840f4e3-7e5e-4ed8-9066-5a6673b940B6");
+          expect(is).toBeTruthy();
+        });
+        it("Item is not a GUID", () => {
+          const is = isGuid("4840f4e37e5e4ed890665a6673b940B6");
+          expect(is).toBeFalsy();
         });
       });
       describe("isString", () => {
