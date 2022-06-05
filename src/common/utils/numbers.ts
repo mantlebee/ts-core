@@ -12,6 +12,7 @@ export function generateRandomNumber(
   min = 0,
   decimals = 0
 ): number {
+  if (max === min) return max;
   const random = Math.random() * (max - min + 1) + min;
   if (decimals) {
     if (random >= max) return max;
