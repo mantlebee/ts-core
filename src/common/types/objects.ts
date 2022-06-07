@@ -5,23 +5,26 @@
 export type Dictionary<T> = {
   [key: string]: T;
 };
+
 /**
  * Key of an object.
  * @param TObject Object from which to extract the key.
  * @param TKey Type of the key, default is `string`.
  */
 export type KeyOf<TObject, TKey = string> = Extract<keyof TObject, TKey>;
+
 /**
- * Keys of an object.
+ * Keys of an object. Value is the same of the original object or different, if specified.
  * @param TObject Object from which to extract the keys.
  */
-export type KeysOf<TObject> = {
-  [TKey in keyof TObject]: TObject[TKey];
+export type KeysOf<TObject, TValue = TObject[keyof TObject]> = {
+  [TKey in keyof TObject]: TValue;
 };
+
 /**
- * Keys of an object; all keys are optional.
+ * Keys of an object; all keys are optional. Value is the same of the original object or different, if specified.
  * @param TObject Object from which to extract the keys.
  */
-export type OptionalKeysOf<TObject> = {
-  [TKey in keyof TObject]?: TObject[TKey];
+export type OptionalKeysOf<TObject, TValue = TObject[keyof TObject]> = {
+  [TKey in keyof TObject]?: TValue;
 };
