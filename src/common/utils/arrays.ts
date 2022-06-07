@@ -7,6 +7,7 @@ import { generateRandomNumber } from "./numbers";
  * @returns a random item from a list.
  */
 export function extractRandomItem<TItem>(items: List<TItem>): TItem {
+  if (items.length === 1) return items[0];
   const randomIndex = generateRandomNumber(items.length - 1);
   return items[randomIndex];
 }
