@@ -11,6 +11,6 @@ export default {
     },
     plugins: [
         cleaner({ targets: [outDir] }),
-        typescript()
+        typescript({ tsconfig: "tsconfig.prod.json" })
     ]
 };
