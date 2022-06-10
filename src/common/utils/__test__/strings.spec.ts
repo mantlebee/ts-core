@@ -1,8 +1,6 @@
-import { getLowercaseChars, getNumberChars, getUppercaseChars } from "../chars";
 import {
   formatString,
   generateGuid,
-  generateRandomString,
   isEmail,
   isGuid,
   isString,
@@ -33,22 +31,6 @@ describe("common", () => {
         it("Generates a guid", () => {
           const guid = generateGuid();
           expect(isGuid(guid)).toBeTruthy();
-        });
-      });
-      describe("generateRandomString", () => {
-        it("Generates `aaa`", () => {
-          const random = generateRandomString("a", 3);
-          expect(random).toBe("aaa");
-        });
-        it("Generates a string of 5 numbers", () => {
-          const chars = getNumberChars();
-          const random = generateRandomString(chars, 5);
-          expect(/^[0-9]{5}$/.test(random)).toBeTruthy();
-        });
-        it("Generates a string of 10 letters, upper and lower case", () => {
-          const chars = getLowercaseChars() + getUppercaseChars();
-          const random = generateRandomString(chars, 10);
-          expect(/^([a-z]|[A-Z]){10}$/.test(random)).toBeTruthy();
         });
       });
       describe("isEmail", () => {

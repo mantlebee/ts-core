@@ -1,18 +1,8 @@
-import { List } from "@/common";
-
-import { generateRandomBoolean, isBoolean } from "../booleans";
+import { isBoolean } from "../booleans";
 
 describe("common", () => {
   describe("utils", () => {
     describe("booleans", () => {
-      describe("generateRandomBoolean", () => {
-        it("Generates a random boolean", () => {
-          const randoms: List<boolean> = [];
-          for (let i = 0; i < 100; ++i) randoms.push(generateRandomBoolean());
-          expect(randoms.some((a) => a)).toBeTruthy();
-          expect(randoms.some((a) => !a)).toBeTruthy();
-        });
-      });
       describe("isBoolean", () => {
         it("Item is a boolean", () => {
           const is = isBoolean(true);
