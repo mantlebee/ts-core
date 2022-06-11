@@ -1,5 +1,5 @@
-import { roundNumber } from "..";
-import { RgbaColor } from "./types";
+import { KeyOf, List } from "..";
+import { RgbaColor, RgbColor } from "./types";
 
 /**
  * Converts an HEX color to a RgbaColor object.
@@ -14,7 +14,7 @@ export function hexToRgba(hex: string): RgbaColor {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-  const a = roundNumber(parseInt(hex.slice(7, 9), 16) / 255, 2);
+  const a = parseInt(hex.slice(7, 9), 16) / 255;
   return { a, b, g, r };
 }
 
@@ -30,6 +30,25 @@ export function rgbaToHex(r: number, g: number, b: number, a?: number) {
   let hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
   if (a !== undefined) hex += ((a * 255) | (1 << 8)).toString(16).slice(1);
   return hex;
+}
+
+/**
+ * Converts a RGB string into a RgbColor object. It works with RGBA colors too.
+ * Reference: https://www.geeksforgeeks.org/how-to-convert-rgb-color-string-into-an-object-in-javascript/
+ * @param rgb RGB strng to convert.
+ * @returns a RgbColor object.
+ */
+export function rgbStringToRgb(rgb: string): RgbColor {
+  const keys: List<KeyOf<RgbColor>> = ["r", "g", "b"];
+  // Removing rgba, rgb, brackets and spaces and splitting by ","
+  const values = rgb.replace(/(rgba|rgb|\(|\)| )/g, "").split(",");
+  const color = keys.reduce((result, current, index) => {
+    result[current] = parseInt(values[index]);
+    return result;
+  }, {} as RgbColor);
+  // Adding alpha if present
+  if (values.length === 4) color.a = parseFloat(values[3]);
+  return color;
 }
 
 /**
