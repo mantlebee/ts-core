@@ -1,11 +1,11 @@
 import { IFactory } from "@/builders";
-import { debug } from "@/debug";
+import { isDebug } from "@/debug";
 
 import { IBuilder } from "./interfaces";
 
 /**
  * This is a builder implementation that use a factory and instances
- * the right object according to debug.isEnabled flag.
+ * the right object according to isDebug() flag.
  */
 export class Builder<T> implements IBuilder<T> {
   /** Factory used to build objects. */
@@ -22,7 +22,7 @@ export class Builder<T> implements IBuilder<T> {
 
   /** @inheritdoc */
   public create(): T {
-    if (debug.isEnabled) return this._factory.createDebug();
+    if (isDebug()) return this._factory.createDebug();
     else return this._factory.createRelease();
   }
 }
