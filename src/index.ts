@@ -4,4 +4,5 @@ export * from "./common";
 export * from "./debug";
 export * from "./delegates";
 export * from "./identities";
+export * from "./loggers";
 export * from "./subscriptions";
