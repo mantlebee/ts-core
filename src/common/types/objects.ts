@@ -1,9 +1,10 @@
 /**
- * Dictionary of items.
- * @param T Item.
+ * Dictionary of items. A list of keys can be specified.
+ * @param TValue Item.
+ * @param TKey Type of the key, default is `string`.
  */
-export type Dictionary<T> = {
-  [key: string]: T;
+export type Dictionary<TValue, TKey extends string = string> = {
+  [key in TKey]: TValue;
 };
 
 /**
