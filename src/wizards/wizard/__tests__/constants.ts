@@ -2,17 +2,21 @@ import { IWizardStep } from "../../interfaces";
 import { WizardContext } from "../types";
 
 //#region Contexts
-export const canCompleteContext: WizardContext = {
+export const canContext: WizardContext = {
+  canAbort: true,
   canComplete: true,
-  complete: () => Promise.resolve(),
+  abort: jest.fn(),
+  complete: jest.fn(),
 };
-export const canNotCompleteContext: WizardContext = {
+export const canNotContext: WizardContext = {
+  canAbort: false,
   canComplete: false,
-  complete: () => Promise.resolve(),
+  abort: jest.fn(),
+  complete: jest.fn(),
 };
 export const genericContext: WizardContext = {
   canComplete: false,
-  complete: () => Promise.resolve(),
+  complete: jest.fn(),
 };
 //#endregion
 

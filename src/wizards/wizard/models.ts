@@ -1,6 +1,12 @@
 import { List } from "@/common";
 
 import { IWizard, IWizardStep } from "../interfaces";
+import {
+  AbortNotAllowedException,
+  CompleteNotAllowedException,
+  GoBackNotAllowedException,
+  GoForwardNotAllowedException,
+} from "./exceptions";
 import { WizardContext } from "./types";
 import {
   canGoBack,
@@ -42,21 +48,21 @@ export class Wizard implements IWizard {
   }
 
   public abort(): Promise<void> {
-    if (!this.canAbort) return Promise.reject();
+    if (!this.canAbort) throw new AbortNotAllowedException();
     const { abort = Promise.resolve } = this.context;
     return abort();
   }
   public complete(): Promise<void> {
-    if (!this.canComplete) return Promise.reject();
+    if (!this.canComplete) throw new CompleteNotAllowedException();
     return this.context.complete();
   }
   public goBack(): Promise<void> {
-    if (!this.canGoBack) return Promise.reject();
+    if (!this.canGoBack) throw new GoBackNotAllowedException();
     const { currentStep, previousSteps } = this;
     return goBack(currentStep, previousSteps, (a) => this.setCurrentStep(a));
   }
   public goForward(): Promise<void> {
-    if (!this.canGoForward) return Promise.reject();
+    if (!this.canGoForward) throw new GoForwardNotAllowedException();
     const { allSteps, currentStep, previousSteps } = this;
     return goForward(currentStep, previousSteps, allSteps, (a) =>
       this.setCurrentStep(a)
