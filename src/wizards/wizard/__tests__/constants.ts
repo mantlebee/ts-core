@@ -5,18 +5,18 @@ import { WizardContext } from "../types";
 export const canContext: WizardContext = {
   canAbort: true,
   canComplete: true,
-  abort: jest.fn(),
-  complete: jest.fn(),
+  abort: jest.fn(() => Promise.resolve()),
+  complete: jest.fn(() => Promise.resolve()),
 };
 export const canNotContext: WizardContext = {
   canAbort: false,
   canComplete: false,
-  abort: jest.fn(),
-  complete: jest.fn(),
+  abort: jest.fn(() => Promise.resolve()),
+  complete: jest.fn(() => Promise.resolve()),
 };
 export const genericContext: WizardContext = {
   canComplete: false,
-  complete: jest.fn(),
+  complete: jest.fn(() => Promise.resolve()),
 };
 //#endregion
 
@@ -29,9 +29,9 @@ export const canGoStep: IWizardStep = {
 export const canGoStepWithBefore: IWizardStep = {
   canGoBack: true,
   canGoForward: true,
-  beforeEnter: jest.fn(),
-  beforeGoBack: jest.fn(),
-  beforeGoForward: jest.fn(),
+  beforeEnter: jest.fn(() => Promise.resolve()),
+  beforeGoBack: jest.fn(() => Promise.resolve()),
+  beforeGoForward: jest.fn(() => Promise.resolve()),
 };
 
 export const canGoStepWithNext: IWizardStep = {
