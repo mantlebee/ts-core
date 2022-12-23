@@ -13,10 +13,8 @@ import {
   canGoStepWithBefore,
   canGoStepWithNext,
   canNotGoStep,
-  genericContext,
   genericStep,
 } from "./constants";
-import { Model } from "./types";
 
 describe("wizards", () => {
   describe("Wizard", () => {
@@ -32,7 +30,7 @@ describe("wizards", () => {
           expect(canGoBack(canNotGoStep, previousSteps)).toBeFalsy();
         });
         it("False if it is the first step", () => {
-          const previousSteps = [] as List<IWizardStep<Model>>;
+          const previousSteps = [] as List<IWizardStep>;
           expect(canGoBack(canGoStep, previousSteps)).toBeFalsy();
         });
       });
@@ -74,7 +72,7 @@ describe("wizards", () => {
         it("Updates current step and remove the last step from the previous steps", async () => {
           let currentStep = canGoStep;
           const allSteps = [canGoStep, genericStep];
-          const previousSteps = [] as List<IWizardStep<Model>>;
+          const previousSteps = [] as List<IWizardStep>;
           await goForward(currentStep, previousSteps, allSteps, (a) => {
             currentStep = a;
           });
@@ -93,15 +91,15 @@ describe("wizards", () => {
       // setCurrentStep
       describe("setCurrentStep", () => {
         it("Sets the current step", async () => {
-          let currentStep: Nullable<IWizardStep<Model>> = null;
-          await setCurrentStep(genericStep, genericContext, (a) => {
+          let currentStep: Nullable<IWizardStep> = null;
+          await setCurrentStep(genericStep, (a) => {
             currentStep = a;
           });
           expect(currentStep).toBe(genericStep);
         });
         it("Calls `beforeEnter` before setting current step", async () => {
-          let currentStep: Nullable<IWizardStep<Model>> = null;
-          await setCurrentStep(canGoStepWithBefore, genericContext, (a) => {
+          let currentStep: Nullable<IWizardStep> = null;
+          await setCurrentStep(canGoStepWithBefore, (a) => {
             currentStep = a;
           });
           expect(canGoStepWithBefore.beforeGoForward).toBeCalled();

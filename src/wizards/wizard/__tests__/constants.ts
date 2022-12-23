@@ -1,33 +1,28 @@
-import { IWizardContext, IWizardStep } from "../../interfaces";
-import { Model } from "./types";
-
-export const model: Model = {};
+import { IWizardStep } from "../../interfaces";
+import { WizardContext } from "../types";
 
 //#region Contexts
-export const canCompleteContext: IWizardContext<Model> = {
+export const canCompleteContext: WizardContext = {
   canComplete: true,
-  complete: () => Promise.resolve(model),
-  model,
+  complete: () => Promise.resolve(),
 };
-export const canNotCompleteContext: IWizardContext<Model> = {
+export const canNotCompleteContext: WizardContext = {
   canComplete: false,
-  complete: () => Promise.resolve(model),
-  model,
+  complete: () => Promise.resolve(),
 };
-export const genericContext: IWizardContext<Model> = {
+export const genericContext: WizardContext = {
   canComplete: false,
-  complete: () => Promise.resolve(model),
-  model,
+  complete: () => Promise.resolve(),
 };
 //#endregion
 
 //#region Steps
-export const canGoStep: IWizardStep<Model> = {
+export const canGoStep: IWizardStep = {
   canGoBack: true,
   canGoForward: true,
 };
 
-export const canGoStepWithBefore: IWizardStep<Model> = {
+export const canGoStepWithBefore: IWizardStep = {
   canGoBack: true,
   canGoForward: true,
   beforeEnter: jest.fn(),
@@ -35,18 +30,18 @@ export const canGoStepWithBefore: IWizardStep<Model> = {
   beforeGoForward: jest.fn(),
 };
 
-export const canGoStepWithNext: IWizardStep<Model> = {
+export const canGoStepWithNext: IWizardStep = {
   canGoBack: true,
   canGoForward: true,
   nextStep: canGoStep,
 };
 
-export const canNotGoStep: IWizardStep<Model> = {
+export const canNotGoStep: IWizardStep = {
   canGoBack: false,
   canGoForward: false,
 };
 
-export const genericStep: IWizardStep<Model> = {
+export const genericStep: IWizardStep = {
   canGoBack: false,
   canGoForward: false,
 };

@@ -1,32 +1,21 @@
-export interface IWizard<TModel> {
+export interface IWizard {
   readonly canAbort: boolean;
   readonly canComplete: boolean;
   readonly canGoBack: boolean;
   readonly canGoForward: boolean;
-  readonly step: IWizardStep<TModel>;
+  readonly step: IWizardStep;
   abort(): Promise<void>;
-  complete(): Promise<TModel>;
+  complete(): Promise<void>;
   goBack(): Promise<void>;
   goForward(): Promise<void>;
-  start(
-    context: IWizardContext<TModel>,
-    skipReadySteps?: boolean
-  ): Promise<void>;
+  start(skipReadySteps?: boolean): Promise<void>;
 }
 
-export interface IWizardContext<TModel> {
-  readonly canAbort?: boolean;
-  readonly canComplete: boolean;
-  readonly model: TModel;
-  abort?(): Promise<void>;
-  complete(model: TModel): Promise<TModel>;
-}
-
-export interface IWizardStep<TModel> {
+export interface IWizardStep {
   readonly canGoBack: boolean;
   readonly canGoForward: boolean;
-  readonly nextStep?: IWizardStep<TModel>;
-  beforeEnter?(context: IWizardContext<TModel>): Promise<void>;
+  readonly nextStep?: IWizardStep;
+  beforeEnter?(): Promise<void>;
   beforeGoBack?(): Promise<void>;
   beforeGoForward?(): Promise<void>;
 }

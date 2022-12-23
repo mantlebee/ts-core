@@ -1,6 +1,7 @@
 import { List } from "@/common";
 
-import { IWizard, IWizardContext, IWizardStep } from "../interfaces";
+import { IWizard, IWizardStep } from "../interfaces";
+import { WizardContext } from "./types";
 import {
   canGoBack,
   canGoForward,
@@ -9,14 +10,16 @@ import {
   setCurrentStep,
 } from "./utils";
 
-export class Wizard<TModel> implements IWizard<TModel> {
-  protected currentStep!: IWizardStep<TModel>;
-  protected context!: IWizardContext<TModel>;
-  protected previousSteps!: List<IWizardStep<TModel>>;
-  protected allSteps!: List<IWizardStep<TModel>>;
+export class Wizard implements IWizard {
+  protected allSteps: List<IWizardStep>;
+  protected currentStep: IWizardStep;
+  protected context: WizardContext;
+  protected previousSteps: List<IWizardStep> = [];
 
-  public constructor(steps: List<IWizardStep<TModel>>) {
+  public constructor(context: WizardContext, steps: List<IWizardStep>) {
     this.allSteps = steps;
+    this.context = context;
+    this.currentStep = steps[0];
   }
 
   public get canAbort(): boolean {
@@ -34,49 +37,46 @@ export class Wizard<TModel> implements IWizard<TModel> {
     const { allSteps, currentStep } = this;
     return canGoForward(currentStep, allSteps);
   }
-  public get step(): IWizardStep<TModel> {
+  public get step(): IWizardStep {
     return this.currentStep;
   }
 
   public abort(): Promise<void> {
+    if (!this.canAbort) return Promise.reject();
     const { abort = Promise.resolve } = this.context;
     return abort();
   }
-  public complete(): Promise<TModel> {
-    const { canComplete, context } = this;
-    if (!canComplete) return Promise.reject();
-    return context.complete(context.model);
+  public complete(): Promise<void> {
+    if (!this.canComplete) return Promise.reject();
+    return this.context.complete();
   }
   public goBack(): Promise<void> {
-    const { canGoBack, currentStep, previousSteps } = this;
-    if (!canGoBack) return Promise.reject();
+    if (!this.canGoBack) return Promise.reject();
+    const { currentStep, previousSteps } = this;
     return goBack(currentStep, previousSteps, (a) => this.setCurrentStep(a));
   }
   public goForward(): Promise<void> {
-    const { allSteps, canGoForward, currentStep, previousSteps } = this;
-    if (!canGoForward) return Promise.reject();
+    if (!this.canGoForward) return Promise.reject();
+    const { allSteps, currentStep, previousSteps } = this;
     return goForward(currentStep, previousSteps, allSteps, (a) =>
       this.setCurrentStep(a)
     );
   }
-  public start(
-    context: IWizardContext<TModel>,
-    skipReadySteps = false
-  ): Promise<void> {
-    this.context = context;
-    this.previousSteps = [];
+  public start(skipReadySteps = false): Promise<void> {
     return new Promise(async (resolve) => {
       const { allSteps } = this;
       const firstStep = allSteps[0];
       await this.setCurrentStep(firstStep);
-      if (skipReadySteps) while (this.canGoForward) await this.goForward();
+      if (skipReadySteps)
+        while (this.canGoForward) {
+          await this.goForward();
+        }
       resolve();
     });
   }
 
-  protected setCurrentStep(step: IWizardStep<TModel>): Promise<void> {
-    const { context } = this;
-    return setCurrentStep(step, context, (a) => {
+  protected setCurrentStep(step: IWizardStep): Promise<void> {
+    return setCurrentStep(step, (a) => {
       this.currentStep = a;
     });
   }

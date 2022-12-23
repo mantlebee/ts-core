@@ -1,18 +1,18 @@
 import { List } from "@/common";
 
-import { IWizardContext, IWizardStep } from "../interfaces";
+import { IWizardStep } from "../interfaces";
 
-export function canGoBack<TModel>(
-  currentStep: IWizardStep<TModel>,
-  previousSteps: List<IWizardStep<TModel>>
+export function canGoBack(
+  currentStep: IWizardStep,
+  previousSteps: List<IWizardStep>
 ): boolean {
   const isFirstStep = !Boolean(previousSteps.length);
   return currentStep.canGoBack && !isFirstStep;
 }
 
-export function canGoForward<TModel>(
-  currentStep: IWizardStep<TModel>,
-  allSteps: List<IWizardStep<TModel>>
+export function canGoForward(
+  currentStep: IWizardStep,
+  allSteps: List<IWizardStep>
 ): boolean {
   const hasNextStep = Boolean(currentStep.nextStep);
   const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
@@ -20,31 +20,31 @@ export function canGoForward<TModel>(
   return currentStep.canGoForward && (hasNextStep || !isLastStep);
 }
 
-export function getCurrentStepIndex<TModel>(
-  currentStep: IWizardStep<TModel>,
-  steps: List<IWizardStep<TModel>>
+export function getCurrentStepIndex(
+  currentStep: IWizardStep,
+  steps: List<IWizardStep>
 ): number {
   return steps.indexOf(currentStep);
 }
 
-export function goBack<TModel>(
-  currentStep: IWizardStep<TModel>,
-  previousSteps: List<IWizardStep<TModel>>,
-  setCurrentStep: (step: IWizardStep<TModel>) => void
+export function goBack(
+  currentStep: IWizardStep,
+  previousSteps: List<IWizardStep>,
+  setCurrentStep: (step: IWizardStep) => void
 ): Promise<void> {
   return new Promise(async (resolve) => {
     if (currentStep.beforeGoBack) await currentStep.beforeGoBack();
-    const previousStep = previousSteps.pop() as IWizardStep<TModel>;
+    const previousStep = previousSteps.pop() as IWizardStep;
     await setCurrentStep(previousStep);
     resolve();
   });
 }
 
-export function goForward<TModel>(
-  currentStep: IWizardStep<TModel>,
-  previousSteps: List<IWizardStep<TModel>>,
-  allSteps: List<IWizardStep<TModel>>,
-  setCurrentStep: (step: IWizardStep<TModel>) => void
+export function goForward(
+  currentStep: IWizardStep,
+  previousSteps: List<IWizardStep>,
+  allSteps: List<IWizardStep>,
+  setCurrentStep: (step: IWizardStep) => void
 ): Promise<void> {
   return new Promise(async (resolve) => {
     if (currentStep.beforeGoForward) await currentStep.beforeGoForward();
@@ -56,13 +56,12 @@ export function goForward<TModel>(
   });
 }
 
-export function setCurrentStep<TModel>(
-  step: IWizardStep<TModel>,
-  context: IWizardContext<TModel>,
-  setStep: (step: IWizardStep<TModel>) => void
+export function setCurrentStep(
+  step: IWizardStep,
+  setStep: (step: IWizardStep) => void
 ): Promise<void> {
   return new Promise(async (resolve) => {
-    if (step.beforeEnter) await step.beforeEnter(context);
+    if (step.beforeEnter) await step.beforeEnter();
     setStep(step);
     resolve();
   });
