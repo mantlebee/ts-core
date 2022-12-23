@@ -3,6 +3,7 @@ export * from "./colors";
 export * from "./common";
 export * from "./debug";
 export * from "./delegates";
+export * from "./exceptions";
 export * from "./identities";
 export * from "./loggers";
 export * from "./subscriptions";
