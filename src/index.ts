@@ -6,3 +6,4 @@ export * from "./delegates";
 export * from "./identities";
 export * from "./loggers";
 export * from "./subscriptions";
+export * from "./wizards";
