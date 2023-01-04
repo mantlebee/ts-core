@@ -1,6 +1,6 @@
 import { List } from "@/common";
 
-import { firstOrDefault, listToDictionary } from "../arrays";
+import { firstOrDefault, listToDictionary, replaceListItems } from "../arrays";
 
 type Item = { id: number; name: string };
 
@@ -35,6 +35,15 @@ describe("common", () => {
         it("Creates a dictionary `{key: list item}` from a list and an item key", () => {
           const dict = listToDictionary(items, "id");
           expect(dict).toEqual({ 1: items[0], 2: items[1] });
+        });
+      });
+      describe("replaceListItems", () => {
+        it("Replaces the list items of the same list instance", () => {
+          const list = [...items];
+          const listRef = list;
+          const newItems = [defaultItem];
+          replaceListItems(list, newItems);
+          expect(listRef).toEqual(newItems);
         });
       });
     });

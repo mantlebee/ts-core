@@ -44,3 +44,18 @@ export function listToDictionary<T>(
     return result;
   }, {} as Dictionary<T>);
 }
+
+/**
+ * Replace all the list items with new items. Usefull when the array instance can not change.
+ * ```javascript
+ * const list = [1, 2, 3]
+ * const listRef = list
+ * replaceListItems(list, [4, 5, 6])
+ * // listRef is [4, 5, 6]
+ * ```
+ * @param list Instance with items to replace.
+ * @param items Items to replace.
+ */
+export function replaceListItems<T>(list: List<T>, items: List<T>): void {
+  list.splice(0, list.length, ...items);
+}
