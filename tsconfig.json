@@ -12,12 +12,13 @@
     "moduleResolution": "node",
     "outDir": "dist/src",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@test/*": ["test/*"]
     },
     "sourceMap": true,
     "strict": true,
     "target": "ES6"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules"]
 }
