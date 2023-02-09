@@ -2,6 +2,7 @@ export * from "./builders";
 export * from "./colors";
 export * from "./common";
 export * from "./debug";
+export * from "./delays";
 export * from "./delegates";
 export * from "./exceptions";
 export * from "./identities";
