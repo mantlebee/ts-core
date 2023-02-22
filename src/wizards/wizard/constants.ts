@@ -9,9 +9,10 @@ export enum WizardOperations {
 export enum WizardStatuses {
   aborted,
   aborting,
-  changingStep,
   completed,
   completing,
+  goingBack,
+  goingForward,
   idle,
   needToStart,
   starting,
