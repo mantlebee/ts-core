@@ -1,23 +1,35 @@
 import { List } from "@/common";
 
 import { IWizardStep } from "../interfaces";
+import { WizardStatuses } from "./constants";
 
 export function canGoBack(
+  currentStatus: WizardStatuses,
   currentStep: IWizardStep,
   previousSteps: List<IWizardStep>
 ): boolean {
   const isFirstStep = !Boolean(previousSteps.length);
-  return currentStep.canGoBack && !isFirstStep;
+  return (
+    currentStatus === WizardStatuses.idle &&
+    currentStep.canGoBack &&
+    !isFirstStep
+  );
 }
 
 export function canGoForward(
+  currentStatus: WizardStatuses,
   currentStep: IWizardStep,
   allSteps: List<IWizardStep>
 ): boolean {
   const hasNextStep = Boolean(currentStep.nextStep);
   const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
   const isLastStep = currentStepIndex == allSteps.length - 1;
-  return currentStep.canGoForward && (hasNextStep || !isLastStep);
+  return (
+    (currentStatus === WizardStatuses.idle ||
+      currentStatus === WizardStatuses.starting) &&
+    currentStep.canGoForward &&
+    (hasNextStep || !isLastStep)
+  );
 }
 
 export function getCurrentStepIndex(

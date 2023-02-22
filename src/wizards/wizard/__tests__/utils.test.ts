@@ -1,6 +1,7 @@
-import { List, Nullable } from "@/common";
+import { isNumber, List, Nullable } from "@/common";
 
 import { IWizardStep } from "../../interfaces";
+import { WizardStatuses } from "../constants";
 import {
   canGoBack,
   canGoForward,
@@ -16,36 +17,77 @@ import {
   genericStep,
 } from "./constants";
 
+const idleStatus = WizardStatuses.idle;
+
 describe("wizards", () => {
   describe("Wizard", () => {
     describe("utils", () => {
       // canGoBack
       describe("canGoBack", () => {
-        it("True if step allows to go back and it's not the first step", () => {
+        it("True if step allows to go back and it's not the first step and status is idle", () => {
           const previousSteps = [genericStep];
-          expect(canGoBack(canGoStep, previousSteps)).toBeTruthy();
+          expect(canGoBack(idleStatus, canGoStep, previousSteps)).toBeTruthy();
         });
         it("False if step doesn't allow to go back", () => {
           const previousSteps = [genericStep];
-          expect(canGoBack(canNotGoStep, previousSteps)).toBeFalsy();
+          expect(
+            canGoBack(idleStatus, canNotGoStep, previousSteps)
+          ).toBeFalsy();
         });
         it("False if it is the first step", () => {
           const previousSteps = [] as List<IWizardStep>;
-          expect(canGoBack(canGoStep, previousSteps)).toBeFalsy();
+          expect(canGoBack(idleStatus, canGoStep, previousSteps)).toBeFalsy();
+        });
+        it("False if it is the first step", () => {
+          const previousSteps = [] as List<IWizardStep>;
+          expect(canGoBack(idleStatus, canGoStep, previousSteps)).toBeFalsy();
+        });
+        it("False if status is not idle", () => {
+          const previousSteps = [] as List<IWizardStep>;
+          Object.values(WizardStatuses)
+            .filter((a) => isNumber(a) && a !== idleStatus)
+            .forEach((a) => {
+              expect(
+                canGoBack(a as WizardStatuses, canGoStep, previousSteps)
+              ).toBeFalsy();
+            });
         });
       });
       // canGoForward
       describe("canGoForward", () => {
-        it("True if step allows to go forward and it has a next step", () => {
-          expect(canGoForward(canGoStepWithNext, [])).toBeTruthy();
+        const startingStatus = WizardStatuses.starting;
+        it("True if step allows to go forward and it has a next step and status is idle", () => {
+          expect(canGoForward(idleStatus, canGoStepWithNext, [])).toBeTruthy();
         });
-        it("True if step allows to go forward and it's not the last step", () => {
+        it("True if step allows to go forward and it has a next step and status is starting", () => {
+          expect(
+            canGoForward(startingStatus, canGoStepWithNext, [])
+          ).toBeTruthy();
+        });
+        it("True if step allows to go forward and it's not the last step and status is idle", () => {
           const allSteps = [canGoStep, genericStep];
-          expect(canGoForward(canGoStep, allSteps)).toBeTruthy();
+          expect(canGoForward(idleStatus, canGoStep, allSteps)).toBeTruthy();
+        });
+        it("True if step allows to go forward and it's not the last step and status is idle", () => {
+          const allSteps = [canGoStep, genericStep];
+          expect(
+            canGoForward(startingStatus, canGoStep, allSteps)
+          ).toBeTruthy();
         });
         it("False if it hasn't a next step and it is the last step", () => {
           const allSteps = [genericStep, canGoStep];
-          expect(canGoForward(canGoStep, allSteps)).toBeFalsy();
+          expect(canGoForward(idleStatus, canGoStep, allSteps)).toBeFalsy();
+        });
+        it("False if status is not idle", () => {
+          Object.values(WizardStatuses)
+            .filter(
+              (a) => isNumber(a) && a !== idleStatus && a !== startingStatus
+            )
+            .forEach((a) => {
+              expect(
+                canGoForward(a as WizardStatuses, canGoStepWithNext, [])
+              ).toBeFalsy();
+            });
         });
       });
       // goBack

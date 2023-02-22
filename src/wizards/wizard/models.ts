@@ -43,12 +43,12 @@ export class Wizard implements IWizard {
     return this.context.canComplete;
   }
   public get canGoBack(): boolean {
-    const { currentStep, previousSteps } = this;
-    return canGoBack(currentStep, previousSteps);
+    const { currentStatus, currentStep, previousSteps } = this;
+    return canGoBack(currentStatus, currentStep, previousSteps);
   }
   public get canGoForward(): boolean {
-    const { allSteps, currentStep } = this;
-    return canGoForward(currentStep, allSteps);
+    const { allSteps, currentStatus, currentStep } = this;
+    return canGoForward(currentStatus, currentStep, allSteps);
   }
   public get status(): WizardStatuses {
     return this.currentStatus;
@@ -77,7 +77,7 @@ export class Wizard implements IWizard {
   public goBack(): Promise<void> {
     this.validateStatus(WizardOperations.goBack, [WizardStatuses.idle]);
     if (!this.canGoBack) throw new GoBackNotAllowedException();
-    this.setCurrentStatus(WizardStatuses.changingStep);
+    this.setCurrentStatus(WizardStatuses.goingBack);
     const { currentStep, previousSteps } = this;
     return goBack(currentStep, previousSteps, (a) =>
       this.setCurrentStep(a)
@@ -88,7 +88,7 @@ export class Wizard implements IWizard {
   public goForward(): Promise<void> {
     this.validateStatus(WizardOperations.goForward, [WizardStatuses.idle]);
     if (!this.canGoForward) throw new GoForwardNotAllowedException();
-    this.setCurrentStatus(WizardStatuses.changingStep);
+    this.setCurrentStatus(WizardStatuses.goingForward);
     return this.performGoForward().finally(() => {
       this.setCurrentStatus(WizardStatuses.idle);
     });
