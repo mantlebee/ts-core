@@ -1,4 +1,4 @@
-import { WizardOperations } from "../constants";
+import { WizardOperations, WizardStatuses } from "../constants";
 import {
   AbortNotAllowedException,
   CompleteNotAllowedException,
@@ -99,6 +99,27 @@ describe("wizards", () => {
               new GoBackNotAllowedException()
             );
           });
+          it("Status goes to 'goingBack' while 'goBack' is called", async () => {
+            const wizard = new Wizard(genericContext, [canGoStep, canGoStep]);
+            await wizard.start();
+            await wizard.goForward();
+            wizard.goBack();
+            expect(wizard.status).toBe(WizardStatuses.goingBack);
+          });
+          it("Status goes back to 'idle' if 'beforeGoBack' fails", async () => {
+            const wizard = new Wizard(genericContext, [
+              canGoStep,
+              {
+                canGoBack: true,
+                canGoForward: true,
+                beforeGoBack: () => Promise.reject(),
+              },
+            ]);
+            await wizard.start();
+            await wizard.goForward();
+            await wizard.goBack();
+            expect(wizard.status).toBe(WizardStatuses.idle);
+          });
         });
         describe("goForward", () => {
           it("Throws exception if wizard isn't in idle", async () => {
@@ -116,6 +137,25 @@ describe("wizards", () => {
             await expect(wizard.goForward.bind(wizard)).toThrow(
               new GoForwardNotAllowedException()
             );
+          });
+          it("Status goes to 'goingForward' while 'goForward' is called", async () => {
+            const wizard = new Wizard(genericContext, [canGoStep, genericStep]);
+            await wizard.start();
+            wizard.goForward();
+            expect(wizard.status).toBe(WizardStatuses.goingForward);
+          });
+          it("Status goes back to 'idle' if 'beforeGoForward' fails", async () => {
+            const wizard = new Wizard(genericContext, [
+              {
+                canGoBack: true,
+                canGoForward: true,
+                beforeGoForward: () => Promise.reject(),
+              },
+              genericStep,
+            ]);
+            await wizard.start();
+            await wizard.goForward();
+            expect(wizard.status).toBe(WizardStatuses.idle);
           });
         });
         describe("start", () => {

@@ -42,12 +42,13 @@ export function getCurrentStepIndex(
 export function goBack(
   currentStep: IWizardStep,
   previousSteps: List<IWizardStep>,
-  setCurrentStep: (step: IWizardStep) => void
+  setCurrentStep: (step: IWizardStep) => Promise<void>
 ): Promise<void> {
-  return new Promise(async (resolve) => {
-    if (currentStep.beforeGoBack) await currentStep.beforeGoBack();
+  return new Promise(async (resolve, reject) => {
+    if (currentStep.beforeGoBack)
+      await currentStep.beforeGoBack().catch(reject);
     const previousStep = previousSteps.pop() as IWizardStep;
-    await setCurrentStep(previousStep);
+    await setCurrentStep(previousStep).catch(reject);
     resolve();
   });
 }
@@ -56,14 +57,15 @@ export function goForward(
   currentStep: IWizardStep,
   previousSteps: List<IWizardStep>,
   allSteps: List<IWizardStep>,
-  setCurrentStep: (step: IWizardStep) => void
+  setCurrentStep: (step: IWizardStep) => Promise<void>
 ): Promise<void> {
-  return new Promise(async (resolve) => {
-    if (currentStep.beforeGoForward) await currentStep.beforeGoForward();
+  return new Promise(async (resolve, reject) => {
+    if (currentStep.beforeGoForward)
+      await currentStep.beforeGoForward().catch(reject);
     const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
     const nextStep = currentStep.nextStep || allSteps[currentStepIndex + 1];
     previousSteps.push(currentStep);
-    await setCurrentStep(nextStep);
+    await setCurrentStep(nextStep).catch(reject);
     resolve();
   });
 }
@@ -72,8 +74,8 @@ export function setCurrentStep(
   step: IWizardStep,
   setStep: (step: IWizardStep) => void
 ): Promise<void> {
-  return new Promise(async (resolve) => {
-    if (step.beforeEnter) await step.beforeEnter();
+  return new Promise(async (resolve, reject) => {
+    if (step.beforeEnter) await step.beforeEnter().catch(reject);
     setStep(step);
     resolve();
   });

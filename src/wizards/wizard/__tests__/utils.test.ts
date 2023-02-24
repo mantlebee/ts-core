@@ -97,6 +97,7 @@ describe("wizards", () => {
           const previousSteps = [genericStep];
           await goBack(currentStep, previousSteps, (a) => {
             currentStep = a;
+            return Promise.resolve();
           });
           expect(currentStep).toBe(genericStep);
           expect(previousSteps).toHaveLength(0);
@@ -105,6 +106,7 @@ describe("wizards", () => {
           let currentStep = canGoStepWithBefore;
           await goBack(currentStep, [], (a) => {
             currentStep = a;
+            return Promise.resolve();
           });
           expect(canGoStepWithBefore.beforeGoBack).toBeCalled();
         });
@@ -117,6 +119,7 @@ describe("wizards", () => {
           const previousSteps = [] as List<IWizardStep>;
           await goForward(currentStep, previousSteps, allSteps, (a) => {
             currentStep = a;
+            return Promise.resolve();
           });
           expect(currentStep).toBe(genericStep);
           expect(previousSteps).toHaveLength(1);
@@ -126,6 +129,7 @@ describe("wizards", () => {
           let currentStep = canGoStepWithBefore;
           await goForward(currentStep, [], [], (a) => {
             currentStep = a;
+            return Promise.resolve();
           });
           expect(canGoStepWithBefore.beforeGoForward).toBeCalled();
         });

@@ -62,36 +62,43 @@ export class Wizard implements IWizard {
     if (!this.canAbort) throw new AbortNotAllowedException();
     this.setCurrentStatus(WizardStatuses.aborting);
     const { abort = Promise.resolve } = this.context;
-    return abort().finally(() => {
-      this.setCurrentStatus(WizardStatuses.aborted);
-    });
+    return abort()
+      .catch((a) => a)
+      .finally(() => {
+        this.setCurrentStatus(WizardStatuses.aborted);
+      });
   }
   public complete(): Promise<void> {
     this.validateStatus(WizardOperations.complete, [WizardStatuses.idle]);
     if (!this.canComplete) throw new CompleteNotAllowedException();
     this.setCurrentStatus(WizardStatuses.completing);
-    return this.context.complete().finally(() => {
-      this.setCurrentStatus(WizardStatuses.completed);
-    });
+    return this.context
+      .complete()
+      .catch((a) => a)
+      .finally(() => {
+        this.setCurrentStatus(WizardStatuses.completed);
+      });
   }
   public goBack(): Promise<void> {
     this.validateStatus(WizardOperations.goBack, [WizardStatuses.idle]);
     if (!this.canGoBack) throw new GoBackNotAllowedException();
     this.setCurrentStatus(WizardStatuses.goingBack);
     const { currentStep, previousSteps } = this;
-    return goBack(currentStep, previousSteps, (a) =>
-      this.setCurrentStep(a)
-    ).finally(() => {
-      this.setCurrentStatus(WizardStatuses.idle);
-    });
+    return goBack(currentStep, previousSteps, (a) => this.setCurrentStep(a))
+      .catch((a) => a)
+      .finally(() => {
+        this.setCurrentStatus(WizardStatuses.idle);
+      });
   }
   public goForward(): Promise<void> {
     this.validateStatus(WizardOperations.goForward, [WizardStatuses.idle]);
     if (!this.canGoForward) throw new GoForwardNotAllowedException();
     this.setCurrentStatus(WizardStatuses.goingForward);
-    return this.performGoForward().finally(() => {
-      this.setCurrentStatus(WizardStatuses.idle);
-    });
+    return this.performGoForward()
+      .catch((a) => a)
+      .finally(() => {
+        this.setCurrentStatus(WizardStatuses.idle);
+      });
   }
   public async start(skipReadySteps = false): Promise<void> {
     this.validateStatus(WizardOperations.start, [WizardStatuses.needToStart]);
