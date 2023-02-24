@@ -120,6 +120,18 @@ describe("wizards", () => {
             await wizard.goBack();
             expect(wizard.status).toBe(WizardStatuses.idle);
           });
+          it("Step doesn't change if 'beforeGoBack' fails", async () => {
+            const testStep = {
+              canGoBack: true,
+              canGoForward: true,
+              beforeGoBack: () => Promise.reject(),
+            };
+            const wizard = new Wizard(genericContext, [canGoStep, testStep]);
+            await wizard.start();
+            await wizard.goForward();
+            await wizard.goBack();
+            expect(wizard.step).toBe(testStep);
+          });
         });
         describe("goForward", () => {
           it("Throws exception if wizard isn't in idle", async () => {
@@ -156,6 +168,17 @@ describe("wizards", () => {
             await wizard.start();
             await wizard.goForward();
             expect(wizard.status).toBe(WizardStatuses.idle);
+          });
+          it("Step doesn't change if 'beforeGoForward' fails", async () => {
+            const testStep = {
+              canGoBack: true,
+              canGoForward: true,
+              beforeGoForward: () => Promise.reject(),
+            };
+            const wizard = new Wizard(genericContext, [testStep, genericStep]);
+            await wizard.start();
+            await wizard.goForward();
+            expect(wizard.step).toBe(testStep);
           });
         });
         describe("start", () => {

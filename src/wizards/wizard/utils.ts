@@ -45,11 +45,13 @@ export function goBack(
   setCurrentStep: (step: IWizardStep) => Promise<void>
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
+    const performGoBack = async () => {
+      const previousStep = previousSteps.pop() as IWizardStep;
+      await setCurrentStep(previousStep).then(resolve).catch(reject);
+    };
     if (currentStep.beforeGoBack)
-      await currentStep.beforeGoBack().catch(reject);
-    const previousStep = previousSteps.pop() as IWizardStep;
-    await setCurrentStep(previousStep).catch(reject);
-    resolve();
+      await currentStep.beforeGoBack().then(performGoBack).catch(reject);
+    else performGoBack();
   });
 }
 
@@ -60,13 +62,15 @@ export function goForward(
   setCurrentStep: (step: IWizardStep) => Promise<void>
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
+    const performGoForward = async () => {
+      const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
+      const nextStep = currentStep.nextStep || allSteps[currentStepIndex + 1];
+      previousSteps.push(currentStep);
+      await setCurrentStep(nextStep).then(resolve).catch(reject);
+    };
     if (currentStep.beforeGoForward)
-      await currentStep.beforeGoForward().catch(reject);
-    const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
-    const nextStep = currentStep.nextStep || allSteps[currentStepIndex + 1];
-    previousSteps.push(currentStep);
-    await setCurrentStep(nextStep).catch(reject);
-    resolve();
+      await currentStep.beforeGoForward().then(performGoForward).catch(reject);
+    else performGoForward();
   });
 }
 
@@ -75,8 +79,12 @@ export function setCurrentStep(
   setStep: (step: IWizardStep) => void
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
-    if (step.beforeEnter) await step.beforeEnter().catch(reject);
-    setStep(step);
-    resolve();
+    const performSetStep = async () => {
+      setStep(step);
+      resolve();
+    };
+    if (step.beforeEnter)
+      await step.beforeEnter().then(performSetStep).catch(reject);
+    else performSetStep();
   });
 }
