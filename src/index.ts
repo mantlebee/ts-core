@@ -1,4 +1,5 @@
 export * from "./builders";
+export * from "./calendar";
 export * from "./colors";
 export * from "./common";
 export * from "./debug";
@@ -7,5 +8,6 @@ export * from "./delegates";
 export * from "./exceptions";
 export * from "./identities";
 export * from "./loggers";
+export * from "./scheduling";
 export * from "./subscriptions";
 export * from "./wizards";
