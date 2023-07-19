@@ -1,9 +1,9 @@
 export enum MonthWeekConditions {
-  first,
+  first = 1,
   second,
   third,
   fourth,
-  last,
+  last = -1,
 }
 
 export enum Months {
@@ -53,7 +53,7 @@ export const MonthDays = {
   29: 29,
   30: 30,
   31: 31,
-  last: 0,
+  last: -1,
 };
 
 export enum WeekDays {
