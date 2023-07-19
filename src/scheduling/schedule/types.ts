@@ -15,11 +15,6 @@ export type ScheduleRepeat = {
 
 export type ScheduleTime = { hours: number; minutes: number };
 
-/**
- * Extensible schedule definition, defining the period of activity (duration) and the daily occurrences configuration
- * @param duration period of activity of the schedule
- * @param occurrence daily occurrences configuration
- */
 export type Schedule = {
   startDate: Date;
   expireDate?: Date;
