@@ -1,5 +1,5 @@
 /**
- * List of items.
- * @param T Item.
+ * List of items of the same type.
+ * @param TItem Type of item.
  */
-export type List<T> = T[];
+export type List<TItem> = TItem[];

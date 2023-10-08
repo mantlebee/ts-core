@@ -1,6 +1,23 @@
 /**
- * Dictionary of items. A list of keys can be specified.
- * @param TValue Item.
+ * Dictionary of items of the same type. A list of keys can be specified.
+ * @example
+ * Simple dictionary, any string key is allowed.
+ * ```ts
+ * const examResultsBoard: Dictionary<number> = {
+ *  john: 877,
+ *  jane: 931,
+ *  // ...
+ * }
+ * ```
+ * @example
+ * Dictionary with specific keys only.
+ * ```ts
+ * const permissionsMap: Dictionary<boolean, "read" | "write"> = {
+ *  read: true,
+ *  write: false
+ * }
+ * ```
+ * @param TValue Type of the item.
  * @param TKey Type of the key, default is `string`.
  */
 export type Dictionary<TValue, TKey extends string = string> = {
