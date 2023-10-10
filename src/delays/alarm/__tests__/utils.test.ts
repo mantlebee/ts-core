@@ -2,8 +2,8 @@ import { TestDateNow } from "@test/index";
 
 import { getExpirationDelta } from "../utils";
 
-describe("Delays", () => {
-  describe("Alarm", () => {
+describe("delays", () => {
+  describe("alarm", () => {
     describe("utils", () => {
       describe("getExpirationDelta", () => {
         const fakeDateNow = new TestDateNow(new Date(2023, 0, 1, 12, 0, 0));

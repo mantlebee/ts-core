@@ -2,8 +2,8 @@ import { TestDateNow, TestTimeout } from "@test/index";
 
 import { Alarm } from "../models";
 
-describe("Delays", () => {
-  describe("Alarm", () => {
+describe("delays", () => {
+  describe("alarm", () => {
     describe("models", () => {
       describe("Alarm", () => {
         describe("constructor", () => {
