@@ -3,6 +3,10 @@ import { RgbaColor, RgbColor } from "./types";
 
 /**
  * Converts an HEX color to a RgbaColor object.
+ * @example
+ * ```ts
+ * hexToRgba("#FF0000") // {a: 1, b: 0, g: 0, r: 255}
+ * ```
  * @param hex HEX to convert to RGBA.
  * @returns RgbaColor.
  */
@@ -20,23 +24,31 @@ export function hexToRgba(hex: string): RgbaColor {
 
 /**
  * Converts RGBA values to an HEX string. If the alpha value is provided, the HEX result will contain the alpha channel: #rrggbbAA.
+ * @example
+ * ```ts
+ * rgbaToHex(255, 0, 0) // "#FF0000"
+ * ```
  * @param r Red value (0-255).
  * @param g Green value (0-255).
  * @param b Blue value (0-255).
  * @param a Alpha value (0-1). Default is 1.
  * @returns an HEX string of the RGBA values.
  */
-export function rgbaToHex(r: number, g: number, b: number, a?: number) {
+export function rgbaToHex(r: number, g: number, b: number, a?: number): string {
   let hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
   if (a !== undefined) hex += ((a * 255) | (1 << 8)).toString(16).slice(1);
   return hex;
 }
 
 /**
- * Converts a RGB string into a RgbColor object. It works with RGBA colors too.
- * Reference: https://www.geeksforgeeks.org/how-to-convert-rgb-color-string-into-an-object-in-javascript/
- * @param rgb RGB strng to convert.
- * @returns a RgbColor object.
+ * Converts a RGB string into an RgbColor object. It works with RGBA colors too.
+ * Reference: https://www.geeksforgeeks.org/how-to-convert-rgb-color-string-into-an-object-in-javascript/.
+ * @example
+ * ```ts
+ * rgbStringToRgb("rgb(255, 0, 0)") // {a: 1, b: 0, g: 0, r: 255}
+ * ```
+ * @param rgb RGB string to convert.
+ * @returns an RgbColor object.
  */
 export function rgbStringToRgb(rgb: string): RgbColor {
   const keys: List<KeyOf<RgbColor>> = ["r", "g", "b"];
@@ -52,9 +64,13 @@ export function rgbStringToRgb(rgb: string): RgbColor {
 }
 
 /**
- * Converts a short HEX to the full version: #f8a > #ff88aa.
- * @param shortHex Short HEX: #f8a.
- * @returns a full HEX: #ff88aa.
+ * Converts a short HEX to the full version (eg. #f8a > #ff88aa).
+ * @example
+ * ```ts
+ * shortHexToFullHex("#F00") // "#FF0000"
+ * ```
+ * @param shortHex Short HEX (eg. #f8a).
+ * @returns a full HEX (eg.  #ff88aa).
  */
 export function shortHexToFullHex(shortHex: string): string {
   const r = shortHex.slice(1, 2);
