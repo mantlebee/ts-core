@@ -1,20 +1,21 @@
-import { Dictionary, KeyOf, List, Nullable } from "@/common";
+import { Delegate, Dictionary, KeyOf, List, Nullable } from "@/common";
 
 /**
- * Looks for and returns an item in a list or a default on if no item is found.
- * ```javascript
+ * Looks for and returns an item in a list or a default one if item is not found.
+ * @example
+ * ```ts
  * firstOrDefault([1, 2, 3], a => a === 1)      // 1
  * firstOrDefault([1, 2, 3], a => a === 4)      // null
  * firstOrDefault([1, 2, 3], a => a === 4, 5)   // 5
  * ```
- * @param list List where to look for.
+ * @param list List where to look for the item.
  * @param delegate Function to find the item.
- * @param defaultItem Item used as default value if no item is found.
- * @returns the found item or the default provided.
+ * @param defaultItem Item used as default value if item is not found.
+ * @returns the found item or the default one provided.
  */
 export function firstOrDefault<T>(
   list: List<T>,
-  delegate: (a: T) => boolean,
+  delegate: Delegate<boolean, T>,
   defaultItem: Nullable<T> = null
 ): Nullable<T> {
   return list.find(delegate) || defaultItem;
@@ -22,7 +23,8 @@ export function firstOrDefault<T>(
 
 /**
  * Creates a dictionary from the given items, using the item[key] value as key of the dictionary.
- * ```javascript
+ * @example
+ * ```ts
  * const list = [{id: 1, name: "John"}, {id: 2, name: "Jane"}]
  * listToDictionary(list, "id")
  * // {
@@ -32,7 +34,7 @@ export function firstOrDefault<T>(
  * ```
  * @param list Items to map.
  * @param key Key of the item to use as dictionary key.
- * @returns a dictionary where the key is the value of item[key] and the value is the item
+ * @returns a dictionary where the key is the value of item[key] and the value is the item itself
  */
 export function listToDictionary<T>(
   list: List<T>,
@@ -46,8 +48,8 @@ export function listToDictionary<T>(
 }
 
 /**
- * Replace all the list items with new items. Usefull when the array instance can not change.
- * ```javascript
+ * Replaces all the list items with new items. Usefull when the array instance can not change.
+ * ```ts
  * const list = [1, 2, 3]
  * const listRef = list
  * replaceListItems(list, [4, 5, 6])

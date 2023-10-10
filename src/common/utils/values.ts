@@ -1,7 +1,7 @@
 /**
  * Checks if value is not null and not undefined.
  * @param value Value to check
- * @returns true is value is not null and not undefined.
+ * @returns true if value is not null and not undefined.
  */
 export function isDefined<TValue>(value: TValue): boolean {
   return !isUndefined(value) && !isNull(value);
@@ -10,7 +10,7 @@ export function isDefined<TValue>(value: TValue): boolean {
 /**
  * Checks if value is null.
  * @param value Value to check
- * @returns true is value is null.
+ * @returns true if value is null.
  */
 export function isNull<TValue>(value: TValue): boolean {
   return value === null;
@@ -19,7 +19,7 @@ export function isNull<TValue>(value: TValue): boolean {
 /**
  * Checks if value is null or undefined.
  * @param value Value to check
- * @returns true is value is null or undefined.
+ * @returns true if value is null or undefined.
  */
 export function isNullOrUndefined<TValue>(value: TValue): boolean {
   return isUndefined(value) || isNull(value);
@@ -28,7 +28,7 @@ export function isNullOrUndefined<TValue>(value: TValue): boolean {
 /**
  * Checks if value is undefined.
  * @param value Value to check
- * @returns true is value is undefined.
+ * @returns true if value is undefined.
  */
 export function isUndefined<TValue>(value: TValue): boolean {
   return value === undefined;

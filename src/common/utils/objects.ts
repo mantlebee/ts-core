@@ -1,8 +1,9 @@
 import { Any } from "@/common";
 
 /**
- * Check if the given object has the given key.
- * ```javascript
+ * Checks if the given object has the given key.
+ * @example
+ * ```ts
  * objectHasKey({name: "John"}, "name")     // true
  * objectHasKey({name: "John"}, "surname")  // false
  * ```
