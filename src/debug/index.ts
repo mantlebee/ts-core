@@ -1,11 +1,7 @@
-let debug = false;
+import { Enablable } from "@/common";
 
 /**
- * Gets or sets the debug value. If value is defined, its value is used to set/unset debug mode.
- * @param value Debug value to set.
- * @returns current debug value.
+ * Enable/disable the debug mode. Default is disabled.
+ * Debug mode is used by {@link IFactory} to instantiate classes into debug/release mode.
  */
-export function isDebug(value?: boolean): boolean {
-  if (value !== undefined) debug = value;
-  return debug;
-}
+export const DebugMode = new Enablable();

@@ -1,11 +1,11 @@
 import { IFactory } from "@/builders";
-import { isDebug } from "@/debug";
+import { DebugMode } from "@/debug";
 
 import { IBuilder } from "./interfaces";
 
 /**
  * This is a builder implementation that use a {@link IFactory}
- * and instances the right object according to isDebug() flag.
+ * and instances the right object according to the {@link DebugMode}.
  */
 export class Builder<T> implements IBuilder<T> {
   private _factory: IFactory<T>;
@@ -15,7 +15,7 @@ export class Builder<T> implements IBuilder<T> {
   }
 
   public build(): T {
-    if (isDebug()) return this._factory.createDebug();
+    if (DebugMode.isEnabled) return this._factory.createDebug();
     else return this._factory.createRelease();
   }
 }
