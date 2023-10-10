@@ -1,3 +1,6 @@
+/**
+ * Represents an alarm
+ */
 export interface IAlarm {
   readonly expired: boolean;
   readonly stopped: boolean;
