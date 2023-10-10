@@ -2,6 +2,11 @@ import { IAlarm } from "./interfaces";
 import { AlarmDelegate } from "./types";
 import { getExpirationDelta } from "./utils";
 
+/**
+ * Represents an alarm that executes code when the timer goes off.
+ * It requires an expiration date and a delegate to execute when the expiration date is due.
+ * When the Alarm goes off, it can be stopped or snoozed by a specific amount of time (milliseconds).
+ */
 export class Alarm implements IAlarm {
   private _stopped = false;
   private _timeout?: number;
