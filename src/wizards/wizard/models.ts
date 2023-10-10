@@ -57,6 +57,11 @@ export class Wizard implements IWizard {
     return this.currentStep;
   }
 
+  /**
+   * Aborts the wizard.
+   * Other actions are not callable anymore. Exceptions are thrown if they are called.
+   * An exception is thrown if called when {@link canAbort} is false.
+   */
   public abort(): Promise<void> {
     this.validateStatus(WizardOperations.abort, [WizardStatuses.idle]);
     if (!this.canAbort) throw new AbortNotAllowedException();
@@ -68,6 +73,11 @@ export class Wizard implements IWizard {
         this.setCurrentStatus(WizardStatuses.aborted);
       });
   }
+  /**
+   * Completes the wizard.
+   * Other actions are not callable anymore. Exceptions are thrown if they are called.
+   * An exception is thrown if called when {@link canComplete} is false.
+   */
   public complete(): Promise<void> {
     this.validateStatus(WizardOperations.complete, [WizardStatuses.idle]);
     if (!this.canComplete) throw new CompleteNotAllowedException();
@@ -79,6 +89,10 @@ export class Wizard implements IWizard {
         this.setCurrentStatus(WizardStatuses.completed);
       });
   }
+  /**
+   * Goes back to the previous step.
+   * An exception is thrown if called when {@link canGoBack} is false.
+   */
   public goBack(): Promise<void> {
     this.validateStatus(WizardOperations.goBack, [WizardStatuses.idle]);
     if (!this.canGoBack) throw new GoBackNotAllowedException();
@@ -90,6 +104,10 @@ export class Wizard implements IWizard {
         this.setCurrentStatus(WizardStatuses.idle);
       });
   }
+  /**
+   * Goes forward to the next step.
+   * An exception is thrown if called when {@link canGoForward} is false.
+   */
   public goForward(): Promise<void> {
     this.validateStatus(WizardOperations.goForward, [WizardStatuses.idle]);
     if (!this.canGoForward) throw new GoForwardNotAllowedException();
@@ -100,6 +118,11 @@ export class Wizard implements IWizard {
         this.setCurrentStatus(WizardStatuses.idle);
       });
   }
+  /**
+   * Initializes the wizard.
+   * An exception is thrown if is called twice.
+   * @param skipReadySteps Skips all steps that can go forward. The wizard begins from the first step that can't go forward.
+   */
   public async start(skipReadySteps = false): Promise<void> {
     this.validateStatus(WizardOperations.start, [WizardStatuses.needToStart]);
     this.setCurrentStatus(WizardStatuses.starting);
