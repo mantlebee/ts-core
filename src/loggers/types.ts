@@ -1,7 +1,3 @@
-import { LoggerTypes } from "./contants";
+import { LogTypes } from "./contants";
 
-export type LogDelegate = (
-  type: LoggerTypes,
-  message: string,
-  data?: any
-) => void;
+export type LogDelegate = (type: LogTypes, message: string, data?: any) => void;

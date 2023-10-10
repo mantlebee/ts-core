@@ -1,7 +1,7 @@
-import { LoggerTypes } from "../contants";
+import { LogTypes } from "../contants";
 
 export type SubscribableLoggerData = {
-  type: LoggerTypes;
+  type: LogTypes;
   message: string;
   data?: any;
 };

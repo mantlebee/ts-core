@@ -1,7 +1,5 @@
-import { Any } from "@/common";
 import { ISubscribable, Subscribable, Subscription } from "@/subscriptions";
 
-import { LoggerTypes } from "../contants";
 import { ILogger } from "../interfaces";
 import { Logger } from "../models";
 import { SubscribableLoggerData } from "./types";
@@ -12,9 +10,12 @@ export class SubscribableLogger
 {
   private _subscribable = new Subscribable<SubscribableLoggerData>();
 
-  public override log(type: LoggerTypes, message: string, data?: Any): void {
-    this._subscribable.notifyData({ type, message, data });
+  public constructor() {
+    super((type, message, data) =>
+      this._subscribable.notifyData({ type, message, data })
+    );
   }
+
   public subscribe(subscription: Subscription<SubscribableLoggerData>): number {
     return this._subscribable.subscribe(subscription);
   }

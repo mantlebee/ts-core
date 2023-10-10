@@ -1,9 +1,9 @@
 import { Any } from "@/common";
 
-import { LoggerTypes } from "./contants";
+import { LogTypes } from "./contants";
 
 export interface ILogger {
-  log(type: LoggerTypes, message: string, data?: Any): void;
+  log(type: LogTypes, message: string, data?: Any): void;
   logDebug(message: string, data?: Any): void;
   logError(message: string, data?: Any): void;
   logInfo(message: string, data?: Any): void;
