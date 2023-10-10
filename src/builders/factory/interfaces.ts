@@ -1,5 +1,6 @@
 /**
- * Abstract factory pattern to build debug or release instances
+ * Abstract factory pattern to build debug or release instances.
+ * Use it in combination of {@link IBuilder}
  */
 export interface IFactory<T> {
   /**
