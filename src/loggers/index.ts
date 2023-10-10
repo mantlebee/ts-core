@@ -1,3 +1,4 @@
+export * from "./console-logger";
 export * from "./contants";
 export * from "./interfaces";
 export * from "./models";
