@@ -65,6 +65,16 @@ describe("wizards", () => {
             await wizard.complete();
             expect(canContext.complete).toBeCalled();
           });
+          it("Complete reject is propagated", async () => {
+            const wizard = new Wizard(
+              { canComplete: true, complete: () => Promise.reject() },
+              [genericStep]
+            );
+            await wizard.start();
+            await expect(wizard.complete.bind(wizard)).rejects.toEqual(
+              undefined
+            );
+          });
           it("Throws exception if wizard isn't in idle", async () => {
             const wizard = new Wizard(genericContext, [genericStep]);
             await expect(wizard.complete.bind(wizard)).toThrow(
@@ -117,7 +127,9 @@ describe("wizards", () => {
             ]);
             await wizard.start();
             await wizard.goForward();
-            await wizard.goBack();
+            try {
+              await wizard.goBack();
+            } catch {}
             expect(wizard.status).toBe(WizardStatuses.idle);
           });
           it("Step doesn't change if 'beforeGoBack' fails", async () => {
@@ -129,7 +141,9 @@ describe("wizards", () => {
             const wizard = new Wizard(genericContext, [canGoStep, testStep]);
             await wizard.start();
             await wizard.goForward();
-            await wizard.goBack();
+            try {
+              await wizard.goBack();
+            } catch {}
             expect(wizard.step).toBe(testStep);
           });
         });
@@ -166,7 +180,9 @@ describe("wizards", () => {
               genericStep,
             ]);
             await wizard.start();
-            await wizard.goForward();
+            try {
+              await wizard.goForward();
+            } catch {}
             expect(wizard.status).toBe(WizardStatuses.idle);
           });
           it("Step doesn't change if 'beforeGoForward' fails", async () => {
@@ -177,7 +193,9 @@ describe("wizards", () => {
             };
             const wizard = new Wizard(genericContext, [testStep, genericStep]);
             await wizard.start();
-            await wizard.goForward();
+            try {
+              await wizard.goForward();
+            } catch {}
             expect(wizard.step).toBe(testStep);
           });
         });

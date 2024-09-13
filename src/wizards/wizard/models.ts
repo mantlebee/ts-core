@@ -68,7 +68,7 @@ export class Wizard implements IWizard {
     this.setCurrentStatus(WizardStatuses.aborting);
     const { abort = Promise.resolve } = this.context;
     return abort()
-      .catch((a) => a)
+      .catch((a) => Promise.reject(a))
       .finally(() => {
         this.setCurrentStatus(WizardStatuses.aborted);
       });
@@ -84,7 +84,7 @@ export class Wizard implements IWizard {
     this.setCurrentStatus(WizardStatuses.completing);
     return this.context
       .complete()
-      .catch((a) => a)
+      .catch((a) => Promise.reject(a))
       .finally(() => {
         this.setCurrentStatus(WizardStatuses.completed);
       });
@@ -99,7 +99,7 @@ export class Wizard implements IWizard {
     this.setCurrentStatus(WizardStatuses.goingBack);
     const { currentStep, previousSteps } = this;
     return goBack(currentStep, previousSteps, (a) => this.setCurrentStep(a))
-      .catch((a) => a)
+      .catch((a) => Promise.reject(a))
       .finally(() => {
         this.setCurrentStatus(WizardStatuses.idle);
       });
@@ -113,7 +113,7 @@ export class Wizard implements IWizard {
     if (!this.canGoForward) throw new GoForwardNotAllowedException();
     this.setCurrentStatus(WizardStatuses.goingForward);
     return this.performGoForward()
-      .catch((a) => a)
+      .catch((a) => Promise.reject(a))
       .finally(() => {
         this.setCurrentStatus(WizardStatuses.idle);
       });
