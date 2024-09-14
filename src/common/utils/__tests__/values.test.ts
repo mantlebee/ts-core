@@ -1,8 +1,27 @@
-import { isDefined, isNull, isNullOrUndefined, isUndefined } from "../values";
+import {
+  getValue,
+  isDefined,
+  isNull,
+  isNullOrUndefined,
+  isUndefined,
+} from "../values";
 
 describe("common", () => {
   describe("utils", () => {
     describe("values", () => {
+      describe("getValue", () => {
+        it("Returns the value as-is if is not a getter", () => {
+          expect(getValue(42)).toBe(42);
+        });
+        it("Returns the getter result if is a getter", () => {
+          expect(getValue(() => 42)).toBe(42);
+        });
+        it("Returns the getter result if is a getter, using the given argument", () => {
+          expect(
+            getValue<number, { id: number }>((a) => a.id, { id: 42 })
+          ).toBe(42);
+        });
+      });
       describe("isDefined", () => {
         it("Returns true if value is not null and not undefined", () => {
           const value = 1;
