@@ -2,6 +2,7 @@ export * from "./arrays";
 export * from "./booleans";
 export * from "./chars";
 export * from "./dates";
+export * from "./functions";
 export * from "./numbers";
 export * from "./objects";
 export * from "./strings";
