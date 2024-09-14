@@ -18,7 +18,7 @@ import { Any } from "@/common";
  * @returns true if arg is an object.
  */
 export function isObject(arg: Any): boolean {
-  return (
+  return Boolean(
     typeof arg === "object" && arg instanceof Object && !(arg instanceof Array)
   );
 }
