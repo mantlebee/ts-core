@@ -1,6 +1,18 @@
 import { Any, List, Stringable } from "@/common";
 
 /**
+ * Convert a string into a slug.
+ * @param str String to convert into a slug.
+ * @returns the slug version of the {@link str} parameter.
+ */
+export function createSlug(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+}
+
+/**
  * Formats a string, replacing the placeholders with the given values.
  * @example
  * ```ts

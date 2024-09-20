@@ -1,4 +1,5 @@
 import {
+  createSlug,
   formatString,
   generateGuid,
   isEmail,
@@ -9,6 +10,12 @@ import {
 describe("common", () => {
   describe("utils", () => {
     describe("strings", () => {
+      describe("createSlug", () => {
+        it("Converts a string into a slug.", () => {
+          const slug = createSlug("I'm the best ! The #1");
+          expect(slug).toBe("im-the-best--the-1");
+        });
+      });
       describe("formatString", () => {
         it("Replaces placeholders with given data", () => {
           const formattedString = formatString(
