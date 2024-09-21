@@ -12,8 +12,8 @@ describe("common", () => {
     describe("strings", () => {
       describe("createSlug", () => {
         it("Converts a string into a slug.", () => {
-          const slug = createSlug("I'm the best ! The #1");
-          expect(slug).toBe("im-the-best--the-1");
+          const slug = createSlug("I'm the best ! The niño #1");
+          expect(slug).toBe("im-the-best-the-nino-1");
         });
       });
       describe("formatString", () => {
