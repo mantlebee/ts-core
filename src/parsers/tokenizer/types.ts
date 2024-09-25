@@ -1,15 +1,23 @@
-import { List } from "@/common";
+import { List, Nullable } from "@/common";
 
-import { IToken } from "./interface";
-
-export type RuleMatch = {
-  readonly endIndex: number;
-  readonly match: string;
-  readonly value: string;
+export type Token = {
+  occurrences: List<TokenOccurrence>;
+  match: string;
+  value: string;
 };
 
-export type Tokenized = {
-  readonly tokens: List<IToken>;
+export type TokenizerResult = {
+  tokens: List<Token>;
+};
+
+export type TokenizerRule = {
+  match(text: string, currentIndex: number): Nullable<TokenizerRuleMatch>;
+};
+
+export type TokenizerRuleMatch = {
+  endIndex: number;
+  match: string;
+  value: string;
 };
 
 export type TokenOccurrence = {

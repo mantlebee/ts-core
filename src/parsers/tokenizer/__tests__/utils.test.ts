@@ -1,9 +1,9 @@
 import { getSpecialChars, List } from "@/common";
 
-import { IRule, IToken } from "../interface";
+import { Token, TokenizerRule } from "../types";
 import { tokenize } from "../utils";
 
-const RepeatableCharacterRule: (char: string) => IRule = (char) => ({
+const RepeatableCharacterRule: (char: string) => TokenizerRule = (char) => ({
   match: (text, currentIndex) => {
     if (text[currentIndex] === char) {
       if (/^.\{\d{1,}\}/.test(text.substring(currentIndex))) {
@@ -21,7 +21,7 @@ const RepeatableCharacterRule: (char: string) => IRule = (char) => ({
   },
 });
 
-const BracketsRule: IRule = {
+const BracketsRule: TokenizerRule = {
   match: (text, currentIndex) => {
     if (text[currentIndex] === "(") {
       const endIndex = text.indexOf(")", currentIndex);
@@ -36,7 +36,7 @@ const BracketsRule: IRule = {
 };
 const LowerCaseRule = RepeatableCharacterRule("a");
 const NumberRule = RepeatableCharacterRule("0");
-const SpecialCharRule: IRule = {
+const SpecialCharRule: TokenizerRule = {
   match(text, currentIndex) {
     const specialChars = getSpecialChars();
     const char = text[currentIndex];
@@ -59,7 +59,7 @@ describe("parsers", () => {
             SpecialCharRule,
             UpperCaseRule,
           ]);
-          const expected: List<IToken> = [
+          const expected: List<Token> = [
             {
               occurrences: [{ endIndex: 10, startIndex: 0 }],
               match: "(Phone of )",
