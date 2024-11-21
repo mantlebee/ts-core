@@ -6,7 +6,11 @@ export interface IColor {
   readonly blue: number;
   readonly green: number;
   readonly red: number;
+  // Black or White IColor
+  contrast(): IColor;
   hex(): string;
+  hsl(): string;
+  hsla(): string;
   rgb(): string;
   rgba(): string;
 }
