@@ -1,5 +1,7 @@
 import { KeyOf, List } from "..";
 import { WebColorNamesHexMap } from "./constants";
+import { IColor } from "./interfaces";
+import { Color } from "./models";
 import {
   HslaColor,
   HslColor,
@@ -7,6 +9,21 @@ import {
   RgbColor,
   WebColorName,
 } from "./types";
+
+/**
+ * Tries to convert a string into an IColor instance.
+ * If {@link value} is not a valid string, a black color is returned instead.
+ * @param value string to convert into an IColor instance; accepted values are: HEX, HSL, RGB(A), Web Color Name.
+ * @returns an IColor instance.
+ */
+export function getColor(value: string): IColor {
+  if (value.startsWith("#")) return Color.fromHex(value);
+  if (value.startsWith("hsl")) return Color.fromHsl(value);
+  if (value.startsWith("rgb")) return Color.fromRgb(value);
+  if (WebColorNamesHexMap[value as WebColorName])
+    return Color.fromWebColorName(value as WebColorName);
+  return new Color(0, 0, 0);
+}
 
 /**
  * Converts an HEX color to a RgbaColor object.

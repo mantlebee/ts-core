@@ -1,7 +1,8 @@
-import { Dictionary } from "@/common";
+import { Dictionary, List } from "@/common";
 
 import { RgbaColor, RgbColor } from "../types";
 import {
+  getColor,
   hexToRgba,
   hslStringToRgba,
   rgbaToHex,
@@ -14,6 +15,21 @@ import {
 
 describe("colors", () => {
   describe("utils", () => {
+    describe("getColor", () => {
+      it("Converts valid strings into colors", () => {
+        const values: List<List<string>> = [
+          ["#ff0000", "#ff0000"],
+          ["hsl(120,100%,50%)", "#00ff00"],
+          ["rgb(0,0,255)", "#0000ff"],
+          ["rgba(255,136,0,0.5)", "#ff88007f"],
+          ["lightseagreen", "#20b2aa"],
+          ["INVALIDSTRING", "#000000"],
+        ];
+        values.forEach(([from, to]) => {
+          expect(getColor(from).hex()).toEqual(to);
+        });
+      });
+    });
     describe("hslStringToRgba", () => {
       it("Converts HSL to RGBA", () => {
         const toTest: Dictionary<RgbaColor> = {
