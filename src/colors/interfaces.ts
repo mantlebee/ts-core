@@ -6,8 +6,12 @@ export interface IColor {
   readonly blue: number;
   readonly green: number;
   readonly red: number;
-  // Black or White IColor
-  contrast(): IColor;
+  /**
+   * Returns a IColor instance of value black or white,
+   * based on the current color value.
+   * @param threshold luminance threshold; returns black if current luminance is lower than the thershold, white otherwise.
+   */
+  contrast(threshold?: number): IColor;
   hex(): string;
   hsl(): string;
   hsla(): string;

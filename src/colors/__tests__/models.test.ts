@@ -44,8 +44,10 @@ describe("colors", () => {
       });
       describe("Extra methods", () => {
         it("Method contrast returns black or white, based on current color", () => {
-          expect(Color.fromHex("#ff8800").contrast().hex()).toBe("#000000");
           expect(Color.fromHex("#0088ff").contrast().hex()).toBe("#ffffff");
+          expect(Color.fromHex("#0088ff").contrast(0.6).hex()).toBe("#000000");
+          expect(Color.fromHex("#ff8800").contrast().hex()).toBe("#000000");
+          expect(Color.fromHex("#ff8800").contrast(0.3).hex()).toBe("#ffffff");
         });
       });
       describe("Static constructors", () => {

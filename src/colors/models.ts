@@ -35,14 +35,15 @@ export class Color implements IColor {
   }
 
   /**
-   * Creates a Color instance with high contrast.
-   * Results could be "black" or "white".
+   * Returns a IColor instance of value black or white,
+   * based on the current color value.
+   * @param threshold luminance threshold; returns black if current luminance is lower than the thershold, white otherwise.
    * @returns Black or White Color instance.
    */
-  public contrast(): IColor {
+  public contrast(threshold: number = 0.5): IColor {
     const { b, g, r } = this.color;
     const luminance = 1 - (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance < 0.5 ? new Color(0, 0, 0) : new Color(255, 255, 255);
+    return luminance < threshold ? new Color(0, 0, 0) : new Color(255, 255, 255);
   }
 
   /**
