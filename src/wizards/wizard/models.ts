@@ -68,10 +68,13 @@ export class Wizard implements IWizard {
     this.setCurrentStatus(WizardStatuses.aborting);
     const { abort = Promise.resolve } = this.context;
     return abort()
-      .catch((a) => Promise.reject(a))
-      .finally(() => {
+      .then(() => {
         this.setCurrentStatus(WizardStatuses.aborted);
-      });
+      })
+      .catch((...args) => {
+        this.setCurrentStatus(WizardStatuses.idle)
+        return Promise.reject(...args)
+      })
   }
   /**
    * Completes the wizard.
@@ -79,15 +82,18 @@ export class Wizard implements IWizard {
    * An exception is thrown if called when {@link canComplete} is false.
    */
   public complete(): Promise<void> {
-    this.validateStatus(WizardOperations.complete, [WizardStatuses.idle]);
-    if (!this.canComplete) throw new CompleteNotAllowedException();
-    this.setCurrentStatus(WizardStatuses.completing);
+    this.validateStatus(WizardOperations.complete, [WizardStatuses.idle])
+    if (!this.canComplete) throw new CompleteNotAllowedException()
+    this.setCurrentStatus(WizardStatuses.completing)
     return this.context
       .complete()
-      .catch((a) => Promise.reject(a))
-      .finally(() => {
-        this.setCurrentStatus(WizardStatuses.completed);
-      });
+      .then(() => {
+        this.setCurrentStatus(WizardStatuses.completed)
+      })
+      .catch((...args) => {
+        this.setCurrentStatus(WizardStatuses.idle)
+        return Promise.reject(...args)
+      })
   }
   /**
    * Goes back to the previous step.

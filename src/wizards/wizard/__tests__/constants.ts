@@ -11,8 +11,8 @@ export const canContext: WizardContext = {
 export const canNotContext: WizardContext = {
   canAbort: false,
   canComplete: false,
-  abort: jest.fn(() => Promise.resolve()),
-  complete: jest.fn(() => Promise.resolve()),
+  abort: jest.fn(() => Promise.reject()),
+  complete: jest.fn(() => Promise.reject()),
 };
 export const genericContext: WizardContext = {
   canComplete: false,

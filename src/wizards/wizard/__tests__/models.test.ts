@@ -41,6 +41,18 @@ describe("wizards", () => {
             await wizard.abort();
             expect(canContext.abort).toBeCalled();
           });
+          it("Status is aborted after abort", async () => {
+            const wizard = new Wizard(canContext, [genericStep]);
+            await wizard.start();
+            await wizard.abort();
+            expect(wizard.status).toEqual(WizardStatuses.aborted);
+          });
+          it("Status is idle if abort fails", async () => {
+            const wizard = new Wizard({ ...canNotContext, canAbort: true }, [genericStep]);
+            await wizard.start();
+            await wizard.abort().catch(() => {});
+            expect(wizard.status).toEqual(WizardStatuses.idle);
+          });
           it("Throws exception if wizard isn't in idle", async () => {
             const wizard = new Wizard(genericContext, [genericStep]);
             await expect(wizard.abort.bind(wizard)).toThrow(
@@ -74,6 +86,18 @@ describe("wizards", () => {
             await expect(wizard.complete.bind(wizard)).rejects.toEqual(
               undefined
             );
+          });
+          it("Status is completed after complete", async () => {
+            const wizard = new Wizard(canContext, [genericStep]);
+            await wizard.start();
+            await wizard.complete();
+            expect(wizard.status).toEqual(WizardStatuses.completed);
+          });
+          it("Status is idle if complete fails", async () => {
+            const wizard = new Wizard({ ...canNotContext, canComplete: true }, [genericStep]);
+            await wizard.start();
+            await wizard.complete().catch(() => {});
+            expect(wizard.status).toEqual(WizardStatuses.idle);
           });
           it("Throws exception if wizard isn't in idle", async () => {
             const wizard = new Wizard(genericContext, [genericStep]);
