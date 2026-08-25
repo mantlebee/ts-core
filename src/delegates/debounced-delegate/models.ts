@@ -1,4 +1,4 @@
-import { Nullable } from "@/common";
+import { List, Nullable } from "@/common";
 
 import { IDebouncedDelegate } from "./interfaces";
 
@@ -10,7 +10,7 @@ export class DebouncedDelegate implements IDebouncedDelegate {
   /** Milliseconds after which the {@link _delegate} must be executed. */
   private readonly _delay!: number;
   /** Function to execute. */
-  private readonly _delegate!: () => void;
+  private readonly _delegate!: (...args: List<unknown>) => void;
   /**
    * Timeout that is set and reset every time the {@link call} method is called.
    * After its expiring, the {@link _delegate} is executed.
@@ -20,7 +20,7 @@ export class DebouncedDelegate implements IDebouncedDelegate {
    * @param delegate {@link delegate}
    * @param delay {@link delay}
    */
-  public constructor(delegate: () => void, delay: number) {
+  public constructor(delegate: (...args: List<unknown>) => void, delay: number) {
     this._delay = delay;
     this._delegate = delegate;
   }
@@ -28,11 +28,11 @@ export class DebouncedDelegate implements IDebouncedDelegate {
    * Reset the timeout any time the method is run.
    * When the timeout expires the {@link _delegate} is executed.
    */
-  public call(): void {
+  public call(...args: List<unknown>): void {
     this.clearTimeout();
     this._timeout = window.setTimeout(() => {
       this.clearTimeout();
-      this._delegate();
+      this._delegate(...args);
     }, this._delay);
   }
   /**

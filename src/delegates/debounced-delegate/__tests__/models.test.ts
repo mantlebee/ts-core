@@ -17,6 +17,16 @@ describe("delegates", () => {
           fakeTimeout.runPending();
           expect(delegate).toBeCalledTimes(1);
         });
+        it("the delegate is invoked using the same params passed to the last call() invocation", () => {
+          const fakeTimeout = new TestTimeout();
+          const delegate = jest.fn();
+          const debouncedDelegate = new DebouncedDelegate(delegate, 1000);
+          debouncedDelegate.call(true);
+          debouncedDelegate.call(123);
+          debouncedDelegate.call("string");
+          fakeTimeout.runPending();
+          expect(delegate).toBeCalledWith("string");
+        });
       });
     });
   });
