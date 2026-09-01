@@ -51,3 +51,13 @@ export type KeysOf<TObject, TValue = TObject[keyof TObject]> = {
 export type OptionalKeysOf<TObject, TValue = TObject[keyof TObject]> = {
   [TKey in keyof TObject]?: TValue;
 };
+
+/**
+ * Same as the given object, but a with a specific property required,
+ * instead of optional.
+ * @param TObject Object to simulate.
+ * @param TKey Object's optional key that become required.
+ */
+export type WithRequiredKey<TObject, TKey extends keyof TObject> = TObject & {
+  [Property in TKey]-?: TObject[Property];
+};
