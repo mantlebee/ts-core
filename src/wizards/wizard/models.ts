@@ -19,6 +19,12 @@ import {
   setCurrentStep,
 } from "./utils";
 
+/**
+ * Default {@link IWizard} implementation: drives an ordered list of
+ * {@link IWizardStep}s through their lifecycle, awaiting each step's
+ * `beforeEnter` / `beforeGoBack` / `beforeGoForward` hooks and enforcing which
+ * operations are allowed in the current {@link WizardStatuses}.
+ */
 export class Wizard implements IWizard {
   protected allSteps: List<IWizardStep>;
   protected currentStatus: WizardStatuses;
@@ -26,6 +32,11 @@ export class Wizard implements IWizard {
   protected context: WizardContext;
   protected previousSteps: List<IWizardStep>;
 
+  /**
+   * @param context Host-provided abort/complete behaviour and permissions.
+   * @param steps Ordered steps; must contain at least one.
+   * @throws `EmptyStepsException` when steps is empty.
+   */
   public constructor(context: WizardContext, steps: List<IWizardStep>) {
     if (!steps.length) throw new EmptyStepsException();
     this.allSteps = steps;
@@ -35,24 +46,30 @@ export class Wizard implements IWizard {
     this.previousSteps = [];
   }
 
+  /** `true` when {@link abort} is allowed in the current state. */
   public get canAbort(): boolean {
     const { canAbort = true } = this.context;
     return canAbort;
   }
+  /** `true` when {@link complete} is allowed in the current state. */
   public get canComplete(): boolean {
     return this.context.canComplete;
   }
+  /** `true` when {@link goBack} is allowed in the current state. */
   public get canGoBack(): boolean {
     const { currentStatus, currentStep, previousSteps } = this;
     return canGoBack(currentStatus, currentStep, previousSteps);
   }
+  /** `true` when {@link goForward} is allowed in the current state. */
   public get canGoForward(): boolean {
     const { allSteps, currentStatus, currentStep } = this;
     return canGoForward(currentStatus, currentStep, allSteps);
   }
+  /** Current lifecycle status of the wizard. */
   public get status(): WizardStatuses {
     return this.currentStatus;
   }
+  /** The step currently displayed by the wizard. */
   public get step(): IWizardStep {
     return this.currentStep;
   }

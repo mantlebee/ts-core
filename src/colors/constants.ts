@@ -1,3 +1,6 @@
+/**
+ * Maps every CSS/Web color name to its lowercase HEX value (e.g. `aliceblue` -> `#f0f8ff`).
+ */
 export const WebColorNamesHexMap = {
   aliceblue: "#f0f8ff",
   antiquewhite: "#faebd7",

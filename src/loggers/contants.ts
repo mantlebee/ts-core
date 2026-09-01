@@ -1,3 +1,6 @@
+/**
+ * Severity/category of a log entry.
+ */
 export enum LogTypes {
   debug = "debug",
   error = "error",

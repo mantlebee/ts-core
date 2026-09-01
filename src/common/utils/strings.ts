@@ -1,9 +1,9 @@
 import { Any, List, Stringable } from "@/common";
 
 /**
- * Convert a string into a slug.
+ * Converts a string into a slug.
  * @param str String to convert into a slug.
- * @returns the slug version of the {@link str} parameter.
+ * @returns the slug version of str.
  */
 export function createSlug(str: string): string {
   // trim all kind of whitespaces (\n, \t, etc.)

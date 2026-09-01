@@ -4,29 +4,30 @@ import { IDebouncedDelegate } from "./interfaces";
 
 /**
  * Prevents multiple and repetitive executions of a function, in a specific time range.
- * Delays the execution of a {@link _delegate}, if the {@link call} method is called multiple times in a time range ({@link _delay}).
+ * Delays the execution of the delegate while the {@link call} method keeps being
+ * called within the configured time range.
  */
 export class DebouncedDelegate implements IDebouncedDelegate {
-  /** Milliseconds after which the {@link _delegate} must be executed. */
+  /** Milliseconds of quiet time to wait before the delegate is executed. */
   private readonly _delay!: number;
   /** Function to execute. */
   private readonly _delegate!: (...args: List<unknown>) => void;
   /**
    * Timeout that is set and reset every time the {@link call} method is called.
-   * After its expiring, the {@link _delegate} is executed.
+   * When it expires, the delegate is executed.
    */
   private _timeout: Nullable<number> = null;
   /**
-   * @param delegate {@link delegate}
-   * @param delay {@link delay}
+   * @param delegate Function to execute once the calls stop.
+   * @param delay Milliseconds of quiet time to wait before executing.
    */
   public constructor(delegate: (...args: List<unknown>) => void, delay: number) {
     this._delay = delay;
     this._delegate = delegate;
   }
   /**
-   * Reset the timeout any time the method is run.
-   * When the timeout expires the {@link _delegate} is executed.
+   * Resets the timeout every time the method is run.
+   * When the timeout expires the delegate is executed.
    */
   public call(...args: List<unknown>): void {
     this.clearTimeout();
@@ -36,7 +37,7 @@ export class DebouncedDelegate implements IDebouncedDelegate {
     }, this._delay);
   }
   /**
-   * Stops and clears the {@link _timeout}.
+   * Stops and clears the pending timeout, if any.
    */
   private clearTimeout(): void {
     if (this._timeout) {

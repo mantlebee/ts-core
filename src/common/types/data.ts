@@ -9,10 +9,12 @@ export type Any = any; // eslint-disable-line
 
 /**
  * Type of value that can be `null` too.
+ * @typeParam T Type of the non-null value.
  */
 export type Nullable<T> = T | null;
 
 /**
  * Type of value that can be `undefined` too.
+ * @typeParam T Type of the defined value.
  */
 export type Undefinable<T> = T | undefined;

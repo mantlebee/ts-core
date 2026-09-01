@@ -4,20 +4,38 @@ import { List } from "@/common";
 //#region Common Schedule Types
 
 /**
- * Repeat the schedule execution every X time for an optional amount of time
- * @param every after how much time the schedule has to be executed
- * @param duration after how much time the schedule has to be executed
+ * Repeat the schedule execution every X time, optionally for a limited amount of time.
  */
 export type ScheduleRepeat = {
+  /** Amount of time that has to elapse between one execution and the next. */
   every: ScheduleTime;
+  /**
+   * For how long the schedule keeps repeating, counted from its start.
+   * When omitted, the schedule repeats indefinitely.
+   */
   duration?: ScheduleTime;
 };
 
-export type ScheduleTime = { hours: number; minutes: number };
+/**
+ * An amount of time expressed in hours and minutes.
+ */
+export type ScheduleTime = {
+  /** Hours component of the amount of time. */
+  hours: number;
+  /** Minutes component of the amount of time. */
+  minutes: number;
+};
 
+/**
+ * Common shape shared by every schedule: when it starts, when it expires and
+ * whether it repeats.
+ */
 export type Schedule = {
+  /** Date and time the schedule becomes active. */
   startDate: Date;
+  /** Date and time after which the schedule no longer runs. */
   expireDate?: Date;
+  /** Repetition rule; when omitted, the schedule runs only once. */
   repeat?: ScheduleRepeat;
 };
 
@@ -26,45 +44,48 @@ export type Schedule = {
 //#region Specific Schedules
 
 /**
- * Execute the schedule once at a specific DateTime
+ * Execute the schedule once, at a specific date and time.
  */
 export type OneTimeSchedule = Schedule;
 
 /**
- * Execute the schedule every X days
- * @param every days occur between an execution and the next one
+ * Execute the schedule every X days.
  */
-export type DailySchedule = Schedule & { every: number };
-
-/**
- * Execute the schedule at specific weekly days
- * @param days the list of {@link WeekDays} on which execute the schedule
- * @param every weeks occur between an execution and the next one
- */
-export type WeeklySchedule = Schedule & {
-  days: List<WeekDays>;
+export type DailySchedule = Schedule & {
+  /** Number of days between one execution and the next. */
   every: number;
 };
 
 /**
- * Execute the schedule on a specific day (number, eg: 5), every X months
- * @param days days of the month in which execute the schedule
- * @param months months in which execute the schedule
+ * Execute the schedule on specific week days.
+ */
+export type WeeklySchedule = Schedule & {
+  /** The {@link WeekDays} on which the schedule is executed. */
+  days: List<WeekDays>;
+  /** Number of weeks between one execution and the next. */
+  every: number;
+};
+
+/**
+ * Execute the schedule on specific days of the month (e.g. the 5th), in specific months.
  */
 export type MonthlyByDaySchedule = Schedule & {
+  /** Days of the month on which the schedule is executed. */
   days: List<number>;
+  /** Months in which the schedule is executed. */
   months: List<Months>;
 };
 
 /**
- * Execute the schedule on a specific day of the week (eg: first monday), every X months
- * @param conditions list of specific weekly days of the month (eg: first, last)
- * @param weekDays days of the week in which execute the schedule
- * @param months months in which execute the schedule
+ * Execute the schedule on a specific day of the week within the month
+ * (e.g. the first Monday), in specific months.
  */
 export type MonthlyByWeeklyDaySchedule = Schedule & {
+  /** Which occurrences within the month are targeted (e.g. first, last). */
   conditions: List<MonthWeekConditions>;
+  /** Days of the week on which the schedule is executed. */
   weekDays: List<WeekDays>;
+  /** Months in which the schedule is executed. */
   months: List<Months>;
 };
 

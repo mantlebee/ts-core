@@ -32,8 +32,8 @@ export function getNumberChars(): string {
 }
 
 /**
- * Creates a uppercase string of the alphabet.
- * @returns a uppercase string of the alphabet.
+ * Creates an uppercase string of the alphabet.
+ * @returns an uppercase string of the alphabet.
  */
 export function getUppercaseChars(): string {
   return getCharsFromCharCodesRange(65, 26);

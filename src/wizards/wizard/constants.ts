@@ -1,3 +1,7 @@
+/**
+ * The operations a wizard can perform; used to report which one was invalid for
+ * the current status.
+ */
 export enum WizardOperations {
   abort = "abort",
   complete = "complete",
@@ -6,6 +10,10 @@ export enum WizardOperations {
   start = "start",
 }
 
+/**
+ * Lifecycle status of a wizard. `-ing` values are transient states held while the
+ * matching async operation is in flight.
+ */
 export enum WizardStatuses {
   aborted,
   aborting,

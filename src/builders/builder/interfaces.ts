@@ -1,11 +1,12 @@
 /**
  * A builder is used in combination with a {@link IFactory}
- * to instatiates an object without worrying about if debug mode is active or not.
+ * to instantiate an object without worrying about if debug mode is active or not.
+ * @typeParam T Type of the object the builder creates.
  */
 export interface IBuilder<T> {
   /**
    * Create an object of type T.
-   * @return An instance of T element.
+   * @returns an instance of T.
    */
   build(): T;
 }

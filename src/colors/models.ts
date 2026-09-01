@@ -12,7 +12,7 @@ import {
 
 /**
  * Represents a color instance. It can be read in different formats. It manages transparency.
- * Exposes static methods to create an instance of Color from an existing string (hex, rgb, rgba)
+ * Exposes static methods to create an instance of Color from an existing string (hex, rgb, rgba).
  */
 export class Color implements IColor {
   private color!: RgbaColor;
@@ -37,8 +37,8 @@ export class Color implements IColor {
   /**
    * Returns a IColor instance of value black or white,
    * based on the current color value.
-   * @param threshold luminance threshold; returns black if current luminance is lower than the thershold, white otherwise.
-   * @returns Black or White Color instance.
+   * @param threshold Luminance threshold; returns black if the current luminance is lower than the threshold, white otherwise.
+   * @returns a black or white Color instance.
    */
   public contrast(threshold: number = 0.5): IColor {
     const { b, g, r } = this.color;
@@ -47,7 +47,7 @@ export class Color implements IColor {
   }
 
   /**
-   * Prints the HEX string version of the color.
+   * Returns the HEX string representation of the color.
    * @returns an HEX color string.
    */
   public hex(): string {
@@ -56,7 +56,7 @@ export class Color implements IColor {
     return rgbaToHex(r, g, b, a);
   }
   /**
-   * Prints the HSL string version of the color.
+   * Returns the HSL string representation of the color.
    * @returns an HSL color string.
    */
   public hsl(): string {
@@ -65,7 +65,7 @@ export class Color implements IColor {
     return `hsl(${h},${s}%,${l}%)`;
   }
   /**
-   * Prints the HSLA string version of the color.
+   * Returns the HSLA string representation of the color.
    * @returns an HSLA color string.
    */
   public hsla(): string {
@@ -74,7 +74,7 @@ export class Color implements IColor {
     return `hsla(${h},${s}%,${l}%,${a})`;
   }
   /**
-   * Prints the RGB string version of the color.
+   * Returns the RGB string representation of the color.
    * @returns an RGB color string.
    */
   public rgb(): string {
@@ -82,7 +82,7 @@ export class Color implements IColor {
     return `rgb(${r},${g},${b})`;
   }
   /**
-   * Prints the RGBA string version of the color.
+   * Returns the RGBA string representation of the color.
    * @returns an RGBA color string.
    */
   public rgba(): string {

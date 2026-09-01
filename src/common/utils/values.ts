@@ -3,9 +3,11 @@ import { isFunction } from "./functions";
 
 /**
  * Type-safe implementation of the {@link ValueOrGetter} type.
- * @param valueOrGetter The value or the getter to call to return the value.
- * @param arg The optional argument, if {@link valurOrGetter} is a getter.
- * @returns the type-safe value.
+ * @typeParam TValue Type of the resolved value.
+ * @typeParam TArg Type of the argument passed to valueOrGetter when it is a getter.
+ * @param valueOrGetter The value, or the getter to call to return the value.
+ * @param arg The argument passed to valueOrGetter when it is a getter.
+ * @returns the resolved value.
  */
 export function getValue<TValue, TArg = never>(
   valueOrGetter: ValueOrGetter<TValue, TArg>,
@@ -18,7 +20,7 @@ export function getValue<TValue, TArg = never>(
 
 /**
  * Checks if value is not null and not undefined.
- * @param value Value to check
+ * @param value Value to check.
  * @returns true if value is not null and not undefined.
  */
 export function isDefined<TValue>(value: TValue): boolean {
@@ -27,7 +29,7 @@ export function isDefined<TValue>(value: TValue): boolean {
 
 /**
  * Checks if value is null.
- * @param value Value to check
+ * @param value Value to check.
  * @returns true if value is null.
  */
 export function isNull<TValue>(value: TValue): boolean {
@@ -36,7 +38,7 @@ export function isNull<TValue>(value: TValue): boolean {
 
 /**
  * Checks if value is null or undefined.
- * @param value Value to check
+ * @param value Value to check.
  * @returns true if value is null or undefined.
  */
 export function isNullOrUndefined<TValue>(value: TValue): boolean {
@@ -45,7 +47,7 @@ export function isNullOrUndefined<TValue>(value: TValue): boolean {
 
 /**
  * Checks if value is undefined.
- * @param value Value to check
+ * @param value Value to check.
  * @returns true if value is undefined.
  */
 export function isUndefined<TValue>(value: TValue): boolean {

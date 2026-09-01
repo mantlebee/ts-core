@@ -14,9 +14,14 @@ export class NumericIdentityManager implements IIdentityManager<number> {
   public constructor(lastValue?: number) {
     if (lastValue && lastValue > 0) this._lastValue = lastValue;
   }
+  /** The last generated number, or `null` when none has been generated yet. */
   public get lastValue(): Nullable<number> {
     return this._lastValue;
   }
+  /**
+   * Returns {@link lastValue} + 1 (starting from 1) and records it as the new last value.
+   * @returns the newly generated number.
+   */
   public newValue(): number {
     const newValue = (this.lastValue || 0) + 1;
     this._lastValue = newValue;

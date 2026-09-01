@@ -4,9 +4,16 @@ import { LogTypes } from "./contants";
 import { ILogger } from "./interfaces";
 import { LogDelegate } from "./types";
 
+/**
+ * Base {@link ILogger} implementation that forwards every entry to a
+ * {@link LogDelegate}. The `logX` helpers are thin wrappers around {@link log}.
+ */
 export class Logger implements ILogger {
   private readonly _logDelegate: LogDelegate;
 
+  /**
+   * @param logDelegate Function that actually writes the log entry.
+   */
   public constructor(logDelegate: LogDelegate) {
     this._logDelegate = logDelegate;
   }

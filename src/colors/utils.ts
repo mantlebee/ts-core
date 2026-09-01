@@ -12,8 +12,8 @@ import {
 
 /**
  * Tries to convert a string into an IColor instance.
- * If {@link value} is not a valid string, a black color is returned instead.
- * @param value string to convert into an IColor instance; accepted values are: HEX, HSL, RGB(A), Web Color Name.
+ * If value is not a valid string, a black color is returned instead.
+ * @param value String to convert into an IColor instance; accepted formats are HEX, HSL, RGB(A) and Web Color Name.
  * @returns an IColor instance.
  */
 export function getColor(value: string): IColor {
@@ -165,15 +165,16 @@ export function shortHexToFullHex(shortHex: string): string {
 }
 
 /**
- * Converts a text to an HSL color.
+ * Converts a text to an HSL color. The hue is derived from a hash of the text,
+ * so the same text always yields the same color.
  * @example
  * ```ts
- * textToHsl("Hello, World!") // ""
+ * textToHsl("Hello, World!") // { h: 109, l: 50, s: 50 }
  * ```
- * @param text text to convert into HSL color.
- * @param lightness lightness value of the HSL color (default: 50).
- * @param saturation saturation value of the HSL color (default: 50).
- * @returns
+ * @param text Text to derive the HSL color from.
+ * @param lightness Lightness value of the HSL color (default: 50).
+ * @param saturation Saturation value of the HSL color (default: 50).
+ * @returns the HSL color derived from text.
  */
 export function textToHsl(
   text: string,

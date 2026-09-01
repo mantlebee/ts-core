@@ -5,9 +5,16 @@
  * When the Alarm goes off, it can be stopped or snoozed by a specific amount of time (milliseconds).
  */
 export interface IAlarm {
+  /** `true` once the expiration date has passed. */
   readonly expired: boolean;
+  /** `true` once the alarm has been stopped. */
   readonly stopped: boolean;
-  /**@param time Snooze time in milliseconds. If greater than the delta between 'now' and the 'expiration', the delta is used */
+  /**
+   * Postpones the alarm.
+   * @param time Snooze time in milliseconds. If greater than the delta between
+   * 'now' and the 'expiration', the delta is used instead.
+   */
   snooze(time: number): void;
+  /** Stops the alarm; it will not go off anymore. */
   stop(): void;
 }

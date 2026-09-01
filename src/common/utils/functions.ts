@@ -1,4 +1,5 @@
 import { Any } from "../types";
+
 /**
  * Checks if arg is a function.
  * What is considered a function?

@@ -1,6 +1,7 @@
 /**
  * Abstract factory pattern to build debug or release instances.
- * Use it in combination of {@link IBuilder}
+ * Use it in combination with {@link IBuilder}.
+ * @typeParam T Type of the object the factory creates.
  */
 export interface IFactory<T> {
   /**

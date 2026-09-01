@@ -21,6 +21,7 @@ class WizardException extends Exception {
   }
 }
 
+/** Thrown when `abort()` is called while `canAbort` is `false`. */
 export class AbortNotAllowedException extends WizardException {
   public constructor() {
     super(
@@ -29,6 +30,7 @@ export class AbortNotAllowedException extends WizardException {
     );
   }
 }
+/** Thrown when `complete()` is called while `canComplete` is `false`. */
 export class CompleteNotAllowedException extends WizardException {
   public constructor() {
     super(
@@ -37,11 +39,13 @@ export class CompleteNotAllowedException extends WizardException {
     );
   }
 }
+/** Thrown when a wizard is constructed with an empty list of steps. */
 export class EmptyStepsException extends WizardException {
   public constructor() {
     super(WizardErrors.emptySteps, "Wizard can't be initialized without steps");
   }
 }
+/** Thrown when `goBack()` is called while `canGoBack` is `false`. */
 export class GoBackNotAllowedException extends WizardException {
   public constructor() {
     super(
@@ -50,6 +54,7 @@ export class GoBackNotAllowedException extends WizardException {
     );
   }
 }
+/** Thrown when `goForward()` is called while `canGoForward` is `false`. */
 export class GoForwardNotAllowedException extends WizardException {
   public constructor() {
     super(
@@ -58,7 +63,12 @@ export class GoForwardNotAllowedException extends WizardException {
     );
   }
 }
+/** Thrown when an operation is invoked in a status that does not allow it. */
 export class InvalidOperationForStatusException extends WizardException {
+  /**
+   * @param operationName The operation that was rejected.
+   * @param status The status the wizard was in.
+   */
   public constructor(operationName: WizardOperations, status: WizardStatuses) {
     super(
       WizardErrors.invalidOperationForStatus,

@@ -2,13 +2,13 @@ import { Any, Dictionary, KeyOf, List, Nullable } from "@/common";
 
 /**
  * Checks if arg is an array.
- * @example
- * ```ts
- * isArray([])        // true
- * isArray([1, 2, 3]) // true
- * isArray({})        // false
- * isArray("abc")     // false
- * ```
+ * What is considered an array?
+ * - `[]`
+ * - `new Array()`
+ * What is NOT considered an array?
+ * - array-like objects (`arguments`, `NodeList`, ...)
+ * - typed arrays (`Int8Array`, `Uint8Array`, ...)
+ * - anything else (objects, strings, ...)
  * @param arg Item to check.
  * @returns true if arg is an array.
  */
@@ -24,6 +24,7 @@ export function isArray(arg: Any): boolean {
  * firstOrDefault([1, 2, 3], a => a === 4)      // null
  * firstOrDefault([1, 2, 3], a => a === 4, 5)   // 5
  * ```
+ * @typeParam T Type of the list items.
  * @param list List where to look for the item.
  * @param delegate Function to find the item.
  * @param defaultItem Item used as default value if item is not found.
@@ -48,9 +49,10 @@ export function firstOrDefault<T>(
  * //   2: {id: 2, name: "Jane"}
  * // }
  * ```
+ * @typeParam T Type of the list items.
  * @param list Items to map.
  * @param key Key of the item to use as dictionary key.
- * @returns a dictionary where the key is the value of item[key] and the value is the item itself
+ * @returns a dictionary where the key is the value of item[key] and the value is the item itself.
  */
 export function listToDictionary<T>(
   list: List<T>,
@@ -64,13 +66,15 @@ export function listToDictionary<T>(
 }
 
 /**
- * Replaces all the list items with new items. Usefull when the array instance can not change.
+ * Replaces all the list items with new items. Useful when the array instance can not change.
+ * @example
  * ```ts
  * const list = [1, 2, 3]
  * const listRef = list
  * replaceListItems(list, [4, 5, 6])
  * // listRef is [4, 5, 6]
  * ```
+ * @typeParam T Type of the list items.
  * @param list Instance with items to replace.
  * @param items Items to replace.
  */
