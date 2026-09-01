@@ -1,3 +1,5 @@
+import { Any } from "./data";
+
 /**
  * Dictionary of items of the same type. A list of keys can be specified.
  * @example
@@ -20,9 +22,10 @@
  * @param TValue Type of the item.
  * @param TKey Type of the key, default is `string`.
  */
-export type Dictionary<TValue, TKey extends string = string> = {
-  [key in TKey]: TValue;
-};
+export type Dictionary<
+  TValue = Any,
+  TKey extends number | string | symbol = string,
+> = Record<TKey, TValue>;
 
 /**
  * Key of an object.
