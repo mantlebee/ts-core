@@ -5,5 +5,6 @@ export * from "./dates";
 export * from "./functions";
 export * from "./numbers";
 export * from "./objects";
+export * from "./promises";
 export * from "./strings";
 export * from "./values";
