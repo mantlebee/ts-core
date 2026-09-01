@@ -15,7 +15,7 @@
 </div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">IWizardStep</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#cangoback">canGoBack</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#cangoforward">canGoForward</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#nextstep">nextStep</a><span class="tsd-signature-symbol">?:</span> <a href="" class="tsd-signature-type tsd-kind-interface">IWizardStep</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#beforeenter-1">beforeEnter</a><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#beforegoback-1">beforeGoBack</a><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#beforegoforward-1">beforeGoForward</a><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L20">src/wizards/interfaces.ts:20</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L44">src/wizards/interfaces.ts:44</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -38,19 +38,25 @@
 <section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="cangoback"><code class="tsd-tag">Readonly</code><span>can<wbr/>Go<wbr/>Back</span><a href="#cangoback" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">canGoBack</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">canGoBack</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p><code>true</code> when the wizard is allowed to leave this step backwards.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L21">src/wizards/interfaces.ts:21</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L46">src/wizards/interfaces.ts:46</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="cangoforward"><code class="tsd-tag">Readonly</code><span>can<wbr/>Go<wbr/>Forward</span><a href="#cangoforward" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">canGoForward</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">canGoForward</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p><code>true</code> when the wizard is allowed to leave this step forwards.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L22">src/wizards/interfaces.ts:22</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L48">src/wizards/interfaces.ts:48</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="nextstep"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>next<wbr/>Step</span><a href="#nextstep" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">nextStep</span><span class="tsd-signature-symbol">?:</span> <a href="" class="tsd-signature-type tsd-kind-interface">IWizardStep</a></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">nextStep</span><span class="tsd-signature-symbol">?:</span> <a href="" class="tsd-signature-type tsd-kind-interface">IWizardStep</a></div>
+<div class="tsd-comment tsd-typography"><p>Explicit next step; when omitted, the next step in declaration order is used.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L23">src/wizards/interfaces.ts:23</a></li></ul></aside></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L50">src/wizards/interfaces.ts:50</a></li></ul></aside></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -60,27 +66,33 @@
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="beforeenter-1"><span class="tsd-kind-call-signature">beforeEnter</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#beforeenter-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Hook awaited right before this step becomes the current one.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L24">src/wizards/interfaces.ts:24</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L52">src/wizards/interfaces.ts:52</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="beforegoback"><code class="tsd-tag">Optional</code><span>before<wbr/>Go<wbr/>Back</span><a href="#beforegoback" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="beforegoback-1"><span class="tsd-kind-call-signature">beforeGoBack</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#beforegoback-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Hook awaited right before the wizard goes back from this step.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L25">src/wizards/interfaces.ts:25</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L54">src/wizards/interfaces.ts:54</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="beforegoforward"><code class="tsd-tag">Optional</code><span>before<wbr/>Go<wbr/>Forward</span><a href="#beforegoforward" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="beforegoforward-1"><span class="tsd-kind-call-signature">beforeGoForward</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#beforegoforward-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Hook awaited right before the wizard goes forward from this step.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/interfaces.ts#L26">src/wizards/interfaces.ts:26</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/interfaces.ts#L56">src/wizards/interfaces.ts:56</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

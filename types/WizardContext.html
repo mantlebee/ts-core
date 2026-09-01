@@ -10,9 +10,13 @@
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="" aria-current="page">WizardContext</a></li></ul>
 <h1>Type Alias WizardContext</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>Host-provided behaviour a <a href="../classes/Wizard.html" class="tsd-kind-class">Wizard</a> needs: whether it may abort/complete
+and what to run when it does.</p>
+</div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">type</span> <span class="tsd-kind-type-alias">WizardContext</span> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#canabort">canAbort</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#cancomplete">canComplete</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#abort-1">abort</a><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#complete-1">complete</a><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/wizard/types.ts#L1">src/wizards/wizard/types.ts:1</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/wizard/types.ts#L5">src/wizards/wizard/types.ts:5</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -33,14 +37,18 @@
 <section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="canabort"><code class="tsd-tag">Optional</code> <code class="tsd-tag">Readonly</code><span>can<wbr/>Abort</span><a href="#canabort" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">canAbort</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">canAbort</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Whether the wizard may be aborted. Defaults to <code>true</code> when omitted.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/wizard/types.ts#L2">src/wizards/wizard/types.ts:2</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/wizard/types.ts#L7">src/wizards/wizard/types.ts:7</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="cancomplete"><code class="tsd-tag">Readonly</code><span>can<wbr/>Complete</span><a href="#cancomplete" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">canComplete</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">canComplete</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Whether the wizard may be completed.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/wizard/types.ts#L3">src/wizards/wizard/types.ts:3</a></li></ul></aside></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/wizard/types.ts#L9">src/wizards/wizard/types.ts:9</a></li></ul></aside></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -50,18 +58,22 @@
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="abort-1"><span class="tsd-kind-call-signature">abort</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#abort-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Work to perform when the wizard is aborted. Defaults to a no-op.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/wizard/types.ts#L4">src/wizards/wizard/types.ts:4</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/wizard/types.ts#L11">src/wizards/wizard/types.ts:11</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="complete"><span>complete</span><a href="#complete" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="complete-1"><span class="tsd-kind-call-signature">complete</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#complete-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Work to perform when the wizard is completed.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/wizards/wizard/types.ts#L5">src/wizards/wizard/types.ts:5</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/wizards/wizard/types.ts#L13">src/wizards/wizard/types.ts:13</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

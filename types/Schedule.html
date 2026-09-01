@@ -10,9 +10,13 @@
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="" aria-current="page">Schedule</a></li></ul>
 <h1>Type Alias Schedule</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>Common shape shared by every schedule: when it starts, when it expires and
+whether it repeats.</p>
+</div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">type</span> <span class="tsd-kind-type-alias">Schedule</span> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#expiredate">expireDate</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#repeat">repeat</a><span class="tsd-signature-symbol">?:</span> <a href="ScheduleRepeat.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleRepeat</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#startdate">startDate</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L18">src/scheduling/schedule/types.ts:18</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L33">src/scheduling/schedule/types.ts:33</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -29,19 +33,25 @@
 <section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="expiredate"><code class="tsd-tag">Optional</code><span>expire<wbr/>Date</span><a href="#expiredate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">expireDate</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">expireDate</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">Date</span></div>
+<div class="tsd-comment tsd-typography"><p>Date and time after which the schedule no longer runs.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L20">src/scheduling/schedule/types.ts:20</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L37">src/scheduling/schedule/types.ts:37</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="repeat"><code class="tsd-tag">Optional</code><span>repeat</span><a href="#repeat" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">repeat</span><span class="tsd-signature-symbol">?:</span> <a href="ScheduleRepeat.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleRepeat</a></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">repeat</span><span class="tsd-signature-symbol">?:</span> <a href="ScheduleRepeat.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleRepeat</a></div>
+<div class="tsd-comment tsd-typography"><p>Repetition rule; when omitted, the schedule runs only once.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L21">src/scheduling/schedule/types.ts:21</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L39">src/scheduling/schedule/types.ts:39</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="startdate"><span>start<wbr/>Date</span><a href="#startdate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">startDate</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">startDate</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+<div class="tsd-comment tsd-typography"><p>Date and time the schedule becomes active.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L19">src/scheduling/schedule/types.ts:19</a></li></ul></aside></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L35">src/scheduling/schedule/types.ts:35</a></li></ul></aside></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

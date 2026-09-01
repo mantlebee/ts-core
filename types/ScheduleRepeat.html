@@ -11,18 +11,11 @@
 <li><a href="" aria-current="page">ScheduleRepeat</a></li></ul>
 <h1>Type Alias ScheduleRepeat</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Repeat the schedule execution every X time for an optional amount of time</p>
-</div>
-<div class="tsd-comment tsd-typography">
-<div class="tsd-tag-param">
-<h4 class="tsd-anchor-link" id="param-every">Param: every<a href="#param-every" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>after how much time the schedule has to be executed</p>
-</div>
-<div class="tsd-tag-param">
-<h4 class="tsd-anchor-link" id="param-duration">Param: duration<a href="#param-duration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>after how much time the schedule has to be executed</p>
-</div></div></section>
+<div class="tsd-comment tsd-typography"><p>Repeat the schedule execution every X time, optionally for a limited amount of time.</p>
+</div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">type</span> <span class="tsd-kind-type-alias">ScheduleRepeat</span> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#duration">duration</a><span class="tsd-signature-symbol">?:</span> <a href="ScheduleTime.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleTime</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#every">every</a><span class="tsd-signature-symbol">:</span> <a href="ScheduleTime.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleTime</a><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L11">src/scheduling/schedule/types.ts:11</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L9">src/scheduling/schedule/types.ts:9</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -38,14 +31,19 @@
 <section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="duration"><code class="tsd-tag">Optional</code><span>duration</span><a href="#duration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">duration</span><span class="tsd-signature-symbol">?:</span> <a href="ScheduleTime.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleTime</a></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">duration</span><span class="tsd-signature-symbol">?:</span> <a href="ScheduleTime.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleTime</a></div>
+<div class="tsd-comment tsd-typography"><p>For how long the schedule keeps repeating, counted from its start.
+When omitted, the schedule repeats indefinitely.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L13">src/scheduling/schedule/types.ts:13</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L16">src/scheduling/schedule/types.ts:16</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="every"><span>every</span><a href="#every" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">every</span><span class="tsd-signature-symbol">:</span> <a href="ScheduleTime.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleTime</a></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">every</span><span class="tsd-signature-symbol">:</span> <a href="ScheduleTime.html" class="tsd-signature-type tsd-kind-type-alias">ScheduleTime</a></div>
+<div class="tsd-comment tsd-typography"><p>Amount of time that has to elapse between one execution and the next.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/scheduling/schedule/types.ts#L12">src/scheduling/schedule/types.ts:12</a></li></ul></aside></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/scheduling/schedule/types.ts#L11">src/scheduling/schedule/types.ts:11</a></li></ul></aside></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

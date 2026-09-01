@@ -11,7 +11,8 @@
 <li><a href="" aria-current="page">ConsoleLogger</a></li></ul>
 <h1>Class ConsoleLogger</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Logger implementation to log on console.</p>
+<div class="tsd-comment tsd-typography"><p><a href="Logger.html" class="tsd-kind-class">Logger</a> implementation that writes entries to the console, mapping each
+<a href="../enums/LogTypes.html" class="tsd-kind-enum">LogTypes</a> to the matching <code>console</code> method.</p>
 </div></section>
 <section class="tsd-panel tsd-hierarchy" data-refl="624">
 <h4>Hierarchy (<a href="../hierarchy.html#ConsoleLogger">View Summary</a>)</h4>
@@ -20,7 +21,7 @@
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">ConsoleLogger</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/console-logger/models.ts#L7">src/loggers/console-logger/models.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/console-logger/models.ts#L8">src/loggers/console-logger/models.ts:8</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -51,7 +52,7 @@
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">ConsoleLogger</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="Logger.html">Logger</a>.<a href="Logger.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/console-logger/models.ts#L8">src/loggers/console-logger/models.ts:8</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/console-logger/models.ts#L9">src/loggers/console-logger/models.ts:9</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -61,91 +62,129 @@
 <li class="tsd-is-inherited">
 <div class="tsd-signature tsd-anchor-link" id="log-1"><span class="tsd-kind-call-signature">log</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">type</span><span class="tsd-signature-symbol">:</span> <a href="../enums/LogTypes.html" class="tsd-signature-type tsd-kind-enum">LogTypes</a><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#log-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Logs a message at the given level.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">type</span>: <a href="../enums/LogTypes.html" class="tsd-signature-type tsd-kind-enum">LogTypes</a></span></li>
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">type</span>: <a href="../enums/LogTypes.html" class="tsd-signature-type tsd-kind-enum">LogTypes</a></span>
+<div class="tsd-comment tsd-typography"><p>Severity/category of the entry.</p>
+</div></li>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Message to log.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional data to attach to the entry.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="Logger.html">Logger</a>.<a href="Logger.html#log">log</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/models.ts#L14">src/loggers/models.ts:14</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/models.ts#L21">src/loggers/models.ts:21</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="logdebug"><span>log<wbr/>Debug</span><a href="#logdebug" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
 <li class="tsd-is-inherited">
 <div class="tsd-signature tsd-anchor-link" id="logdebug-1"><span class="tsd-kind-call-signature">logDebug</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#logdebug-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Logs a message at <a href="../enums/LogTypes.html#debug" class="tsd-kind-enum-member">LogTypes.debug</a> level.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Message to log.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional data to attach to the entry.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="Logger.html">Logger</a>.<a href="Logger.html#logdebug">logDebug</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/models.ts#L17">src/loggers/models.ts:17</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/models.ts#L24">src/loggers/models.ts:24</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="logerror"><span>log<wbr/>Error</span><a href="#logerror" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
 <li class="tsd-is-inherited">
 <div class="tsd-signature tsd-anchor-link" id="logerror-1"><span class="tsd-kind-call-signature">logError</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#logerror-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Logs a message at <a href="../enums/LogTypes.html#error" class="tsd-kind-enum-member">LogTypes.error</a> level.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Message to log.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional data to attach to the entry.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="Logger.html">Logger</a>.<a href="Logger.html#logerror">logError</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/models.ts#L20">src/loggers/models.ts:20</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/models.ts#L27">src/loggers/models.ts:27</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="loginfo"><span>log<wbr/>Info</span><a href="#loginfo" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
 <li class="tsd-is-inherited">
 <div class="tsd-signature tsd-anchor-link" id="loginfo-1"><span class="tsd-kind-call-signature">logInfo</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#loginfo-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Logs a message at <a href="../enums/LogTypes.html#info" class="tsd-kind-enum-member">LogTypes.info</a> level.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Message to log.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional data to attach to the entry.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="Logger.html">Logger</a>.<a href="Logger.html#loginfo">logInfo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/models.ts#L23">src/loggers/models.ts:23</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/models.ts#L30">src/loggers/models.ts:30</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="logsuccess"><span>log<wbr/>Success</span><a href="#logsuccess" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
 <li class="tsd-is-inherited">
 <div class="tsd-signature tsd-anchor-link" id="logsuccess-1"><span class="tsd-kind-call-signature">logSuccess</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#logsuccess-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Logs a message at <a href="../enums/LogTypes.html#success" class="tsd-kind-enum-member">LogTypes.success</a> level.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Message to log.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional data to attach to the entry.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="Logger.html">Logger</a>.<a href="Logger.html#logsuccess">logSuccess</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/models.ts#L26">src/loggers/models.ts:26</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/models.ts#L33">src/loggers/models.ts:33</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="logwarning"><span>log<wbr/>Warning</span><a href="#logwarning" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
 <li class="tsd-is-inherited">
 <div class="tsd-signature tsd-anchor-link" id="logwarning-1"><span class="tsd-kind-call-signature">logWarning</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">data</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#logwarning-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Logs a message at <a href="../enums/LogTypes.html#warning" class="tsd-kind-enum-member">LogTypes.warning</a> level.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Message to log.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type">any</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional data to attach to the entry.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Inherited from <a href="Logger.html">Logger</a>.<a href="Logger.html#logwarning">logWarning</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/loggers/models.ts#L29">src/loggers/models.ts:29</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/loggers/models.ts#L36">src/loggers/models.ts:36</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

@@ -12,21 +12,25 @@
 <h1>Interface ISubscribable&lt;TData, TId&gt;</h1></div>
 <section class="tsd-panel tsd-comment">
 <div class="tsd-comment tsd-typography"><p>Represents a subscribable element. It allows to (un)subscribe to an instance.
-When the subscribers are notified, depends on the implementation of the interface.</p>
+When the subscribers are notified depends on the implementation of the interface.</p>
 </div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">ISubscribable</span><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">,</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-call-signature" href="#subscribe-1">subscribe</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">subscription</span><span class="tsd-signature-symbol">:</span> <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-call-signature" href="#unsubscribe-1">unsubscribe</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div>
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
-<li><span id="tdata"><span class="tsd-kind-type-parameter">TData</span></span></li>
-<li><span id="tid"><span class="tsd-kind-type-parameter">TId</span> = <span class="tsd-signature-type">number</span></span></li></ul></section>
+<li><span id="tdata"><span class="tsd-kind-type-parameter">TData</span></span>
+<div class="tsd-comment tsd-typography"><p>Type of the payload delivered to subscribers.</p>
+</div></li>
+<li><span id="tid"><span class="tsd-kind-type-parameter">TId</span> = <span class="tsd-signature-type">number</span></span>
+<div class="tsd-comment tsd-typography"><p>Type of the handle returned by <a href="#subscribe" class="tsd-kind-method">subscribe</a>, default <code>number</code>.</p>
+</div></li></ul></section>
 <section class="tsd-panel">
 <h4>Implemented by</h4>
 <ul class="tsd-hierarchy">
 <li><a href="../classes/Subscribable.html" class="tsd-signature-type tsd-kind-class">Subscribable</a></li>
 <li><a href="../classes/SubscribableLogger.html" class="tsd-signature-type tsd-kind-class">SubscribableLogger</a></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/interfaces.ts#L7">src/subscriptions/subscribable/interfaces.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/interfaces.ts#L9">src/subscriptions/subscribable/interfaces.ts:9</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -46,26 +50,35 @@ When the subscribers are notified, depends on the implementation of the interfac
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="subscribe-1"><span class="tsd-kind-call-signature">subscribe</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">subscription</span><span class="tsd-signature-symbol">:</span> <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a><a href="#subscribe-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Registers a subscriber.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">subscription</span>: <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span></span></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a></h4><aside class="tsd-sources">
+<li><span><span class="tsd-kind-parameter">subscription</span>: <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span></span>
+<div class="tsd-comment tsd-typography"><p>Callback invoked on every notification.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a></h4><p>the handle to pass to <a href="#unsubscribe" class="tsd-kind-method">unsubscribe</a>.</p>
+<aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/interfaces.ts#L8">src/subscriptions/subscribable/interfaces.ts:8</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/interfaces.ts#L15">src/subscriptions/subscribable/interfaces.ts:15</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="unsubscribe"><span>unsubscribe</span><a href="#unsubscribe" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="unsubscribe-1"><span class="tsd-kind-call-signature">unsubscribe</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#unsubscribe-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Removes a previously registered subscriber.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">id</span>: <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">id</span>: <a class="tsd-signature-type tsd-kind-type-parameter" href="#tid">TId</a></span>
+<div class="tsd-comment tsd-typography"><p>Handle returned by <a href="#subscribe" class="tsd-kind-method">subscribe</a>.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/interfaces.ts#L9">src/subscriptions/subscribable/interfaces.ts:9</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/interfaces.ts#L20">src/subscriptions/subscribable/interfaces.ts:20</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

@@ -10,9 +10,13 @@
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="" aria-current="page">Token</a></li></ul>
 <h1>Type Alias Token</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>A distinct piece of text recognized by a <a href="TokenizerRule.html" class="tsd-kind-type-alias">TokenizerRule</a>, together with
+every place it occurs in the parsed text.</p>
+</div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">type</span> <span class="tsd-kind-type-alias">Token</span> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#match">match</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#occurrences">occurrences</a><span class="tsd-signature-symbol">:</span> <a href="List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenOccurrence.html" class="tsd-signature-type tsd-kind-type-alias">TokenOccurrence</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#value">value</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/types.ts#L3">src/parsers/tokenizer/types.ts:3</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/types.ts#L7">src/parsers/tokenizer/types.ts:7</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -29,19 +33,25 @@
 <section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="match"><span>match</span><a href="#match" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">match</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">match</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The exact substring that was matched.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/types.ts#L5">src/parsers/tokenizer/types.ts:5</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/types.ts#L11">src/parsers/tokenizer/types.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="occurrences"><span>occurrences</span><a href="#occurrences" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">occurrences</span><span class="tsd-signature-symbol">:</span> <a href="List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenOccurrence.html" class="tsd-signature-type tsd-kind-type-alias">TokenOccurrence</a><span class="tsd-signature-symbol">&gt;</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">occurrences</span><span class="tsd-signature-symbol">:</span> <a href="List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenOccurrence.html" class="tsd-signature-type tsd-kind-type-alias">TokenOccurrence</a><span class="tsd-signature-symbol">&gt;</span></div>
+<div class="tsd-comment tsd-typography"><p>Every position in the text where this token was matched.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/types.ts#L4">src/parsers/tokenizer/types.ts:4</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/types.ts#L9">src/parsers/tokenizer/types.ts:9</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="value"><span>value</span><a href="#value" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The value the rule assigned to the match.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/types.ts#L6">src/parsers/tokenizer/types.ts:6</a></li></ul></aside></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/types.ts#L13">src/parsers/tokenizer/types.ts:13</a></li></ul></aside></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

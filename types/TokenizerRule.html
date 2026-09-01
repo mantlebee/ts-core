@@ -10,9 +10,13 @@
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="" aria-current="page">TokenizerRule</a></li></ul>
 <h1>Type Alias TokenizerRule</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>A single tokenization rule: given the text and a position, it decides whether
+something matches there.</p>
+</div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">type</span> <span class="tsd-kind-type-alias">TokenizerRule</span> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-call-signature" href="#match-1">match</a><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">text</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">currentIndex</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="Nullable.html" class="tsd-signature-type tsd-kind-type-alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenizerRuleMatch.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRuleMatch</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/types.ts#L13">src/parsers/tokenizer/types.ts:13</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/types.ts#L28">src/parsers/tokenizer/types.ts:28</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -31,14 +35,21 @@
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="match-1"><span class="tsd-kind-call-signature">match</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">text</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">currentIndex</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="Nullable.html" class="tsd-signature-type tsd-kind-type-alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenizerRuleMatch.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRuleMatch</a><span class="tsd-signature-symbol">&gt;</span><a href="#match-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Tries to match at the given position.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">text</span>: <span class="tsd-signature-type">string</span></span></li>
-<li><span><span class="tsd-kind-parameter">currentIndex</span>: <span class="tsd-signature-type">number</span></span></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="Nullable.html" class="tsd-signature-type tsd-kind-type-alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenizerRuleMatch.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRuleMatch</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<li><span><span class="tsd-kind-parameter">text</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Full text being tokenized.</p>
+</div></li>
+<li><span><span class="tsd-kind-parameter">currentIndex</span>: <span class="tsd-signature-type">number</span></span>
+<div class="tsd-comment tsd-typography"><p>Position at which to attempt the match.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="Nullable.html" class="tsd-signature-type tsd-kind-type-alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="TokenizerRuleMatch.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRuleMatch</a><span class="tsd-signature-symbol">&gt;</span></h4><p>the match, or <code>null</code> when the rule does not apply here.</p>
+<aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/types.ts#L14">src/parsers/tokenizer/types.ts:14</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/types.ts#L35">src/parsers/tokenizer/types.ts:35</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

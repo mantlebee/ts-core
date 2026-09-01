@@ -11,18 +11,21 @@
 <li><a href="" aria-current="page">Subscribable</a></li></ul>
 <h1>Class Subscribable&lt;TData&gt;</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Implementation of <a href="../interfaces/ISubscribable.html" class="tsd-kind-interface">ISubscribable</a> with a <a href="#notifydata" class="tsd-kind-method">notifyData</a> to call the subscribers.</p>
+<div class="tsd-comment tsd-typography"><p>Ready-to-use <a href="../interfaces/ISubscribable.html" class="tsd-kind-interface">ISubscribable</a> implementation. Call <a href="#notifydata" class="tsd-kind-method">notifyData</a> to
+push a payload to every current subscriber.</p>
 </div></section>
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
-<li><span id="tdata"><span class="tsd-kind-type-parameter">TData</span></span></li></ul></section>
+<li><span id="tdata"><span class="tsd-kind-type-parameter">TData</span></span>
+<div class="tsd-comment tsd-typography"><p>Type of the payload delivered to subscribers.</p>
+</div></li></ul></section>
 <section class="tsd-panel">
 <h4>Implements</h4>
 <ul class="tsd-hierarchy">
 <li><a href="../interfaces/ISubscribable.html" class="tsd-signature-type tsd-kind-interface">ISubscribable</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/models.ts#L10">src/subscriptions/subscribable/models.ts:10</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/models.ts#L12">src/subscriptions/subscribable/models.ts:12</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -50,7 +53,9 @@
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
-<li><span id="constructorsubscribabletdata"><span class="tsd-kind-type-parameter">TData</span></span></li></ul></section>
+<li><span id="constructorsubscribabletdata"><span class="tsd-kind-type-parameter">TData</span></span>
+<div class="tsd-comment tsd-typography"><p>Type of the payload delivered to subscribers.</p>
+</div></li></ul></section>
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">Subscribable</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span></h4></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
@@ -71,35 +76,44 @@
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/models.ts#L18">src/subscriptions/subscribable/models.ts:18</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/models.ts#L20">src/subscriptions/subscribable/models.ts:20</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="subscribe"><span>subscribe</span><a href="#subscribe" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="subscribe-1"><span class="tsd-kind-call-signature">subscribe</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">subscription</span><span class="tsd-signature-symbol">:</span> <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><a href="#subscribe-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Registers a subscriber.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">subscription</span>: <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span></span></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><aside class="tsd-sources">
+<li><span><span class="tsd-kind-parameter">subscription</span>: <a href="../types/Subscription.html" class="tsd-signature-type tsd-kind-type-alias">Subscription</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#tdata">TData</a><span class="tsd-signature-symbol">&gt;</span></span>
+<div class="tsd-comment tsd-typography"><p>Callback invoked on every <a href="#notifydata" class="tsd-kind-method">notifyData</a> call.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the id to pass to <a href="#unsubscribe" class="tsd-kind-method">unsubscribe</a>.</p>
+<aside class="tsd-sources">
 <p>Implementation of <a href="../interfaces/ISubscribable.html">ISubscribable</a>.<a href="../interfaces/ISubscribable.html#subscribe">subscribe</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/models.ts#L22">src/subscriptions/subscribable/models.ts:22</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/models.ts#L29">src/subscriptions/subscribable/models.ts:29</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="unsubscribe"><span>unsubscribe</span><a href="#unsubscribe" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="unsubscribe-1"><span class="tsd-kind-call-signature">unsubscribe</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#unsubscribe-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Removes a previously registered subscriber.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">number</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">number</span></span>
+<div class="tsd-comment tsd-typography"><p>Id returned by <a href="#subscribe" class="tsd-kind-method">subscribe</a>.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Implementation of <a href="../interfaces/ISubscribable.html">ISubscribable</a>.<a href="../interfaces/ISubscribable.html#unsubscribe">unsubscribe</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/subscriptions/subscribable/models.ts#L27">src/subscriptions/subscribable/models.ts:27</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/subscriptions/subscribable/models.ts#L38">src/subscriptions/subscribable/models.ts:38</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

@@ -11,14 +11,14 @@
 <li><a href="" aria-current="page">Enablable</a></li></ul>
 <h1>Class Enablable</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Represents any class that can be enabled or disabled.</p>
+<div class="tsd-comment tsd-typography"><p>Minimal <a href="../interfaces/IEnablable.html" class="tsd-kind-interface">IEnablable</a> implementation backed by a boolean flag.</p>
 </div></section>
 <section class="tsd-panel">
 <h4>Implements</h4>
 <ul class="tsd-hierarchy">
 <li><a href="../interfaces/IEnablable.html" class="tsd-signature-type tsd-kind-interface">IEnablable</a></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/common/classes/enablable/models.ts#L3">src/common/classes/enablable/models.ts:3</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/common/classes/enablable/models.ts#L6">src/common/classes/enablable/models.ts:6</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -49,10 +49,12 @@
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">isEnabled</span>: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">isEnabled</span>: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></span>
+<div class="tsd-comment tsd-typography"><p>Initial state; disabled by default.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">Enablable</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/common/classes/enablable/models.ts#L6">src/common/classes/enablable/models.ts:6</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/common/classes/enablable/models.ts#L12">src/common/classes/enablable/models.ts:12</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="accessors-1">Accessors<a href="#accessors-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -62,10 +64,12 @@
 <li>
 <div class="tsd-signature" id="isenabledisenabled"><span class="tsd-signature-keyword">get</span> <span class="tsd-kind-get-signature">isEnabled</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p><code>true</code> while enabled.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <p>Implementation of <a href="../interfaces/IEnablable.html">IEnablable</a>.<a href="../interfaces/IEnablable.html#isenabled">isEnabled</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/common/classes/enablable/models.ts#L10">src/common/classes/enablable/models.ts:10</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/common/classes/enablable/models.ts#L17">src/common/classes/enablable/models.ts:17</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -75,20 +79,24 @@
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="disable-1"><span class="tsd-kind-call-signature">disable</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#disable-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Sets the state to disabled.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Implementation of <a href="../interfaces/IEnablable.html">IEnablable</a>.<a href="../interfaces/IEnablable.html#disable">disable</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/common/classes/enablable/models.ts#L14">src/common/classes/enablable/models.ts:14</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/common/classes/enablable/models.ts#L22">src/common/classes/enablable/models.ts:22</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="enable"><span>enable</span><a href="#enable" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="enable-1"><span class="tsd-kind-call-signature">enable</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#enable-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Sets the state to enabled.</p>
+</div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <p>Implementation of <a href="../interfaces/IEnablable.html">IEnablable</a>.<a href="../interfaces/IEnablable.html#enable">enable</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/common/classes/enablable/models.ts#L17">src/common/classes/enablable/models.ts:17</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/common/classes/enablable/models.ts#L26">src/common/classes/enablable/models.ts:26</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

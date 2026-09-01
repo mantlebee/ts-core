@@ -10,12 +10,16 @@
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="" aria-current="page">Tokenizer</a></li></ul>
 <h1>Class Tokenizer</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>Default <a href="../interfaces/ITokenizer.html" class="tsd-kind-interface">ITokenizer</a> implementation. Applies its <a href="../types/TokenizerRule.html" class="tsd-kind-type-alias">TokenizerRule</a>s,
+in order, at each position of the text.</p>
+</div></section>
 <section class="tsd-panel">
 <h4>Implements</h4>
 <ul class="tsd-hierarchy">
 <li><a href="../interfaces/ITokenizer.html" class="tsd-signature-type tsd-kind-interface">ITokenizer</a></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/models.ts#L7">src/parsers/tokenizer/models.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/models.ts#L11">src/parsers/tokenizer/models.ts:11</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -45,18 +49,22 @@
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">rules</span>: <a href="../types/List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="../types/TokenizerRule.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRule</a><span class="tsd-signature-symbol">&gt;</span></span></li></ul></div>
+<li><span><span class="tsd-kind-parameter">rules</span>: <a href="../types/List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="../types/TokenizerRule.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRule</a><span class="tsd-signature-symbol">&gt;</span></span>
+<div class="tsd-comment tsd-typography"><p>Rules applied, in order, at every position of the text.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">Tokenizer</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/models.ts#L8">src/parsers/tokenizer/models.ts:8</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/models.ts#L15">src/parsers/tokenizer/models.ts:15</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="properties-1">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
 <section class="tsd-panel tsd-member tsd-is-protected">
 <h3 class="tsd-anchor-link" id="rules"><code class="tsd-tag">Protected</code> <code class="tsd-tag">Readonly</code><span>rules</span><a href="#rules" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">rules</span><span class="tsd-signature-symbol">:</span> <a href="../types/List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="../types/TokenizerRule.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRule</a><span class="tsd-signature-symbol">&gt;</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">rules</span><span class="tsd-signature-symbol">:</span> <a href="../types/List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="../types/TokenizerRule.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerRule</a><span class="tsd-signature-symbol">&gt;</span></div>
+<div class="tsd-comment tsd-typography"><p>Rules applied, in order, at every position of the text.</p>
+</div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/models.ts#L8">src/parsers/tokenizer/models.ts:8</a></li></ul></aside></section></section></details>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/models.ts#L15">src/parsers/tokenizer/models.ts:15</a></li></ul></aside></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -66,14 +74,19 @@
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="tokenize-1"><span class="tsd-kind-call-signature">tokenize</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">text</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="../types/TokenizerResult.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerResult</a><a href="#tokenize-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Scans the text and collects the distinct tokens it contains.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">text</span>: <span class="tsd-signature-type">string</span></span></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="../types/TokenizerResult.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerResult</a></h4><aside class="tsd-sources">
+<li><span><span class="tsd-kind-parameter">text</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Text to tokenize.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="../types/TokenizerResult.html" class="tsd-signature-type tsd-kind-type-alias">TokenizerResult</a></h4><p>the tokenization result.</p>
+<aside class="tsd-sources">
 <p>Implementation of <a href="../interfaces/ITokenizer.html">ITokenizer</a>.<a href="../interfaces/ITokenizer.html#tokenize">tokenize</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/87b6d1abc6feb8d8d45ba81a8b0d966c6c39e109/src/parsers/tokenizer/models.ts#L10">src/parsers/tokenizer/models.ts:10</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/3dbb187f9936292843d0131e4a971d968df2ef10/src/parsers/tokenizer/models.ts#L22">src/parsers/tokenizer/models.ts:22</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
