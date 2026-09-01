@@ -1,6 +1,36 @@
 import { Any, List, Stringable } from "@/common";
 
 /**
+ * Produces a short, deterministic hash string for any serializable value.
+ *
+ * Strings are hashed as-is; any other value is first serialized with
+ * `JSON.stringify` (falling back to `String(data)` for values that do not
+ * serialize, such as `undefined` or functions). The digest is a 32-bit
+ * djb2-style hash rendered as an 8-character, zero-padded, lowercase hex string.
+ *
+ * It is **not** cryptographic: use it for cache keys, change detection or
+ * bucketing, never for security. Structurally equal inputs hash to the same
+ * value only when they serialize identically (e.g. object key order matters).
+ * @example
+ * ```ts
+ * createHash("hello")                          // "05e918d2" (stable across calls)
+ * createHash({ id: 1 }) === createHash({ id: 1 }) // true
+ * createHash([1, 2]) === createHash([2, 1])       // false
+ * ```
+ * @param data Value to hash.
+ * @returns an 8-character lowercase hex hash of data.
+ */
+export function createHash(data: Any): string {
+  const input = isString(data) ? data : (JSON.stringify(data) ?? String(data));
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    // djb2: hash * 31 + charCode, kept within a signed 32-bit integer.
+    hash = (input.charCodeAt(i) + ((hash << 5) - hash)) | 0;
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0");
+}
+
+/**
  * Converts a string into a slug.
  * @param str String to convert into a slug.
  * @returns the slug version of str.
@@ -38,7 +68,7 @@ export function formatString(str: string, ...args: List<Stringable>) {
   // select the match and check if related argument is present
   // if yes, replace the match with the argument
   return str.replace(/{([0-9]+)}/g, (match, index) =>
-    typeof args[index] == "undefined" ? match : args[index].toString()
+    typeof args[index] == "undefined" ? match : args[index].toString(),
   );
 }
 
@@ -53,11 +83,11 @@ export function generateGuid(): string {
     var r = Math.random() * 16; //random number between 0 and 16
     if (d > 0) {
       //Use timestamp until depleted
-      r = (d + r) % 16 | 0;
+      r = ((d + r) % 16) | 0;
       d = Math.floor(d / 16);
     } else {
       //Use microseconds since page-load if supported
-      r = (d2 + r) % 16 | 0;
+      r = ((d2 + r) % 16) | 0;
       d2 = Math.floor(d2 / 16);
     }
     return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
@@ -71,7 +101,7 @@ export function generateGuid(): string {
  */
 export function isEmail(arg: string): boolean {
   return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
-    arg
+    arg,
   );
 }
 
