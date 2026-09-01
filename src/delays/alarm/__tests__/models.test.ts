@@ -53,7 +53,7 @@ describe("delays", () => {
             const expiration = new Date(Date.now() + 1000);
             const delegate = jest.fn();
             new Alarm(expiration, delegate);
-            expect(delegate).not.toBeCalled();
+            expect(delegate).not.toHaveBeenCalled();
             expect(setTimeout).toHaveBeenCalledTimes(1);
             expect(setTimeout).toHaveBeenLastCalledWith(
               expect.any(Function),
@@ -69,7 +69,7 @@ describe("delays", () => {
             const alarm = new Alarm(expiration, delegate);
             alarm.stop();
             fakeTimeout.runPending();
-            expect(delegate).not.toBeCalled();
+            expect(delegate).not.toHaveBeenCalled();
           });
           it("can stop the alarm", () => {
             const fakeTimeout = new TestTimeout();
@@ -114,7 +114,7 @@ describe("delays", () => {
             alarm.stop();
             alarm.snooze(1000);
             fakeTimeout.runPending();
-            expect(delegate).not.toBeCalled();
+            expect(delegate).not.toHaveBeenCalled();
           });
         });
       });

@@ -39,7 +39,7 @@ describe("wizards", () => {
             const wizard = new Wizard(canContext, [genericStep]);
             await wizard.start();
             await wizard.abort();
-            expect(canContext.abort).toBeCalled();
+            expect(canContext.abort).toHaveBeenCalled();
           });
           it("Status is aborted after abort", async () => {
             const wizard = new Wizard(canContext, [genericStep]);
@@ -75,7 +75,7 @@ describe("wizards", () => {
             const wizard = new Wizard(canContext, [genericStep]);
             await wizard.start();
             await wizard.complete();
-            expect(canContext.complete).toBeCalled();
+            expect(canContext.complete).toHaveBeenCalled();
           });
           it("Complete reject is propagated", async () => {
             const wizard = new Wizard(
@@ -228,7 +228,7 @@ describe("wizards", () => {
             const steps = [canGoStepWithBefore];
             const wizard = new Wizard(genericContext, steps);
             await wizard.start();
-            expect(canGoStepWithBefore.beforeEnter).toBeCalled();
+            expect(canGoStepWithBefore.beforeEnter).toHaveBeenCalled();
           });
           it("Ready steps can be forwarded", async () => {
             const skipReadySteps = true;

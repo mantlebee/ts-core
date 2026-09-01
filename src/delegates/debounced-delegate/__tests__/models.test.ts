@@ -13,9 +13,9 @@ describe("delegates", () => {
           debouncedDelegate.call();
           debouncedDelegate.call();
           debouncedDelegate.call();
-          expect(delegate).not.toBeCalled();
+          expect(delegate).not.toHaveBeenCalled();
           fakeTimeout.runPending();
-          expect(delegate).toBeCalledTimes(1);
+          expect(delegate).toHaveBeenCalledTimes(1);
         });
         it("the delegate is invoked using the same params passed to the last call() invocation", () => {
           const fakeTimeout = new TestTimeout();
@@ -25,7 +25,7 @@ describe("delegates", () => {
           debouncedDelegate.call(123);
           debouncedDelegate.call("string");
           fakeTimeout.runPending();
-          expect(delegate).toBeCalledWith("string");
+          expect(delegate).toHaveBeenCalledWith("string");
         });
       });
     });

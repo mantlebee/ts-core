@@ -108,7 +108,7 @@ describe("wizards", () => {
             currentStep = a;
             return Promise.resolve();
           });
-          expect(canGoStepWithBefore.beforeGoBack).toBeCalled();
+          expect(canGoStepWithBefore.beforeGoBack).toHaveBeenCalled();
         });
       });
       // goForward
@@ -131,7 +131,7 @@ describe("wizards", () => {
             currentStep = a;
             return Promise.resolve();
           });
-          expect(canGoStepWithBefore.beforeGoForward).toBeCalled();
+          expect(canGoStepWithBefore.beforeGoForward).toHaveBeenCalled();
         });
       });
       // setCurrentStep
@@ -148,7 +148,7 @@ describe("wizards", () => {
           await setCurrentStep(canGoStepWithBefore, (a) => {
             currentStep = a;
           });
-          expect(canGoStepWithBefore.beforeGoForward).toBeCalled();
+          expect(canGoStepWithBefore.beforeGoForward).toHaveBeenCalled();
         });
       });
     });

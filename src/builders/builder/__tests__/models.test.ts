@@ -14,12 +14,12 @@ describe("builders", () => {
               createRelease: jest.fn(),
             };
             const builder = new Builder(factory);
-            expect(factory.createDebug).not.toBeCalled();
-            expect(factory.createRelease).not.toBeCalled();
+            expect(factory.createDebug).not.toHaveBeenCalled();
+            expect(factory.createRelease).not.toHaveBeenCalled();
             DebugMode.enable();
             builder.build();
-            expect(factory.createDebug).toBeCalled();
-            expect(factory.createRelease).not.toBeCalled();
+            expect(factory.createDebug).toHaveBeenCalled();
+            expect(factory.createRelease).not.toHaveBeenCalled();
           });
           it("If DebugMode is disabled, instantiates the release version", () => {
             const factory: IFactory<boolean> = {
@@ -27,12 +27,12 @@ describe("builders", () => {
               createRelease: jest.fn(),
             };
             const builder = new Builder(factory);
-            expect(factory.createDebug).not.toBeCalled();
-            expect(factory.createRelease).not.toBeCalled();
+            expect(factory.createDebug).not.toHaveBeenCalled();
+            expect(factory.createRelease).not.toHaveBeenCalled();
             DebugMode.disable();
             builder.build();
-            expect(factory.createDebug).not.toBeCalled();
-            expect(factory.createRelease).toBeCalled();
+            expect(factory.createDebug).not.toHaveBeenCalled();
+            expect(factory.createRelease).toHaveBeenCalled();
           });
         });
       });
