@@ -1,6 +1,11 @@
 import { List } from "@/common";
 
-import { firstOrDefault, listToDictionary, replaceListItems } from "../arrays";
+import {
+  firstOrDefault,
+  isArray,
+  listToDictionary,
+  replaceListItems,
+} from "../arrays";
 
 type Item = { id: number; name: string };
 
@@ -13,6 +18,20 @@ const defaultItem: Item = { id: 3, name: "Jack" };
 describe("common", () => {
   describe("utils", () => {
     describe("arrays", () => {
+      describe("isArray", () => {
+        it("True if arg is an array", () => {
+          expect(isArray([])).toBeTruthy();
+          expect(isArray([1, 2, 3])).toBeTruthy();
+        });
+        it("False if arg is not an array", () => {
+          expect(isArray(undefined)).toBeFalsy();
+          expect(isArray(null)).toBeFalsy();
+          expect(isArray(1)).toBeFalsy();
+          expect(isArray("abc")).toBeFalsy();
+          expect(isArray({})).toBeFalsy();
+          expect(isArray(() => {})).toBeFalsy();
+        });
+      });
       describe("firstOrDefault", () => {
         it("Returns the found item", () => {
           const item = firstOrDefault<Item>(items, (a) => a.id == 1);

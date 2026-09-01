@@ -1,4 +1,20 @@
-import { Dictionary, KeyOf, List, Nullable } from "@/common";
+import { Any, Dictionary, KeyOf, List, Nullable } from "@/common";
+
+/**
+ * Checks if arg is an array.
+ * @example
+ * ```ts
+ * isArray([])        // true
+ * isArray([1, 2, 3]) // true
+ * isArray({})        // false
+ * isArray("abc")     // false
+ * ```
+ * @param arg Item to check.
+ * @returns true if arg is an array.
+ */
+export function isArray(arg: Any): boolean {
+  return Array.isArray(arg);
+}
 
 /**
  * Looks for and returns an item in a list or a default one if item is not found.
