@@ -9,8 +9,8 @@ describe("common", () => {
         it("True if arg in an object", () => {
           expect(isObject({})).toBeTruthy();
           expect(isObject(obj)).toBeTruthy();
-          expect(isObject(new Error())).toBeTruthy();
           expect(isObject(JSON.parse("{}"))).toBeTruthy();
+          expect(isObject(Object.create(null))).toBeTruthy();
         });
         it("False if arg in not an object", () => {
           expect(isObject(undefined)).toBeFalsy();
@@ -22,6 +22,12 @@ describe("common", () => {
           expect(isObject([])).toBeFalsy();
           expect(isObject(JSON.parse("[]"))).toBeFalsy();
           expect(isObject(Error)).toBeFalsy();
+          expect(isObject(new Error())).toBeFalsy();
+          expect(isObject(new Date())).toBeFalsy();
+          expect(isObject(/regex/)).toBeFalsy();
+          expect(isObject(new Map())).toBeFalsy();
+          class Foo {}
+          expect(isObject(new Foo())).toBeFalsy();
         });
       });
       describe("objectHasKey", () => {

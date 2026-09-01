@@ -1,10 +1,10 @@
 import { Any } from "@/common";
 
 /**
- * Checks if arg is an object.
+ * Checks if arg is a plain object.
  * What is considered an object?
  * - {}
- * - class' instance
+ * - object literals / `Object.create(null)`
  * What is NOT considered an object?
  * - undefined
  * - null
@@ -14,13 +14,16 @@ import { Any } from "@/common";
  * - function
  * - array
  * - class
+ * - class' instance
+ * - built-in object instances (Date, Error, RegExp, Map, Set, ...)
  * @param arg Item to check.
- * @returns true if arg is an object.
+ * @returns true if arg is a plain object.
  */
 export function isObject(arg: Any): boolean {
-  return Boolean(
-    typeof arg === "object" && arg instanceof Object && !(arg instanceof Array)
-  );
+  if (arg === null || typeof arg !== "object" || arg instanceof Array)
+    return false;
+  const prototype = Object.getPrototypeOf(arg);
+  return prototype === Object.prototype || prototype === null;
 }
 
 /**
