@@ -15,9 +15,11 @@
       "@/*": ["src/*"],
       "@test/*": ["test/*"]
     },
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES6"
+    "target": "ES6",
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules"]
