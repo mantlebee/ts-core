@@ -1,5 +1,22 @@
-import { Any, Dictionary, isDefined } from "@/common";
+import { Any, Dictionary, isDefined, NestedObjectOptions } from "@/common";
 
+//#region Private
+
+//#region Options
+function getCreateIfMissing(options?: NestedObjectOptions): boolean {
+  return Boolean(options?.createIfMissing);
+}
+
+function getPathSeparator(options?: NestedObjectOptions): string {
+  return options?.pathSeparator ?? ".";
+}
+
+function getReplaceIfExists(options?: NestedObjectOptions): boolean {
+  return Boolean(options?.replaceIfExists);
+}
+//#endregion
+
+//#region Traversing
 /** True when `value` is a non-null object or array: something we can index into. */
 function canTraverse(value: Any): value is Dictionary {
   return value !== null && typeof value === "object";
@@ -24,86 +41,87 @@ function parsePath(
 }
 
 /**
- * Walks `data` through `keys`, stopping as soon as a segment is not traversable.
+ * Walks `obj` through `keys`, stopping as soon as a segment is not traversable.
  * @returns the container the walk ended on, or `undefined` if it was cut short.
  */
-function walkTo(data: Dictionary, keys: string[]): Any {
-  let target: Any = data;
+function walkTo(obj: Dictionary, keys: string[]): Any {
+  let target: Any = obj;
   for (const key of keys) {
     if (!canTraverse(target)) return undefined;
     target = target[key];
   }
   return target;
 }
+//#endregion
+//#endregion
 
 /**
- * Reads the value reached by following `path` through `data`.
+ * Reads the value reached by following `path` through `obj`.
  * @typeParam TValue Expected type of the value; not checked at runtime.
- * @param data Object to read from.
+ * @param obj Object to read from.
  * @param path Path to the value.
- * @param pathSeparator Separator used to split `path` into segments.
  * @returns the value at `path`, or `undefined` if a segment is missing or not
  * traversable.
  */
-export function getDataValue<TValue = Any>(
-  data: Dictionary,
+export function getNestedPropertyValue<TValue = Any>(
+  obj: Dictionary,
   path: string,
-  pathSeparator: string,
+  options?: NestedObjectOptions,
 ): TValue {
+  const pathSeparator = getPathSeparator(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
-  const parent = walkTo(data, parents);
+  const parent = walkTo(obj, parents);
   return (canTraverse(parent) ? parent[leaf] : undefined) as TValue;
 }
 
 /**
  * Tells whether `path` resolves to a key that is physically present on its
  * parent, regardless of the value stored there (including `undefined`).
- * @param data Object to inspect.
+ * @param obj Object to inspect.
  * @param path Path whose final key is checked.
  * @param pathSeparator Separator used to split `path` into segments.
  * @returns true when the final key exists on its parent.
  */
-export function hasDataValue(
-  data: Dictionary,
+export function hasNestedProperty(
+  obj: Dictionary,
   path: string,
-  pathSeparator: string,
+  options?: NestedObjectOptions,
 ): boolean {
+  const pathSeparator = getPathSeparator(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
-  const parent = walkTo(data, parents);
+  const parent = walkTo(obj, parents);
   return canTraverse(parent) && leaf in parent;
 }
 
 /**
- * Writes `value` at `path` inside `data`, mutating it in place.
+ * Writes `value` at `path` inside `obj`, mutating it in place.
  *
  * The parent chain is validated first: when an intermediate segment cannot be
  * traversed and the options do not allow fixing it (`createIfMissing` for an
  * absent segment, `replaceIfExists` for a present-but-non-traversable one), the
- * write is abandoned and `data` is left **completely** untouched — never
+ * write is abandoned and `obj` is left **completely** untouched — never
  * partially mutated. A container created to fill a gap is an array when the
  * following segment is a numeric index, otherwise a plain object.
  * @typeParam TValue Type of the value to write.
- * @param data Object to write into.
+ * @param obj Object to write into.
  * @param path Path to write to.
  * @param value Value to store at `path`.
- * @param pathSeparator Separator used to split `path` into segments.
- * @param createIfMissing Whether to create missing intermediate containers.
- * @param replaceIfExists Whether to replace an existing non-traversable segment.
  */
-export function setDataValue<TValue = Any>(
-  data: Dictionary,
+export function setNestedPropertyValue<TValue = Any>(
+  obj: Dictionary,
   path: string,
   value: TValue,
-  pathSeparator: string,
-  createIfMissing: boolean,
-  replaceIfExists: boolean,
+  options?: NestedObjectOptions,
 ): void {
+  const createIfMissing = getCreateIfMissing(options);
+  const pathSeparator = getPathSeparator(options);
+  const replaceIfExists = getReplaceIfExists(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
 
   // Phase 1 — make sure every parent segment can be reached (by descending,
-  // creating or replacing, as the options permit) without touching `data`, so a
+  // creating or replacing, as the options permit) without touching `obj`, so a
   // write that cannot reach its leaf stays a no-op.
-  let probe: Any = data;
+  let probe: Any = obj;
   for (let i = 0; i < parents.length; i++) {
     const child = canTraverse(probe) ? probe[parents[i]] : undefined;
     if (canTraverse(child)) {
@@ -119,7 +137,7 @@ export function setDataValue<TValue = Any>(
   }
 
   // Phase 2 — descend for real, creating the containers phase 1 approved.
-  let target: Any = data;
+  let target: Any = obj;
   for (let i = 0; i < parents.length; i++) {
     const key = parents[i];
     if (!canTraverse(target[key])) {
@@ -131,18 +149,19 @@ export function setDataValue<TValue = Any>(
 }
 
 /**
- * Deletes the key reached by `path` from `data`; does nothing when an
+ * Deletes the key reached by `path` from `obj`; does nothing when an
  * intermediate segment cannot be traversed.
- * @param data Object to delete from.
+ * @param obj Object to delete from.
  * @param path Path whose final key is deleted.
  * @param pathSeparator Separator used to split `path` into segments.
  */
-export function unsetDataValue(
-  data: Dictionary,
+export function unsetNestedProperty(
+  obj: Dictionary,
   path: string,
-  pathSeparator: string,
+  options?: NestedObjectOptions,
 ): void {
+  const pathSeparator = getPathSeparator(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
-  const parent = walkTo(data, parents);
+  const parent = walkTo(obj, parents);
   if (canTraverse(parent)) delete parent[leaf];
 }
