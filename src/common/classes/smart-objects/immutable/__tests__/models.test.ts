@@ -86,6 +86,21 @@ describe("common", () => {
               });
             });
 
+            describe("keys", () => {
+              it("reads through to the current snapshot", () => {
+                const base = { user: { name: "John" }, keep: true };
+                const obj = new ImmutableObject(base, nestedFactory);
+                expect(obj.keys()).toEqual(["user.name", "keep"]);
+              });
+              it("reflects writes made to this version, not its parent", () => {
+                const v1 = new ImmutableObject({ a: 1 }, nestedFactory);
+                const v2 = v1.clone();
+                v2.set("b", 2);
+                expect(v2.keys()).toEqual(["a", "b"]);
+                expect(v1.keys()).toEqual(["a"]);
+              });
+            });
+
             describe("generic over the ISmartObject implementation", () => {
               it("works with a non-NestedObject implementation", () => {
                 const base = { x: 1, y: 2 };

@@ -1,14 +1,15 @@
 # `common/classes/smart-objects`
 
-The **`ISmartObject`** concept: a deliberately tiny contract for reading and
-writing a value **by key** — `get` / `has` / `set` / `unset`, and nothing else.
+The **`ISmartObject`** concept: a deliberately tiny contract for reading,
+writing and enumerating a value **by key** — `get` / `has` / `keys` / `set` /
+`unset`, and nothing else.
 
 What a `key` means is left entirely to the implementation, so callers can swap
 one for another without changing their code, and a wrapper can layer behaviour on
 top (immutability, copy-on-write, validation, logging, change events, access
-control…) just by holding another `ISmartObject` and forwarding the same four
-calls. Richer needs — enumerating keys, merging, transactions — belong in a wider
-interface built on top, not here.
+control…) just by holding another `ISmartObject` and forwarding the same calls.
+Richer needs — merging, transactions — belong in a wider interface built on top,
+not here.
 
 ## What's in here
 

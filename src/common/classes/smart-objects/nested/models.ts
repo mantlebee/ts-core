@@ -1,8 +1,9 @@
-import { Any, Dictionary } from "@/common";
+import { Any, Dictionary, List } from "@/common";
 
 import { ISmartObject } from "../interfaces";
 import { NestedObjectOptions } from "./types";
 import {
+  getNestedPropertyKeys,
   getNestedPropertyValue,
   hasNestedProperty,
   setNestedPropertyValue,
@@ -22,6 +23,8 @@ import {
  *
  * const deep = new NestedObject({}, { createIfMissing: true });
  * deep.set("a.b.0.c", 1);         // { a: { b: [ { c: 1 } ] } }
+ *
+ * nested.keys();                  // ["user.name"] — leaf paths, not top-level keys
  * ```
  */
 export class NestedObject implements ISmartObject {
@@ -40,6 +43,15 @@ export class NestedObject implements ISmartObject {
   }
   public has(path: string): boolean {
     return hasNestedProperty(this.obj, path, this.options);
+  }
+  /**
+   * Unlike {@link FlatObject.keys}, this returns the path to every leaf value
+   * reachable in the wrapped object (e.g. `{ user: { name: "John" } }` →
+   * `["user.name"]`), not the object's top-level keys — consistent with paths
+   * being what `get`/`has`/`set`/`unset` operate on here.
+   */
+  public keys(): List<string> {
+    return getNestedPropertyKeys(this.obj, this.options);
   }
   public set<TValue = Any>(path: string, value: TValue): void {
     setNestedPropertyValue(this.obj, path, value, this.options);

@@ -1,4 +1,4 @@
-import { Any, Dictionary } from "@/common";
+import { Any, Dictionary, List } from "@/common";
 
 import { ISmartObject } from "../interfaces";
 
@@ -28,6 +28,9 @@ export class FlatObject implements ISmartObject {
   }
   public has(key: string): boolean {
     return key in this.obj;
+  }
+  public keys(): List<string> {
+    return Object.keys(this.obj);
   }
   public set<TValue = Any>(key: string, value: TValue): void {
     this.obj[key] = value;

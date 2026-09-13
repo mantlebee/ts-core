@@ -1,9 +1,9 @@
-import { Any } from "@/common";
+import { Any, List } from "@/common";
 
 /**
- * The whole "smart object" contract: read, probe, write and remove a value by
- * key. Every implementation in this folder ({@link FlatObject},
- * {@link NestedObject}, {@link ImmutableObject}) exposes exactly these four
+ * The whole "smart object" contract: read, probe, write, remove and enumerate
+ * values by key. Every implementation in this folder ({@link FlatObject},
+ * {@link NestedObject}, {@link ImmutableObject}) exposes exactly these five
  * methods and nothing more.
  *
  * It is intentionally a small, dumb concept. What a `key` means is left entirely
@@ -12,9 +12,9 @@ import { Any } from "@/common";
  * swap one implementation for another without changing their code, and a wrapper
  * can layer behaviour on top (immutability, copy-on-write, validation, logging,
  * change events, access control…) by holding another `ISmartObject` and
- * forwarding these same four calls. Keeping the surface this narrow is what
- * makes that encapsulation cheap; richer needs (enumerating keys, merging,
- * transactions) belong in a wider interface built on top, not here.
+ * forwarding these same calls. Keeping the surface this narrow is what makes
+ * that encapsulation cheap; richer needs (merging, transactions) belong in a
+ * wider interface built on top, not here.
  */
 export interface ISmartObject {
   /**
@@ -30,6 +30,12 @@ export interface ISmartObject {
    * @returns true when `key` is present.
    */
   has(key: string): boolean;
+  /**
+   * Lists the keys currently held. What counts as a "key" is defined by the
+   * implementation, the same way it is for {@link get}/{@link has}/{@link set}.
+   * @returns the object's keys.
+   */
+  keys(): List<string>;
   /**
    * Writes `value` at `key`.
    * @typeParam TValue Type of the value to write.

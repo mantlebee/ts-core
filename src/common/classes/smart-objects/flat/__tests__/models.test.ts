@@ -30,6 +30,14 @@ describe("common", () => {
               flat.set("x", 1);
               expect(flat.get("x")).toBe(1);
             });
+            it("lists own keys verbatim", () => {
+              const flat = new FlatObject({ a: 1, "b.c": 2 });
+              expect(flat.keys()).toEqual(["a", "b.c"]);
+            });
+            it("returns no keys for an empty object", () => {
+              const flat = new FlatObject();
+              expect(flat.keys()).toEqual([]);
+            });
           });
         });
       });

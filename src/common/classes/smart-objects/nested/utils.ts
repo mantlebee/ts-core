@@ -1,4 +1,10 @@
-import { Any, Dictionary, isDefined, NestedObjectOptions } from "@/common";
+import {
+  Any,
+  Dictionary,
+  isDefined,
+  List,
+  NestedObjectOptions,
+} from "@/common";
 
 //#region Private
 
@@ -91,6 +97,32 @@ export function hasNestedProperty(
   const { leaf, parents } = parsePath(path, pathSeparator);
   const parent = walkTo(obj, parents);
   return canTraverse(parent) && leaf in parent;
+}
+
+/**
+ * Lists the paths to every leaf value reachable in `obj`, i.e. every path that
+ * {@link getNestedPropertyValue} would resolve to something other than a
+ * traversable container. An empty container (`{}`/`[]`) contributes no path.
+ * @param obj Object to walk.
+ * @param options Path-parsing behaviour; see {@link NestedObjectOptions}.
+ * @returns the paths to every leaf value, in traversal order.
+ */
+export function getNestedPropertyKeys(
+  obj: Dictionary,
+  options?: NestedObjectOptions,
+): List<string> {
+  const pathSeparator = getPathSeparator(options);
+  const keys: string[] = [];
+  const walk = (value: Dictionary, prefix: string): void => {
+    for (const key of Object.keys(value)) {
+      const path = prefix ? `${prefix}${pathSeparator}${key}` : key;
+      const child = value[key];
+      if (canTraverse(child)) walk(child, path);
+      else keys.push(path);
+    }
+  };
+  walk(obj, "");
+  return keys;
 }
 
 /**

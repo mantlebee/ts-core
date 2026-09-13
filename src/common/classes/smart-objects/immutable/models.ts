@@ -1,4 +1,4 @@
-import { Any, Dictionary, Nullable } from "@/common";
+import { Any, Dictionary, List, Nullable } from "@/common";
 
 import { ISmartObject } from "../interfaces";
 import { deepClone } from "./utils";
@@ -74,6 +74,9 @@ export class ImmutableObject implements ISmartObject {
   }
   public has(path: string): boolean {
     return this.reader().has(path);
+  }
+  public keys(): List<string> {
+    return this.reader().keys();
   }
   public set<TValue = Any>(path: string, value: TValue): void {
     this.writer().set(path, value);
