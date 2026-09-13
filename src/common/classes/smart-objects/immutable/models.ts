@@ -78,6 +78,9 @@ export class ImmutableObject implements ISmartObject {
   public keys(): List<string> {
     return this.reader().keys();
   }
+  public seed<TValue = Any>(obj: Dictionary<TValue>): void {
+    this.writer().seed(obj);
+  }
   public set<TValue = Any>(path: string, value: TValue): void {
     this.writer().set(path, value);
   }

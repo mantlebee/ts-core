@@ -38,6 +38,18 @@ describe("common", () => {
               const flat = new FlatObject();
               expect(flat.keys()).toEqual([]);
             });
+            it("writes every own key of the seed object via set", () => {
+              const flat = new FlatObject();
+              flat.seed({ a: 1, b: 2 });
+              expect(flat.get("a")).toBe(1);
+              expect(flat.get("b")).toBe(2);
+            });
+            it("does not remove keys absent from the seed object", () => {
+              const flat = new FlatObject({ a: 1 });
+              flat.seed({ b: 2 });
+              expect(flat.get("a")).toBe(1);
+              expect(flat.get("b")).toBe(2);
+            });
           });
         });
       });

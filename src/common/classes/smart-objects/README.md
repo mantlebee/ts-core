@@ -1,8 +1,8 @@
 # `common/classes/smart-objects`
 
 The **`ISmartObject`** concept: a deliberately tiny contract for reading,
-writing and enumerating a value **by key** — `get` / `has` / `keys` / `set` /
-`unset`, and nothing else.
+writing, enumerating and seeding a value **by key** — `get` / `has` / `keys` /
+`seed` / `set` / `unset`, and nothing else.
 
 What a `key` means is left entirely to the implementation, so callers can swap
 one for another without changing their code, and a wrapper can layer behaviour on

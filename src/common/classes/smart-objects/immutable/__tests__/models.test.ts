@@ -101,6 +101,23 @@ describe("common", () => {
               });
             });
 
+            describe("seed", () => {
+              it("leaves the constructor dictionary untouched", () => {
+                const base = { a: 1 };
+                const obj = new ImmutableObject(base, nestedFactory);
+                obj.seed({ b: 2 });
+                expect(obj.get("b")).toBe(2);
+                expect(base).toEqual({ a: 1 });
+              });
+              it("writes only to this version, not its parent", () => {
+                const v1 = new ImmutableObject({ a: 1 }, nestedFactory);
+                const v2 = v1.clone();
+                v2.seed({ b: 2, c: 3 });
+                expect(v2.keys()).toEqual(["a", "b", "c"]);
+                expect(v1.keys()).toEqual(["a"]);
+              });
+            });
+
             describe("generic over the ISmartObject implementation", () => {
               it("works with a non-NestedObject implementation", () => {
                 const base = { x: 1, y: 2 };

@@ -32,6 +32,9 @@ export class FlatObject implements ISmartObject {
   public keys(): List<string> {
     return Object.keys(this.obj);
   }
+  public seed<TValue = Any>(obj: Dictionary<TValue>): void {
+    for (const key of Object.keys(obj)) this.set(key, obj[key]);
+  }
   public set<TValue = Any>(key: string, value: TValue): void {
     this.obj[key] = value;
   }

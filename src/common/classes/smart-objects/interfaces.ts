@@ -1,9 +1,9 @@
-import { Any, List } from "@/common";
+import { Any, Dictionary, List } from "@/common";
 
 /**
- * The whole "smart object" contract: read, probe, write, remove and enumerate
- * values by key. Every implementation in this folder ({@link FlatObject},
- * {@link NestedObject}, {@link ImmutableObject}) exposes exactly these five
+ * The whole "smart object" contract: read, probe, write, remove, enumerate and
+ * seed values by key. Every implementation in this folder ({@link FlatObject},
+ * {@link NestedObject}, {@link ImmutableObject}) exposes exactly these six
  * methods and nothing more.
  *
  * It is intentionally a small, dumb concept. What a `key` means is left entirely
@@ -36,6 +36,15 @@ export interface ISmartObject {
    * @returns the object's keys.
    */
   keys(): List<string>;
+  /**
+   * Writes every key/value pair found in `obj` via {@link set}. What counts as
+   * a "key" — and whether a nested value is decomposed into deeper keys or
+   * stored as-is — is defined by the implementation, the same way it is for
+   * {@link get}/{@link has}/{@link keys}/{@link set}.
+   * @typeParam TValue Type of the values being written.
+   * @param obj Dictionary of key/value pairs to write.
+   */
+  seed<TValue = Any>(obj: Dictionary<TValue>): void;
   /**
    * Writes `value` at `key`.
    * @typeParam TValue Type of the value to write.

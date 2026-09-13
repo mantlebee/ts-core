@@ -100,9 +100,36 @@ export function hasNestedProperty(
 }
 
 /**
- * Lists the paths to every leaf value reachable in `obj`, i.e. every path that
+ * Pairs the path to every leaf value reachable in `obj` — every path that
  * {@link getNestedPropertyValue} would resolve to something other than a
- * traversable container. An empty container (`{}`/`[]`) contributes no path.
+ * traversable container — with that value. An empty container (`{}`/`[]`)
+ * contributes no entry.
+ * @typeParam TValue Expected type of the leaf values; not checked at runtime.
+ * @param obj Object to walk.
+ * @param options Path-parsing behaviour; see {@link NestedObjectOptions}.
+ * @returns `[path, value]` pairs for every leaf, in traversal order.
+ */
+export function getNestedPropertyEntries<TValue = Any>(
+  obj: Dictionary,
+  options?: NestedObjectOptions,
+): List<[string, TValue]> {
+  const pathSeparator = getPathSeparator(options);
+  const entries: [string, TValue][] = [];
+  const walk = (value: Dictionary, prefix: string): void => {
+    for (const key of Object.keys(value)) {
+      const path = prefix ? `${prefix}${pathSeparator}${key}` : key;
+      const child = value[key];
+      if (canTraverse(child)) walk(child, path);
+      else entries.push([path, child as TValue]);
+    }
+  };
+  walk(obj, "");
+  return entries;
+}
+
+/**
+ * Lists the paths to every leaf value reachable in `obj`; see
+ * {@link getNestedPropertyEntries}.
  * @param obj Object to walk.
  * @param options Path-parsing behaviour; see {@link NestedObjectOptions}.
  * @returns the paths to every leaf value, in traversal order.
@@ -111,18 +138,7 @@ export function getNestedPropertyKeys(
   obj: Dictionary,
   options?: NestedObjectOptions,
 ): List<string> {
-  const pathSeparator = getPathSeparator(options);
-  const keys: string[] = [];
-  const walk = (value: Dictionary, prefix: string): void => {
-    for (const key of Object.keys(value)) {
-      const path = prefix ? `${prefix}${pathSeparator}${key}` : key;
-      const child = value[key];
-      if (canTraverse(child)) walk(child, path);
-      else keys.push(path);
-    }
-  };
-  walk(obj, "");
-  return keys;
+  return getNestedPropertyEntries(obj, options).map(([path]) => path);
 }
 
 /**

@@ -38,6 +38,27 @@ describe("common", () => {
                 expect(nested.keys()).toEqual(["user/name"]);
               });
             });
+            describe("seed", () => {
+              it("calls set once per own key of the seed object", () => {
+                const nested = new NestedObject();
+                nested.seed({ name: "Jane", active: true });
+                expect(nested.get("name")).toBe("Jane");
+                expect(nested.get("active")).toBe(true);
+              });
+              it("decomposes a nested value into leaf paths, like keys()", () => {
+                const nested = new NestedObject({}, { createIfMissing: true });
+                nested.seed({ user: { name: "Jane", role: "admin" } });
+                expect(nested.get("user.name")).toBe("Jane");
+                expect(nested.get("user.role")).toBe("admin");
+                expect(nested.keys()).toEqual(["user.name", "user.role"]);
+              });
+              it("does not remove keys absent from the seed object", () => {
+                const nested = new NestedObject({ a: 1 });
+                nested.seed({ b: 2 });
+                expect(nested.get("a")).toBe(1);
+                expect(nested.get("b")).toBe(2);
+              });
+            });
           });
         });
       });

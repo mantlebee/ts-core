@@ -3,6 +3,7 @@ import { Any, Dictionary, List } from "@/common";
 import { ISmartObject } from "../interfaces";
 import { NestedObjectOptions } from "./types";
 import {
+  getNestedPropertyEntries,
   getNestedPropertyKeys,
   getNestedPropertyValue,
   hasNestedProperty,
@@ -52,6 +53,20 @@ export class NestedObject implements ISmartObject {
    */
   public keys(): List<string> {
     return getNestedPropertyKeys(this.obj, this.options);
+  }
+  /**
+   * Decomposes `obj` into leaf paths — the same paths {@link keys} would
+   * report for it — and calls {@link set} once per leaf, so a nested `obj` is
+   * spread across paths rather than stored as a single value under its
+   * top-level key.
+   */
+  public seed<TValue = Any>(obj: Dictionary<TValue>): void {
+    for (const [path, value] of getNestedPropertyEntries<TValue>(
+      obj,
+      this.options,
+    )) {
+      this.set(path, value);
+    }
   }
   public set<TValue = Any>(path: string, value: TValue): void {
     setNestedPropertyValue(this.obj, path, value, this.options);
