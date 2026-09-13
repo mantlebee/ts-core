@@ -1,10 +1,10 @@
 import { Any, Dictionary, List } from "@/common";
 
 /**
- * The whole "smart object" contract: read, probe, write, remove, enumerate and
- * seed values by key. Every implementation in this folder ({@link FlatObject},
- * {@link NestedObject}, {@link ImmutableObject}) exposes exactly these six
- * methods and nothing more.
+ * The whole "smart object" contract: read, probe, write, remove, enumerate,
+ * seed and clear values by key. Every implementation in this folder
+ * ({@link FlatObject}, {@link NestedObject}, {@link ImmutableObject}) exposes
+ * exactly these seven methods and nothing more.
  *
  * It is intentionally a small, dumb concept. What a `key` means is left entirely
  * to the implementation — a literal property name for {@link FlatObject}, a
@@ -17,6 +17,10 @@ import { Any, Dictionary, List } from "@/common";
  * wider interface built on top, not here.
  */
 export interface ISmartObject {
+  /**
+   * Removes every key currently held, leaving the object empty.
+   */
+  clear(): void;
   /**
    * Reads the value stored at `key`.
    * @typeParam TReturn Expected type of the value; not checked at runtime.

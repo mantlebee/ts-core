@@ -69,6 +69,9 @@ export class ImmutableObject implements ISmartObject {
     return new ImmutableObject(this.obj, this.getSmartObject, this);
   }
 
+  public clear(): void {
+    this.writer().clear();
+  }
   public get<TReturn = Any>(path: string): TReturn {
     return this.reader().get<TReturn>(path);
   }

@@ -14,6 +14,7 @@ import { ISmartObject } from "../interfaces";
  * flat.set("b", 2);     // { a: 1, b: 2 }
  * flat.unset("a");      // { b: 2 }
  * flat.get("a.b");      // undefined ("a.b" is a literal key, not a path)
+ * flat.clear();         // {}
  * ```
  */
 export class FlatObject implements ISmartObject {
@@ -23,6 +24,9 @@ export class FlatObject implements ISmartObject {
    */
   public constructor(protected readonly obj: Dictionary = {}) {}
 
+  public clear(): void {
+    for (const key of this.keys()) this.unset(key);
+  }
   public get<TReturn = Any>(key: string): TReturn {
     return this.obj[key];
   }

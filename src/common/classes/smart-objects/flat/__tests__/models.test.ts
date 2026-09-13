@@ -50,6 +50,13 @@ describe("common", () => {
               expect(flat.get("a")).toBe(1);
               expect(flat.get("b")).toBe(2);
             });
+            it("removes every key on clear", () => {
+              const obj: Record<string, unknown> = { a: 1, b: 2 };
+              const flat = new FlatObject(obj);
+              flat.clear();
+              expect(flat.keys()).toEqual([]);
+              expect(obj).toEqual({});
+            });
           });
         });
       });

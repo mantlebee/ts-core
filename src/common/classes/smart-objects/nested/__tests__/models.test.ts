@@ -59,6 +59,18 @@ describe("common", () => {
                 expect(nested.get("b")).toBe(2);
               });
             });
+            describe("clear", () => {
+              it("empties the object entirely, including nested containers", () => {
+                const obj: Record<string, unknown> = {
+                  user: { name: "John", role: "admin" },
+                  active: true,
+                };
+                const nested = new NestedObject(obj);
+                nested.clear();
+                expect(nested.keys()).toEqual([]);
+                expect(obj).toEqual({});
+              });
+            });
           });
         });
       });

@@ -26,6 +26,7 @@ import {
  * deep.set("a.b.0.c", 1);         // { a: { b: [ { c: 1 } ] } }
  *
  * nested.keys();                  // ["user.name"] — leaf paths, not top-level keys
+ * nested.clear();                 // {}
  * ```
  */
 export class NestedObject implements ISmartObject {
@@ -39,6 +40,14 @@ export class NestedObject implements ISmartObject {
     protected readonly options?: NestedObjectOptions,
   ) {}
 
+  /**
+   * Deletes every own key of the wrapped object, emptying it entirely —
+   * unlike calling {@link unset} once per {@link keys} entry, this also
+   * discards containers left empty by that (e.g. `{ a: {} }`).
+   */
+  public clear(): void {
+    for (const key of Object.keys(this.obj)) delete this.obj[key];
+  }
   public get<TReturn = Any>(path: string): TReturn {
     return getNestedPropertyValue(this.obj, path, this.options);
   }

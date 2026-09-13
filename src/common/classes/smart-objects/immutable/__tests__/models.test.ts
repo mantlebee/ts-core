@@ -118,6 +118,23 @@ describe("common", () => {
               });
             });
 
+            describe("clear", () => {
+              it("leaves the constructor dictionary untouched", () => {
+                const base = { a: 1 };
+                const obj = new ImmutableObject(base, nestedFactory);
+                obj.clear();
+                expect(obj.keys()).toEqual([]);
+                expect(base).toEqual({ a: 1 });
+              });
+              it("clears only this version, not its parent", () => {
+                const v1 = new ImmutableObject({ a: 1 }, nestedFactory);
+                const v2 = v1.clone();
+                v2.clear();
+                expect(v2.keys()).toEqual([]);
+                expect(v1.keys()).toEqual(["a"]);
+              });
+            });
+
             describe("generic over the ISmartObject implementation", () => {
               it("works with a non-NestedObject implementation", () => {
                 const base = { x: 1, y: 2 };
