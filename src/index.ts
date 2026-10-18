@@ -10,6 +10,7 @@ export * from "./delegates";
 export * from "./exceptions";
 export * from "./identities";
 export * from "./loggers";
+export * from "./notifications";
 export * from "./parsers";
 export * from "./scheduling";
 export * from "./storage";

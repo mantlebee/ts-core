@@ -25,6 +25,7 @@ concrete implementations.
 | [`exceptions/`](./exceptions) | Error base type that carries a machine-readable code |
 | [`identities/`](./identities) | Generating ids and building type-safe keys |
 | [`loggers/`](./loggers) | Logging abstraction with pluggable sinks |
+| [`notifications/`](./notifications) | Sending notifications to the user through a pluggable sink |
 | [`parsers/`](./parsers) | Turning text into structured data |
 | [`scheduling/`](./scheduling) | Describing recurring executions (daily, weekly, monthly…) |
 | [`storage/`](./storage) | Key/value storages: in memory, `localStorage`, `sessionStorage` |
