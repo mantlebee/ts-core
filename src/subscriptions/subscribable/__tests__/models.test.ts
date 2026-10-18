@@ -1,32 +1,45 @@
 import { Subscribable } from "../models";
 
-describe("Subscriptions", () => {
-  describe("Subscribable", () => {
+type CounterEvents = { changed: [value: number] };
+
+class Counter extends Subscribable<CounterEvents> {
+  private value = 0;
+  public increment() {
+    this._eventBus.trigger("changed", ++this.value);
+  }
+}
+
+describe("subscriptions", () => {
+  describe("subscribable", () => {
     describe("models", () => {
       describe("Subscribable", () => {
-        it("'subscribe' generates an incremental numeric id", () => {
-          const subscribable = new Subscribable();
-          const first = subscribable.subscribe(() => {});
-          const second = subscribable.subscribe(() => {});
-          subscribable.unsubscribe(second);
-          const third = subscribable.subscribe(() => {});
-          expect(third).toBe(3);
+        it("Calls the handlers when the event is raised", () => {
+          const counter = new Counter();
+          const handler = jest.fn();
+          counter.on("changed", handler);
+          counter.increment();
+          counter.increment();
+          expect(handler).toHaveBeenNthCalledWith(1, 1);
+          expect(handler).toHaveBeenNthCalledWith(2, 2);
         });
-        it("Calls subscriptions", () => {
-          const result = { first: false, second: false, third: false };
-          const subscribable = new Subscribable<typeof result>();
-          const first = subscribable.subscribe((a) => {
-            a.first = true;
-          });
-          const second = subscribable.subscribe((a) => {
-            a.second = true;
-          });
-          const third = subscribable.subscribe((a) => {
-            a.third = true;
-          });
-          subscribable.unsubscribe(second);
-          subscribable.notifyData(result);
-          expect(result).toEqual({ first: true, second: false, third: true });
+        it("Disposing the subscription removes only its handler", async () => {
+          const counter = new Counter();
+          const first = jest.fn();
+          const second = jest.fn();
+          const subscription = counter.on("changed", first);
+          counter.on("changed", second);
+          await subscription.dispose();
+          counter.increment();
+          expect(first).not.toHaveBeenCalled();
+          expect(second).toHaveBeenCalledWith(1);
+        });
+        it("Disposing the subscribable removes every handler", async () => {
+          const counter = new Counter();
+          const handler = jest.fn();
+          counter.on("changed", handler);
+          await counter.dispose();
+          counter.increment();
+          expect(handler).not.toHaveBeenCalled();
         });
       });
     });

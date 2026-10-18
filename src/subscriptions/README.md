@@ -1,16 +1,19 @@
 # `subscriptions`
 
-**Publish/subscribe primitives.** Two flavours of the same idea — register a
-callback, get a handle back, unregister with it — for different needs.
+**Publish/subscribe primitives.** Register a typed handler, get a disposable
+subscription back, dispose it to unregister.
 
 ## What's in here
 
-- **`subscribable/`** — `ISubscribable<TData>` / `Subscribable<TData>`: one
-  channel. `notifyData(data)` calls every current subscriber. `subscribe()`
-  returns a numeric id; `unsubscribe(id)` removes it. Ids come from a
-  [`NumericIdentityManager`](../identities/identity-manager).
 - **`event-bus/`** — `IEventBus<TEvents>` / `EventBus<TEvents>`: many named,
   typed channels. `TEvents` is an `{ eventName: argsTuple }` map, so `on(event,
   handler)` and `trigger(event, ...args)` are checked at compile time.
   `on()` returns an `EventSubscription` (an `IDisposable`); `dispose()` it to
   remove that single handler.
+  - **`multi-tab/`** — `MultiTabEventBus<TEvents>`: an `EventBus` whose
+    triggers are also delivered to the other browser tabs of the same origin,
+    through an `IStorage` (default [`LocalStorage`](../storage)) and the
+    `storage` window event. Browser only.
+- **`subscribable/`** — `ISubscribable<TEvents>` / `Subscribable<TEvents>`:
+  exposes only `on()` (and `dispose()`) to the outside, while the subclass
+  raises its events through the protected `_eventBus`.

@@ -1,41 +1,52 @@
-import { Dictionary } from "@/common";
-import { NumericIdentityManager } from "@/identities";
+import { KeyOf } from "@/common";
 
+import {
+  EventBus,
+  EventHandler,
+  EventsDefinition,
+  EventSubscription,
+} from "../event-bus";
 import { ISubscribable } from "./interfaces";
-import { Subscription } from "./types";
 
 /**
- * Ready-to-use {@link ISubscribable} implementation. Call {@link notifyData} to
- * push a payload to every current subscriber.
- * @typeParam TData Type of the payload delivered to subscribers.
+ * Base {@link ISubscribable} implementation, backed by an {@link EventBus}.
+ * Subclasses raise their events with `this._eventBus.trigger(...)`.
+ * @example
+ * ```ts
+ * class Counter extends Subscribable<{ changed: [value: number] }> {
+ *   private value = 0;
+ *   public increment() {
+ *     this._eventBus.trigger("changed", ++this.value);
+ *   }
+ * }
+ * const subscription = new Counter().on("changed", (value) => console.log(value));
+ * ```
+ * @typeParam TEvents `{ eventName: argsTuple }` map defining the available events.
  */
-export class Subscribable<TData> implements ISubscribable<TData> {
-  private identityManager = new NumericIdentityManager();
-  private subscriptions: Dictionary<Subscription<TData>> = {};
+export class Subscribable<TEvents extends EventsDefinition>
+  implements ISubscribable<TEvents>
+{
+  /** Bus used to register handlers and to raise the events. */
+  protected _eventBus = new EventBus<TEvents>();
 
   /**
-   * Calls all subscribers.
-   * @param data Data to pass to subscribers.
+   * Removes every registered handler.
    */
-  public notifyData(data: TData): void {
-    Object.values(this.subscriptions).forEach((a) => a(data));
+  public dispose(): Promise<void> {
+    return this._eventBus.dispose();
   }
 
   /**
-   * Registers a subscriber.
-   * @param subscription Callback invoked on every {@link notifyData} call.
-   * @returns the id to pass to {@link unsubscribe}.
+   * Registers a handler for an event.
+   * @typeParam TKey Name of the event to listen to.
+   * @param event Event to subscribe to.
+   * @param handler Callback invoked every time `event` is raised.
+   * @returns a subscription; dispose it to remove this single handler.
    */
-  public subscribe(subscription: Subscription<TData>): number {
-    const id = this.identityManager.newValue();
-    this.subscriptions[id] = subscription;
-    return id;
-  }
-  /**
-   * Removes a previously registered subscriber.
-   * @param id Id returned by {@link subscribe}.
-   */
-  public unsubscribe(id: number): void {
-    delete this.subscriptions[id];
+  public on<TKey extends KeyOf<TEvents>>(
+    event: TKey,
+    handler: EventHandler<TEvents, TKey>
+  ): EventSubscription {
+    return this._eventBus.on(event, handler);
   }
 }

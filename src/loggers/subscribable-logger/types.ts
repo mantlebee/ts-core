@@ -11,3 +11,11 @@ export type SubscribableLoggerData = {
   /** Data attached to the entry, if any. */
   data?: any;
 };
+
+/**
+ * Events raised by a {@link SubscribableLogger}.
+ */
+export type SubscribableLoggerEvents = {
+  /** Raised for every log entry. */
+  log: [data: SubscribableLoggerData];
+};

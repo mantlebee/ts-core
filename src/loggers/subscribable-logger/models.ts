@@ -1,38 +1,55 @@
-import { ISubscribable, Subscribable, Subscription } from "@/subscriptions";
+import { KeyOf } from "@/common";
+import {
+  EventBus,
+  EventHandler,
+  EventSubscription,
+  ISubscribable,
+} from "@/subscriptions";
 
 import { ILogger } from "../interfaces";
 import { Logger } from "../models";
-import { SubscribableLoggerData } from "./types";
+import { SubscribableLoggerEvents } from "./types";
 
 /**
- * {@link Logger} that, instead of writing anywhere, notifies its subscribers
- * with every log entry as {@link SubscribableLoggerData}.
+ * {@link Logger} that, instead of writing anywhere, raises the `log` event with
+ * every entry as {@link SubscribableLoggerData}.
+ * @example
+ * ```ts
+ * const logger = new SubscribableLogger();
+ * const subscription = logger.on("log", ({ type, message }) => ...);
+ * logger.logInfo("Hello");
+ * await subscription.dispose();
+ * ```
  */
 export class SubscribableLogger
   extends Logger
-  implements ILogger, ISubscribable<SubscribableLoggerData>
+  implements ILogger, ISubscribable<SubscribableLoggerEvents>
 {
-  private _subscribable = new Subscribable<SubscribableLoggerData>();
+  private _eventBus = new EventBus<SubscribableLoggerEvents>();
 
   public constructor() {
     super((type, message, data) =>
-      this._subscribable.notifyData({ type, message, data })
+      this._eventBus.trigger("log", { type, message, data })
     );
   }
 
   /**
-   * Registers a subscriber that receives every subsequent log entry.
-   * @param subscription Function called with each log entry.
-   * @returns the id to pass to {@link unsubscribe}.
+   * Removes every registered handler.
    */
-  public subscribe(subscription: Subscription<SubscribableLoggerData>): number {
-    return this._subscribable.subscribe(subscription);
+  public dispose(): Promise<void> {
+    return this._eventBus.dispose();
   }
+
   /**
-   * Removes a previously registered subscriber.
-   * @param id Id returned by {@link subscribe}.
+   * Registers a handler that receives every subsequent log entry.
+   * @param event Event to subscribe to (`log`).
+   * @param handler Function called with each log entry.
+   * @returns a subscription; dispose it to remove this single handler.
    */
-  public unsubscribe(id: number): void {
-    this._subscribable.unsubscribe(id);
+  public on<TKey extends KeyOf<SubscribableLoggerEvents>>(
+    event: TKey,
+    handler: EventHandler<SubscribableLoggerEvents, TKey>
+  ): EventSubscription {
+    return this._eventBus.on(event, handler);
   }
 }

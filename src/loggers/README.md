@@ -14,5 +14,6 @@ the entry actually goes is the delegate's job.
 - **`console-logger/`** — `ConsoleLogger`: writes to the matching `console`
   method per `LogTypes`.
 - **`subscribable-logger/`** — `SubscribableLogger`: instead of writing anywhere,
-  notifies subscribers with each entry as `SubscribableLoggerData`. Combines
-  `Logger` with [`subscriptions`](../subscriptions).
+  raises the `log` event with each entry as `SubscribableLoggerData`. It is an
+  `ISubscribable<SubscribableLoggerEvents>` (see
+  [`subscriptions`](../subscriptions)): listen with `on("log", handler)`.
