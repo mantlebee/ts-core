@@ -3,7 +3,17 @@
   "version": "0.32.0",
   "description": "Common types, patterns and utilities for TypeScript projects.",
   "main": "dist/index.js",
+  "module": "dist/esm/index.mjs",
   "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
   "files": [
     "docs/**/*",
     "dist/**/*"

@@ -4,6 +4,14 @@ import { IDeferred } from "../interfaces";
 import { PromiseResolvers } from "./types";
 
 /**
+ * Registry of pending promises, shared across all `KeyedDeferred` instances, keyed by `key`.
+ * Kept at module level instead of as a static field: with an ES6 target TypeScript
+ * emits static fields as an assignment after the class, which bundlers treat as a
+ * side effect and which would prevent `KeyedDeferred` from being tree-shaken.
+ */
+const KeyedDeferredPendingResolvers = new Map<Any, PromiseResolvers>();
+
+/**
  * {@link IDeferred} whose pending promise is stored against a key in a registry
  * shared by every `KeyedDeferred`. Any instance created with the same key can
  * settle the promise, so the producer and the consumer never need a direct
@@ -16,9 +24,6 @@ export class KeyedDeferred<
   TValue = void,
   TKey = Any,
 > implements IDeferred<TValue> {
-  /** Registry of pending promises, shared across all instances, keyed by `key`. */
-  private static readonly map = new Map<Any, PromiseResolvers>();
-
   /**
    * @param key Key the pending promise is registered under.
    * @param timeoutAfter Optional delay, in milliseconds, after which {@link wait}
@@ -40,7 +45,7 @@ export class KeyedDeferred<
       setTimeout(() => this.reject(this.key), this.timeoutAfter);
     }
     return new Promise<TValue>((resolve, reject) => {
-      KeyedDeferred.map.set(this.key, { reject, resolve });
+      KeyedDeferredPendingResolvers.set(this.key, { reject, resolve });
     });
   }
 
@@ -50,7 +55,7 @@ export class KeyedDeferred<
    * @param reason Rejection reason forwarded to the promise.
    */
   public reject(reason?: unknown): void {
-    const pendingResolvers = KeyedDeferred.map.get(this.key);
+    const pendingResolvers = KeyedDeferredPendingResolvers.get(this.key);
     if (pendingResolvers) pendingResolvers.reject(reason);
   }
   /**
@@ -59,7 +64,7 @@ export class KeyedDeferred<
    * @param value Value the promise resolves with.
    */
   public resolve(value: TValue): void {
-    const pendingResolvers = KeyedDeferred.map.get(this.key);
+    const pendingResolvers = KeyedDeferredPendingResolvers.get(this.key);
     if (pendingResolvers) pendingResolvers.resolve(value);
   }
 }
