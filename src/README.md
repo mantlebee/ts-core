@@ -29,6 +29,7 @@ concrete implementations.
 | [`loggers/`](./loggers) | Logging abstraction with pluggable sinks |
 | [`notifications/`](./notifications) | Sending notifications to the user through a pluggable sink |
 | [`parsers/`](./parsers) | Turning text into structured data |
+| [`passwords/`](./passwords) | Password requirements and validation |
 | [`scheduling/`](./scheduling) | Describing recurring executions (daily, weekly, monthly…) |
 | [`storage/`](./storage) | Key/value storages: in memory, `localStorage`, `sessionStorage` |
 | [`subscriptions/`](./subscriptions) | Publish/subscribe primitives |

@@ -14,6 +14,7 @@ export * from "./identities";
 export * from "./loggers";
 export * from "./notifications";
 export * from "./parsers";
+export * from "./passwords";
 export * from "./scheduling";
 export * from "./storage";
 export * from "./subscriptions";
