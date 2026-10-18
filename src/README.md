@@ -22,7 +22,7 @@ concrete implementations.
 | [`debug/`](./debug) | Global debug-mode switch |
 | [`delays/`](./delays) | Mechanisms that run code after a delay |
 | [`delegates/`](./delegates) | Wrappers that control how/when a function runs |
-| [`exceptions/`](./exceptions) | Error base type that carries a machine-readable code |
+| [`http/`](./http) | Pluggable HTTP client on top of the Fetch API |
 | [`identities/`](./identities) | Generating ids and building type-safe keys |
 | [`loggers/`](./loggers) | Logging abstraction with pluggable sinks |
 | [`notifications/`](./notifications) | Sending notifications to the user through a pluggable sink |
