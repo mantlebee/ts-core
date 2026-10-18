@@ -1,4 +1,5 @@
-import { KeyOf, List } from "..";
+import { KeyOf, List } from "@/common";
+
 import { WebColorNamesHexMap } from "./constants";
 import { IColor } from "./interfaces";
 import { Color } from "./models";
@@ -108,7 +109,8 @@ export function rgbaToHsla(r: number, g: number, b: number, a = 1): HslaColor {
     min = Math.min(rNorm, gNorm, bNorm);
   const l = (max + min) / 2;
   const d = max - min;
-  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  // Grays (d === 0) have no saturation; the formulas would divide 0 by 0.
+  const s = d === 0 ? 0 : l > 0.5 ? d / (2 - max - min) : d / (max + min);
   const h =
     max === min
       ? 0
@@ -182,10 +184,11 @@ export function textToHsl(
   saturation = 50
 ): HslColor {
   let hash = 0;
-  for (var i = 0; i < text.length; i++) {
+  for (let i = 0; i < text.length; i++) {
     hash = text.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const h = hash % 360;
+  // The hash can be negative: bring the hue into the 0-359 range.
+  const h = ((hash % 360) + 360) % 360;
   return { h, l: lightness, s: saturation };
 }
 

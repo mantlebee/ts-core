@@ -4,12 +4,21 @@ import { IStorage, LocalStorage } from "@/storage";
 import { IEventBus } from "../interfaces";
 import { EventBus } from "../models";
 import { EventsDefinition } from "../types";
-import { MultiTabEventBusOptions } from "./types";
+import { MultiTabEventBusMessage, MultiTabEventBusOptions } from "./types";
+
+/**
+ * Default prefix of the storage keys of a {@link MultiTabEventBus}.
+ */
+export const MultiTabEventBusKeyPrefixDefault = "multi-tab-event-bus:";
+
+let triggerCounter = 0;
 
 /**
  * {@link EventBus} whose events are delivered to the other browser tabs of the
- * same origin: {@link trigger} writes the arguments in a shared storage, and
- * the other tabs receive them through the `storage` window event.
+ * same origin: {@link trigger} writes the arguments in a shared storage (under
+ * the key `<keyPrefix><event>`, together with a unique id, so even identical
+ * triggers are delivered), and the other tabs receive them through the
+ * `storage` window event.
  * Browser only.
  * @example
  * ```ts
@@ -23,6 +32,7 @@ export class MultiTabEventBus<TEvents extends EventsDefinition>
   extends EventBus<TEvents>
   implements IEventBus<TEvents>
 {
+  private readonly _keyPrefix: string;
   private readonly _notifyCurrentTab: boolean;
   private readonly _storage: IStorage;
   private readonly _storageListener = (event: StorageEvent) =>
@@ -33,6 +43,7 @@ export class MultiTabEventBus<TEvents extends EventsDefinition>
    */
   public constructor(options?: MultiTabEventBusOptions) {
     super();
+    this._keyPrefix = options?.keyPrefix ?? MultiTabEventBusKeyPrefixDefault;
     this._notifyCurrentTab = options?.notifyCurrentTab ?? false;
     this._storage = options?.storage ?? new LocalStorage();
     window.addEventListener("storage", this._storageListener);
@@ -41,7 +52,7 @@ export class MultiTabEventBus<TEvents extends EventsDefinition>
   /**
    * Removes every handler and the `storage` window listener.
    */
-  public async dispose(): Promise<void> {
+  public override async dispose(): Promise<void> {
     window.removeEventListener("storage", this._storageListener);
     await super.dispose();
   }
@@ -53,18 +64,24 @@ export class MultiTabEventBus<TEvents extends EventsDefinition>
    * @param event Event to raise.
    * @param args Arguments forwarded to each handler, as declared for `event`.
    */
-  public trigger<TKey extends KeyOf<TEvents>>(
+  public override trigger<TKey extends KeyOf<TEvents>>(
     event: TKey,
     ...args: TEvents[TKey]
   ): void {
-    this._storage.set(event, args);
+    const message: MultiTabEventBusMessage = {
+      args,
+      id: `${Date.now().toString(36)}-${(++triggerCounter).toString(36)}-${Math.random().toString(36).slice(2)}`,
+    };
+    this._storage.set(this._keyPrefix + event, message);
     if (this._notifyCurrentTab) super.trigger(event, ...args);
   }
 
   private onStorageEvent({ key }: StorageEvent): void {
-    const event = key as KeyOf<TEvents>;
+    if (!key?.startsWith(this._keyPrefix)) return;
+    const event = key.slice(this._keyPrefix.length) as KeyOf<TEvents>;
     if (!this._handlersMap[event]) return;
-    const args = this._storage.get<TEvents[KeyOf<TEvents>]>(event);
-    if (Array.isArray(args)) super.trigger(event, ...args);
+    const message = this._storage.get<MultiTabEventBusMessage>(key);
+    if (Array.isArray(message?.args))
+      super.trigger(event, ...(message.args as TEvents[KeyOf<TEvents>]));
   }
 }

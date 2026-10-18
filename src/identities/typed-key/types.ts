@@ -1,6 +1,12 @@
+/** Type-only brand that ties a {@link TypedKey} to its value type. */
+declare const typedKeyValue: unique symbol;
+
 /**
  * Symbol that defines a key and the type that the key represents.
- * @typeParam T The type the key represents. It is a phantom type: it is not
- * used structurally, only to keep the key and its value type associated.
+ *
+ * `T` is carried by a type-only brand (no runtime property), so keys created
+ * for different types are not assignable to each other:
+ * `const k: TypedKey<number> = createTypedKey<string>()` doesn't compile.
+ * @typeParam T The type the key represents.
  */
-export interface TypedKey<T> extends Symbol {}
+export type TypedKey<T> = symbol & { readonly [typedKeyValue]?: T };

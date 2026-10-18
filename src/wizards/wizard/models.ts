@@ -83,7 +83,7 @@ export class Wizard implements IWizard {
     this.validateStatus(WizardOperations.abort, [WizardStatuses.idle]);
     if (!this.canAbort) throw new AbortNotAllowedException();
     this.setCurrentStatus(WizardStatuses.aborting);
-    const { abort = Promise.resolve } = this.context;
+    const { abort = () => Promise.resolve() } = this.context;
     return abort()
       .then(() => {
         this.setCurrentStatus(WizardStatuses.aborted);
@@ -151,11 +151,19 @@ export class Wizard implements IWizard {
     this.setCurrentStatus(WizardStatuses.starting);
     const { allSteps } = this;
     const firstStep = allSteps[0];
-    await this.setCurrentStep(firstStep);
-    if (skipReadySteps)
-      while (this.canGoForward) {
-        await this.performGoForward();
-      }
+    try {
+      await this.setCurrentStep(firstStep);
+      if (skipReadySteps)
+        while (this.canGoForward) {
+          await this.performGoForward();
+        }
+    } catch (error) {
+      // Back to the initial state, so `start` can be called again.
+      this.currentStep = firstStep;
+      this.previousSteps = [];
+      this.setCurrentStatus(WizardStatuses.needToStart);
+      throw error;
+    }
     this.setCurrentStatus(WizardStatuses.idle);
   }
 

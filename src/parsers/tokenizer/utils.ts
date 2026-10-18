@@ -27,7 +27,9 @@ export function tokenize(
   text: string,
   rules: List<TokenizerRule>
 ): TokenizerResult {
-  const tokensMap: Record<string, Token> = {};
+  // A Map, not a plain object: matches such as "constructor" or "toString"
+  // would otherwise hit the inherited members of Object.prototype.
+  const tokensMap = new Map<string, Token>();
   const tokens: List<Token> = [];
   let currentIndex = 0;
   while (currentIndex < text.length) {
@@ -35,20 +37,23 @@ export function tokenize(
     for (const rule of rules) {
       const ruleMatch = rule.match(text, currentIndex);
       if (ruleMatch) {
-        if (!tokensMap[ruleMatch.match]) {
-          tokensMap[ruleMatch.match] = {
+        let token = tokensMap.get(ruleMatch.match);
+        if (!token) {
+          token = {
             occurrences: [],
             match: ruleMatch.match,
             value: ruleMatch.value,
           };
-          tokens.push(tokensMap[ruleMatch.match]);
+          tokensMap.set(ruleMatch.match, token);
+          tokens.push(token);
         }
-        const token = tokensMap[ruleMatch.match];
         token.occurrences.push({
           endIndex: ruleMatch.endIndex,
           startIndex: currentIndex,
         });
-        nextIndex = ruleMatch.endIndex + 1;
+        // Always move forward, even if a rule reports an end before the
+        // current position: otherwise the loop would never end.
+        nextIndex = Math.max(ruleMatch.endIndex + 1, currentIndex + 1);
         break;
       }
     }

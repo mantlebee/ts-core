@@ -35,7 +35,9 @@ export function firstOrDefault<T>(
   delegate: (a: T) => boolean,
   defaultItem: Nullable<T> = null
 ): Nullable<T> {
-  return list.find(delegate) || defaultItem;
+  // By index, not by value: falsy items (0, "", false) are valid results.
+  const index = list.findIndex(delegate);
+  return index < 0 ? defaultItem : list[index];
 }
 
 /**

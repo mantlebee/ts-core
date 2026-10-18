@@ -28,6 +28,22 @@ function canTraverse(value: Any): value is Dictionary {
   return value !== null && typeof value === "object";
 }
 
+/**
+ * True when `key` is an own property of `obj`: inherited members (`toString`,
+ * `constructor`, `__proto__`, …) are never treated as stored values.
+ */
+function hasOwn(obj: Dictionary, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
+/**
+ * True when a write to `key` would reach the object's prototype instead of an
+ * own property (prototype pollution).
+ */
+export function isUnsafeKey(key: string): boolean {
+  return key === "__proto__";
+}
+
 /** True when `key` reads as a non-negative integer, i.e. an array index. */
 function isArrayIndex(key: string | undefined): boolean {
   return key !== undefined && /^\d+$/.test(key);
@@ -53,7 +69,7 @@ function parsePath(
 function walkTo(obj: Dictionary, keys: string[]): Any {
   let target: Any = obj;
   for (const key of keys) {
-    if (!canTraverse(target)) return undefined;
+    if (!canTraverse(target) || !hasOwn(target, key)) return undefined;
     target = target[key];
   }
   return target;
@@ -77,7 +93,9 @@ export function getNestedPropertyValue<TValue = Any>(
   const pathSeparator = getPathSeparator(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
   const parent = walkTo(obj, parents);
-  return (canTraverse(parent) ? parent[leaf] : undefined) as TValue;
+  return (
+    canTraverse(parent) && hasOwn(parent, leaf) ? parent[leaf] : undefined
+  ) as TValue;
 }
 
 /**
@@ -96,7 +114,7 @@ export function hasNestedProperty(
   const pathSeparator = getPathSeparator(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
   const parent = walkTo(obj, parents);
-  return canTraverse(parent) && leaf in parent;
+  return canTraverse(parent) && hasOwn(parent, leaf);
 }
 
 /**
@@ -165,13 +183,17 @@ export function setNestedPropertyValue<TValue = Any>(
   const pathSeparator = getPathSeparator(options);
   const replaceIfExists = getReplaceIfExists(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
+  if (isUnsafeKey(leaf) || parents.some(isUnsafeKey)) return;
 
   // Phase 1 — make sure every parent segment can be reached (by descending,
   // creating or replacing, as the options permit) without touching `obj`, so a
   // write that cannot reach its leaf stays a no-op.
   let probe: Any = obj;
   for (let i = 0; i < parents.length; i++) {
-    const child = canTraverse(probe) ? probe[parents[i]] : undefined;
+    const child =
+      canTraverse(probe) && hasOwn(probe, parents[i])
+        ? probe[parents[i]]
+        : undefined;
     if (canTraverse(child)) {
       probe = child;
       continue;
@@ -188,7 +210,7 @@ export function setNestedPropertyValue<TValue = Any>(
   let target: Any = obj;
   for (let i = 0; i < parents.length; i++) {
     const key = parents[i];
-    if (!canTraverse(target[key])) {
+    if (!hasOwn(target, key) || !canTraverse(target[key])) {
       target[key] = isArrayIndex(parents[i + 1] ?? leaf) ? [] : {};
     }
     target = target[key];

@@ -36,16 +36,34 @@ export class KeyedDeferred<
 
   /**
    * Creates a fresh promise, registers its resolvers under {@link key}, and, when
-   * `timeoutAfter` was given, schedules its automatic rejection.
+   * `timeoutAfter` was given, schedules its automatic rejection. Once settled,
+   * the promise is removed from the registry.
    * @returns a promise that stays pending until {@link resolve} / {@link reject}
    * is called for the same key (or the timeout elapses).
    */
   public wait(): Promise<TValue> {
-    if (this.timeoutAfter) {
-      setTimeout(() => this.reject(this.key), this.timeoutAfter);
-    }
+    const { key, timeoutAfter } = this;
     return new Promise<TValue>((resolve, reject) => {
-      KeyedDeferredPendingResolvers.set(this.key, { reject, resolve });
+      let timeout: ReturnType<typeof setTimeout> | undefined;
+      // Settling removes the entry from the registry (only if it is still the
+      // registered one: a newer `wait` may have replaced it) and stops its timer.
+      const settle =
+        <TArg>(settler: (arg: TArg) => void) =>
+        (arg: TArg) => {
+          if (KeyedDeferredPendingResolvers.get(key) === resolvers)
+            KeyedDeferredPendingResolvers.delete(key);
+          clearTimeout(timeout);
+          settler(arg);
+        };
+      const resolvers: PromiseResolvers<TValue> = {
+        reject: settle(reject),
+        resolve: settle(resolve),
+      };
+      KeyedDeferredPendingResolvers.set(key, resolvers);
+      // The timer is bound to this promise only, so it can never reject a
+      // promise registered later for the same key.
+      if (timeoutAfter !== undefined)
+        timeout = setTimeout(() => resolvers.reject(key), timeoutAfter);
     });
   }
 

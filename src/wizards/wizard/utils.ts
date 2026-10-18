@@ -21,14 +21,11 @@ export function canGoForward(
   currentStep: IWizardStep,
   allSteps: List<IWizardStep>
 ): boolean {
-  const hasNextStep = Boolean(currentStep.nextStep);
-  const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
-  const isLastStep = currentStepIndex == allSteps.length - 1;
   return (
     (currentStatus === WizardStatuses.idle ||
       currentStatus === WizardStatuses.starting) &&
     currentStep.canGoForward &&
-    (hasNextStep || !isLastStep)
+    Boolean(getNextStep(currentStep, allSteps))
   );
 }
 
@@ -39,52 +36,56 @@ export function getCurrentStepIndex(
   return steps.indexOf(currentStep);
 }
 
-export function goBack(
+/**
+ * Returns the step that follows `currentStep`: its explicit `nextStep`, or the
+ * following one in `allSteps`. A step outside `allSteps` without an explicit
+ * `nextStep` has no next step.
+ */
+export function getNextStep(
+  currentStep: IWizardStep,
+  allSteps: List<IWizardStep>
+): IWizardStep | undefined {
+  if (currentStep.nextStep) return currentStep.nextStep;
+  const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
+  return currentStepIndex < 0 ? undefined : allSteps[currentStepIndex + 1];
+}
+
+/**
+ * Moves to the last of `previousSteps`. The history is changed only once the
+ * step has been entered: if a hook rejects, the wizard state is left untouched.
+ */
+export async function goBack(
   currentStep: IWizardStep,
   previousSteps: List<IWizardStep>,
   setCurrentStep: (step: IWizardStep) => Promise<void>
 ): Promise<void> {
-  return new Promise(async (resolve, reject) => {
-    const performGoBack = async () => {
-      const previousStep = previousSteps.pop() as IWizardStep;
-      await setCurrentStep(previousStep).then(resolve).catch(reject);
-    };
-    if (currentStep.beforeGoBack)
-      await currentStep.beforeGoBack().then(performGoBack).catch(reject);
-    else performGoBack();
-  });
+  await currentStep.beforeGoBack?.();
+  const previousStep = previousSteps[previousSteps.length - 1];
+  await setCurrentStep(previousStep);
+  previousSteps.pop();
 }
 
-export function goForward(
+/**
+ * Moves to the next step (see {@link getNextStep}). The history is changed
+ * only once the step has been entered: if a hook rejects, the wizard state is
+ * left untouched.
+ */
+export async function goForward(
   currentStep: IWizardStep,
   previousSteps: List<IWizardStep>,
   allSteps: List<IWizardStep>,
   setCurrentStep: (step: IWizardStep) => Promise<void>
 ): Promise<void> {
-  return new Promise(async (resolve, reject) => {
-    const performGoForward = async () => {
-      const currentStepIndex = getCurrentStepIndex(currentStep, allSteps);
-      const nextStep = currentStep.nextStep || allSteps[currentStepIndex + 1];
-      previousSteps.push(currentStep);
-      await setCurrentStep(nextStep).then(resolve).catch(reject);
-    };
-    if (currentStep.beforeGoForward)
-      await currentStep.beforeGoForward().then(performGoForward).catch(reject);
-    else performGoForward();
-  });
+  await currentStep.beforeGoForward?.();
+  const nextStep = getNextStep(currentStep, allSteps) as IWizardStep;
+  await setCurrentStep(nextStep);
+  previousSteps.push(currentStep);
 }
 
-export function setCurrentStep(
+export async function setCurrentStep(
   step: IWizardStep,
   setStep: (step: IWizardStep) => void
 ): Promise<void> {
-  return new Promise(async (resolve, reject) => {
-    const performSetStep = async () => {
-      setStep(step);
-      resolve();
-    };
-    if (step.beforeEnter)
-      await step.beforeEnter().then(performSetStep).catch(reject);
-    else performSetStep();
-  });
+  await step.beforeEnter?.();
+  setStep(step);
 }

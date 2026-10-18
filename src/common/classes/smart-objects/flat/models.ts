@@ -1,6 +1,7 @@
 import { Any, Dictionary, List } from "@/common";
 
 import { ISmartObject } from "../interfaces";
+import { isUnsafeKey } from "../nested/utils";
 
 /**
  * Simplest {@link ISmartObject} implementation: a flat key/value store with no
@@ -28,10 +29,11 @@ export class FlatObject implements ISmartObject {
     for (const key of this.keys()) this.unset(key);
   }
   public get<TReturn = Any>(key: string): TReturn {
-    return this.obj[key];
+    return this.has(key) ? this.obj[key] : (undefined as TReturn);
   }
+  /** Only own keys count: inherited members such as `toString` are not stored values. */
   public has(key: string): boolean {
-    return key in this.obj;
+    return Object.prototype.hasOwnProperty.call(this.obj, key);
   }
   public keys(): List<string> {
     return Object.keys(this.obj);
@@ -39,7 +41,9 @@ export class FlatObject implements ISmartObject {
   public seed<TValue = Any>(obj: Dictionary<TValue>): void {
     for (const key of Object.keys(obj)) this.set(key, obj[key]);
   }
+  /** A `__proto__` key is ignored: writing it would replace the object's prototype. */
   public set<TValue = Any>(key: string, value: TValue): void {
+    if (isUnsafeKey(key)) return;
     this.obj[key] = value;
   }
   public unset(key: string): void {

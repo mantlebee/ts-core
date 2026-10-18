@@ -26,7 +26,19 @@ export function numberIsInteger(numb: number): boolean {
  * @returns a rounded number with N decimals.
  */
 export function roundNumber(numb: number, decimals = 0): number {
-  return Number(
-    Math.round(parseFloat(`${numb}e${decimals}`)) + "e-" + decimals
+  if (!Number.isFinite(numb)) return numb;
+  return shiftDecimalPoint(
+    Math.round(shiftDecimalPoint(numb, decimals)),
+    -decimals
   );
+}
+
+/**
+ * Multiplies a number by `10^exponent` working on its string representation,
+ * so no floating point error is introduced. Numbers already written in
+ * exponential notation (e.g. `1e-7`, `1e21`) are handled too.
+ */
+function shiftDecimalPoint(numb: number, exponent: number): number {
+  const [mantissa, numbExponent = "0"] = `${numb}`.split("e");
+  return Number(`${mantissa}e${Number(numbExponent) + exponent}`);
 }

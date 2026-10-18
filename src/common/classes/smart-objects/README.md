@@ -22,7 +22,8 @@ not here.
   Reads and writes go straight through to the wrapped object, mutating it in
   place.
 - **`immutable/`** — `ImmutableObject`: an immutable, versioned view built on the
-  copy-on-write pattern. The input object and every parent version are never
-  mutated; `clone()` forks a new version that shares data until its first write.
+  copy-on-write pattern. The input object is never mutated; `clone()` forks a
+  new version that shares data until either version is written to, and the two
+  versions never see each other's later writes.
   It stays generic by delegating all path work to an injected
   `SmartObjectFactory` — it never assumes a key syntax of its own.

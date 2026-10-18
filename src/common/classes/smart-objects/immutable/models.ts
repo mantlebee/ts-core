@@ -13,12 +13,12 @@ export type SmartObjectFactory = (obj: Dictionary) => ISmartObject;
 /**
  * Immutable {@link ISmartObject} built on the copy-on-write pattern.
  *
- * The dictionary passed to the constructor — and every parent version — is
- * treated as read-only and never mutated. A version shares its parent's data
- * for free until the first {@link set} / {@link unset}, at which point it takes
- * a private deep copy and works on that. {@link clone} forks a new version
- * layered on the current one; the fork also stays copy-free until it is written
- * to.
+ * The dictionary passed to the constructor is treated as read-only and never
+ * mutated. A version shares that data for free until the first {@link set} /
+ * {@link unset}, at which point it takes a private deep copy and works on that.
+ * {@link clone} forks a new version from the current data; the fork also stays
+ * copy-free until it is written to, and writes made to either version after the
+ * fork are never visible to the other one.
  *
  * The class delegates every path operation (`get` / `has` / `set` / `unset`) to
  * an {@link ISmartObject} produced by the injected {@link SmartObjectFactory},
@@ -48,25 +48,30 @@ export type SmartObjectFactory = (obj: Dictionary) => ISmartObject;
 export class ImmutableObject implements ISmartObject {
   /** This version's private working copy; `null` until the first write. */
   protected copy: Nullable<Dictionary> = null;
+  /**
+   * `true` once {@link copy} has been handed to a fork by {@link clone}: from
+   * then on it is read-only too, and the next write takes a fresh copy.
+   */
+  protected isCopyShared = false;
 
   /**
    * @param obj Base dictionary; read-only through this class and never mutated.
    * @param getSmartObject Factory that wraps a dictionary in the concrete
    * {@link ISmartObject} implementation to use.
-   * @param parent Version this one was {@link clone}d from, if any.
    */
   public constructor(
     protected readonly obj: Dictionary = {},
     protected readonly getSmartObject: SmartObjectFactory,
-    protected readonly parent?: ImmutableObject,
   ) {}
 
   /**
-   * Forks a new version layered on this one. The fork shares this version's data
-   * until it is itself written to.
+   * Forks a new version from this one's current data. The fork shares that data
+   * until either version is written to, and the two versions never see each
+   * other's later writes.
    */
   public clone(): ImmutableObject {
-    return new ImmutableObject(this.obj, this.getSmartObject, this);
+    if (this.copy) this.isCopyShared = true;
+    return new ImmutableObject(this.snapshot(), this.getSmartObject);
   }
 
   public clear(): void {
@@ -93,19 +98,21 @@ export class ImmutableObject implements ISmartObject {
 
   /** The plain object this version currently represents. */
   protected snapshot(): Dictionary {
-    return this.copy ?? this.inherited();
-  }
-  /** The object carried over from the parent version, or the original base. */
-  protected inherited(): Dictionary {
-    return this.parent ? this.parent.snapshot() : this.obj;
+    return this.copy ?? this.obj;
   }
   /** A read-only view over the current snapshot. */
   protected reader(): ISmartObject {
     return this.getSmartObject(this.snapshot());
   }
-  /** A writable view; takes this version's private copy on first use. */
+  /**
+   * A writable view; takes a private copy on the first write, and again after
+   * the current copy has been shared with a fork.
+   */
   protected writer(): ISmartObject {
-    if (!this.copy) this.copy = deepClone(this.inherited());
+    if (!this.copy || this.isCopyShared) {
+      this.copy = deepClone(this.snapshot());
+      this.isCopyShared = false;
+    }
     return this.getSmartObject(this.copy);
   }
 }

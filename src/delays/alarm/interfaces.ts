@@ -10,9 +10,9 @@ export interface IAlarm {
   /** `true` once the alarm has been stopped. */
   readonly stopped: boolean;
   /**
-   * Postpones the alarm.
-   * @param time Snooze time in milliseconds. If greater than the delta between
-   * 'now' and the 'expiration', the delta is used instead.
+   * Postpones the alarm: it goes off `time` milliseconds from now, replacing
+   * any alert still pending. Does nothing once the alarm is stopped.
+   * @param time Snooze time in milliseconds.
    */
   snooze(time: number): void;
   /** Stops the alarm; it will not go off anymore. */
