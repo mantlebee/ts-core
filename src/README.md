@@ -15,6 +15,7 @@ concrete implementations.
 | --- | --- |
 | [`builders/`](./builders) | Builder + abstract-factory pattern, wired to debug/release mode |
 | [`calendar/`](./calendar) | Calendar vocabulary (months, week days, day-of-month enums) |
+| [`clipboard/`](./clipboard) | Reading and writing the system clipboard (browser) |
 | [`colors/`](./colors) | Color value type with conversions between HEX / RGB(A) / HSL(A) / web names |
 | [`common/`](./common) | Shared foundation: types, pure utilities and base classes used everywhere |
 | [`debug/`](./debug) | Global debug-mode switch |

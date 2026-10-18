@@ -1,5 +1,6 @@
 export * from "./builders";
 export * from "./calendar";
+export * from "./clipboard";
 export * from "./colors";
 export * from "./common";
 export * from "./debug";
