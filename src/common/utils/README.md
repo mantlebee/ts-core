@@ -8,13 +8,15 @@ library.
 
 - **`values.ts`** — `getValue` (resolve a `ValueOrGetter`), `isDefined`,
   `isNull`, `isUndefined`, `isNullOrUndefined`.
-- **`arrays.ts`** — `isArray`, `firstOrDefault`, `listToDictionary`,
-  `replaceListItems`.
+- **`arrays.ts`** — `isArray`, `firstOrDefault`, `getFirstItemIfSingle`,
+  `listToDictionary`, `replaceListItems`, `sortListByKey`.
+- **`enums.ts`** — `getEnumKeyByValue`.
 - **`objects.ts`** — `isObject` (plain object only), `objectHasKey`.
 - **`booleans.ts`** — `isBoolean`.
 - **`numbers.ts`** — `isNumber`, `numberIsInteger`, `roundNumber`.
-- **`strings.ts`** — `isString`, `isEmail`, `isGuid`, `createSlug`,
-  `formatString`, `generateGuid`, `createHash`.
+- **`strings.ts`** — `isString`, `isEmail`, `isGuid`, `addLeadingZeros`,
+  `createSlug`, `escapeHtml`, `escapeRegexSpecialChars`, `formatString`,
+  `generateGuid`, `createHash`.
 - **`functions.ts`** — `isFunction`.
 - **`chars.ts`** — character-range builders (`getLowercaseChars`,
   `getUppercaseChars`, `getNumberChars`, `getSpecialChars`, …).

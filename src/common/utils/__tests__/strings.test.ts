@@ -1,6 +1,9 @@
 import {
+  addLeadingZeros,
   createHash,
   createSlug,
+  escapeHtml,
+  escapeRegexSpecialChars,
   formatString,
   generateGuid,
   isEmail,
@@ -11,6 +14,46 @@ import {
 describe("common", () => {
   describe("utils", () => {
     describe("strings", () => {
+      describe("addLeadingZeros", () => {
+        it("Pads the number with leading zeros", () => {
+          expect(addLeadingZeros(9)).toBe("09");
+          expect(addLeadingZeros(7, 3)).toBe("007");
+        });
+        it("Doesn't pad numbers with enough digits", () => {
+          expect(addLeadingZeros(10)).toBe("10");
+          expect(addLeadingZeros(123)).toBe("123");
+        });
+        it("Keeps the sign in front of the zeros", () => {
+          expect(addLeadingZeros(-5)).toBe("-05");
+        });
+      });
+      describe("escapeHtml", () => {
+        it("Replaces & < > \" ' with HTML entities", () => {
+          expect(escapeHtml(`<a href="x" title='y'>&</a>`)).toBe(
+            "&lt;a href=&quot;x&quot; title=&#39;y&#39;&gt;&amp;&lt;/a&gt;"
+          );
+        });
+        it("Leaves text without special chars unchanged", () => {
+          expect(escapeHtml("hello")).toBe("hello");
+        });
+      });
+      describe("escapeRegexSpecialChars", () => {
+        it("Escapes all special chars", () => {
+          const value = "^$.*+?()[]{}|\\";
+          const expectedValue = "\\" + value.split("").join("\\");
+          expect(escapeRegexSpecialChars(value)).toBe(expectedValue);
+        });
+        it("Doesn't escape alphanumeric chars", () => {
+          const value =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+          expect(escapeRegexSpecialChars(value)).toBe(value);
+        });
+        it("Escaped string matches itself literally", () => {
+          const value = "1+1=2? (yes)";
+          const regex = new RegExp(`^${escapeRegexSpecialChars(value)}$`);
+          expect(regex.test(value)).toBe(true);
+        });
+      });
       describe("createHash", () => {
         it("Returns an 8-character lowercase hex string", () => {
           expect(createHash("anything")).toMatch(/^[0-9a-f]{8}$/);

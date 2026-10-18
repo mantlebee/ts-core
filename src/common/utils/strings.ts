@@ -1,4 +1,23 @@
-import { Any, List, Stringable } from "@/common";
+import { Any, Dictionary, List, Stringable } from "@/common";
+
+/**
+ * Converts a number to a string, padding it with leading zeros. The sign of
+ * negative numbers is kept in front of the zeros.
+ * @example
+ * ```ts
+ * addLeadingZeros(9)       // "09"
+ * addLeadingZeros(10)      // "10"
+ * addLeadingZeros(7, 3)    // "007"
+ * addLeadingZeros(-5)      // "-05"
+ * ```
+ * @param value Number to pad.
+ * @param digits Minimum number of digits of the result, sign excluded.
+ * @returns the zero-padded string.
+ */
+export function addLeadingZeros(value: number, digits = 2): string {
+  const padded = Math.abs(value).toString().padStart(digits, "0");
+  return value < 0 ? `-${padded}` : padded;
+}
 
 /**
  * Produces a short, deterministic hash string for any serializable value.
@@ -50,6 +69,43 @@ export function createSlug(str: string): string {
     .replace(/\s+/g, "-") // collapse whitespace and replace by -
     .replace(/-+/g, "-"); // collapse dashes
   return str;
+}
+
+const HtmlEscapes: Dictionary<string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+};
+
+/**
+ * Escapes the HTML special chars, so untrusted text can be safely inserted in
+ * `innerHTML` or in an HTML template.
+ * @example
+ * ```ts
+ * escapeHtml(`<a title="x">&</a>`)
+ * // "&lt;a title=&quot;x&quot;&gt;&amp;&lt;/a&gt;"
+ * ```
+ * @param str Text to escape.
+ * @returns the text with `& < > " '` replaced by their HTML entities.
+ */
+export function escapeHtml(str: string): string {
+  return str.replace(/[&<>"']/g, (a) => HtmlEscapes[a]);
+}
+
+/**
+ * Escapes the regex special chars of a string, so it can be used as a literal
+ * inside a `RegExp` (without the `u` or `v` flags).
+ * @example
+ * ```ts
+ * new RegExp(escapeRegexSpecialChars("1+1=2?")).test("1+1=2?") // true
+ * ```
+ * @param str String to escape.
+ * @returns the escaped string.
+ */
+export function escapeRegexSpecialChars(str: string): string {
+  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
 /**
