@@ -8,6 +8,7 @@ export * from "./debug";
 export * from "./delays";
 export * from "./delegates";
 export * from "./exceptions";
+export * from "./files";
 export * from "./http";
 export * from "./identities";
 export * from "./loggers";
