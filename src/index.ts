@@ -1,4 +1,5 @@
 export * from "./builders";
+export * from "./cache";
 export * from "./calendar";
 export * from "./clipboard";
 export * from "./colors";

@@ -14,6 +14,7 @@ concrete implementations.
 | Folder | Concept |
 | --- | --- |
 | [`builders/`](./builders) | Builder + abstract-factory pattern, wired to debug/release mode |
+| [`cache/`](./cache) | Key/value caches, optionally with expiring values |
 | [`calendar/`](./calendar) | Calendar vocabulary (months, week days, day-of-month enums) |
 | [`clipboard/`](./clipboard) | Reading and writing the system clipboard (browser) |
 | [`colors/`](./colors) | Color value type with conversions between HEX / RGB(A) / HSL(A) / web names |
