@@ -12,4 +12,5 @@ domain-specific.
   they operate on (arrays, strings, numbers, objects, dates, promises, …),
   including the `isX` type guards.
 - **[`classes/`](./classes)** — small, generic base classes and the interfaces
-  that describe them (enablable, disposable, iterators, smart objects).
+  that describe them (enablable, disposable, iterators, restorable, smart
+  objects).

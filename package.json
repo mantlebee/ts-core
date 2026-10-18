@@ -1,6 +1,6 @@
 {
   "name": "@mantlebee/ts-core",
-  "version": "0.32.0",
+  "version": "1.0.0",
   "description": "Common types, patterns and utilities for TypeScript projects.",
   "main": "dist/index.js",
   "module": "dist/esm/index.mjs",
@@ -15,7 +15,6 @@
   },
   "sideEffects": false,
   "files": [
-    "docs/**/*",
     "dist/**/*"
   ],
   "scripts": {
@@ -23,7 +22,7 @@
     "coverage": "jest --coverage --collectCoverageFrom='./src/**'",
     "doc": "typedoc",
     "doc:publish": "npm run doc && node ./gh-pages.js",
-    "prepublishOnly": "npm run build && npm run doc",
+    "prepublishOnly": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch"
   },

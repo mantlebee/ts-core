@@ -11,6 +11,8 @@ sub-folder is one concept: an interface plus one or more implementations.
   implementations (e.g. one that removes an item from a list on `dispose()`).
 - **[`iterators/`](./iterators)** — `IIterator`, a minimal forward cursor, plus
   implementations (e.g. over an array).
+- **[`restorable/`](./restorable)** — `IRestorable`: something that can be
+  restored to a saved state with `restore()`.
 - **[`smart-objects/`](./smart-objects)** — `ISmartObject`, a tiny
   get/has/set/unset-by-key contract, plus interchangeable implementations
   (flat, nested-path, immutable/copy-on-write).

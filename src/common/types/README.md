@@ -13,5 +13,7 @@ are the aliases and utility types the rest of the library is written in terms of
 - **`classes.ts`** — `ConstructorOf<TClass>`.
 - **`strings.ts`** — `Stringable`.
 - **`values.ts`** — `ValueOrGetter<TValue, TArg>`.
-- **`instances.ts`** — `IRestorable` lifecycle interface. (`IDisposable` lives in
-  [`classes/disposable`](../classes/disposable).)
+
+The lifecycle interfaces live with their implementations:
+[`IDisposable`](../classes/disposable) and
+[`IRestorable`](../classes/restorable) in `common/classes`.

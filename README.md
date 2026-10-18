@@ -8,6 +8,7 @@ A comprehensive library providing foundational components, design patterns, and 
 
 - [Features](#features)
 - [Installation](#installation)
+- [Upgrading to 1.0](#upgrading-to-10)
 - [Quick Start](#quick-start)
 - [Core Concepts](#core-concepts)
   - [Common Types & Utilities](#common-types--utilities)
@@ -24,6 +25,7 @@ A comprehensive library providing foundational components, design patterns, and 
   - [Calendar](#calendar)
   - [Exceptions](#exceptions)
   - [Debug Mode](#debug-mode)
+  - [Validators, Storage, Cache & More](#validators-storage-cache--more)
 - [API Reference](#api-reference)
 - [Examples](#examples)
 - [Contributing](#contributing)
@@ -32,7 +34,7 @@ A comprehensive library providing foundational components, design patterns, and 
 ## Features
 
 - 🏗️ **Design Patterns**: Builder, Factory, and Wizard patterns
-- 🔔 **Event Management**: Subscribable objects for reactive programming
+- 🔔 **Event Management**: Typed event buses and subscribable objects
 - ⏱️ **Time Management**: Alarms, delays, and scheduling capabilities
 - 📝 **Logging**: Flexible logging system with multiple output strategies
 - 🎨 **Color Utilities**: Comprehensive color manipulation and conversion
@@ -42,6 +44,9 @@ A comprehensive library providing foundational components, design patterns, and 
 - ⚙️ **Tokenization**: Text parsing and tokenization framework
 - 🎭 **Wizard Workflow**: State-based step-by-step workflow management
 - 🐛 **Debug Support**: Toggle debug/release mode for conditional behavior
+- ✅ **Validation**: Asynchronous validators for strings, numbers, emails, URLs, IPv4 addresses and passwords
+- 💾 **Storage & Cache**: In-memory and Web Storage backends, expiring caches
+- 🌐 **HTTP**: Pluggable HTTP client on top of the Fetch API
 
 ## Installation
 
@@ -55,24 +60,25 @@ Or with yarn:
 yarn add @mantlebee/ts-core
 ```
 
+## Upgrading to 1.0
+
+Version 1.0.0 contains breaking changes (`Subscribable`, `SubscribableLogger`,
+`Exception`). See the [1.0.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.0.0.md) for the migration guide.
+
 ## Quick Start
 
 ```typescript
 import {
-  Subscribable,
-  Logger,
+  EventBus,
   ConsoleLogger,
   NumericIdentityManager,
-  Alarm,
-  Color,
-  Builder,
-  Wizard
+  Color
 } from '@mantlebee/ts-core';
 
-// Create a subscribable event system
-const event = new Subscribable<string>();
-event.subscribe((data) => console.log('Received:', data));
-event.notifyData('Hello World');
+// Create a typed event bus
+const bus = new EventBus<{ message: [text: string] }>();
+bus.on('message', (text) => console.log('Received:', text));
+bus.trigger('message', 'Hello World');
 
 // Use the console logger
 const logger = new ConsoleLogger();
@@ -98,12 +104,13 @@ The **common** module provides fundamental types and utility functions used thro
 #### Types
 
 - `List<T>` - Array type alias
-- `Dictionary<T>` - Object with string keys mapping to type T
+- `Dictionary<TValue, TKey>` - Object mapping keys (strings by default) to `TValue`
 - `Nullable<T>` - Type that can be T or null
+- `Undefinable<T>` - Type that can be T or undefined
 - `Any` - Any type alias
 - `KeyOf<T>` - Union of all keys of type T
-- `Constructable<T>` - Constructor function type
-- `Indexable<T>` - Object that can be indexed with strings
+- `ConstructorOf<T>` - Constructor function type
+- `ValueOrGetter<TValue, TArg>` - A value, or a function returning it
 
 #### Utility Functions
 
@@ -184,31 +191,59 @@ const factory: IFactory<string> = {
 
 ### Subscriptions & Observables
 
-Implement reactive programming patterns with the **Subscribable** class.
+Publish/subscribe with typed events. Events are declared as an
+`{ eventName: argsTuple }` map, so handlers and triggers are checked at compile
+time.
+
+#### Event Bus
+
+```typescript
+import { EventBus } from '@mantlebee/ts-core';
+
+type UserEvents = { updated: [user: { id: number; name: string }] };
+
+const userUpdates = new EventBus<UserEvents>();
+
+// Subscribe to an event
+const subscription = userUpdates.on('updated', (user) => {
+  console.log(`User updated: ${user.name}`);
+});
+
+// Notify all handlers of the event
+userUpdates.trigger('updated', { id: 1, name: 'Alice' });
+
+// Unsubscribe
+await subscription.dispose();
+```
+
+#### Subscribable
+
+Extend **Subscribable** to expose only `on()` to the outside, while the class
+raises its own events:
 
 ```typescript
 import { Subscribable } from '@mantlebee/ts-core';
 
-// Create a subscribable with a specific data type
-const userUpdates = new Subscribable<{id: number, name: string}>();
+type CounterEvents = { changed: [value: number] };
 
-// Subscribe to events
-const subscriptionId = userUpdates.subscribe((user) => {
-  console.log(`User updated: ${user.name}`);
-});
+class Counter extends Subscribable<CounterEvents> {
+  private value = 0;
+  public increment(): void {
+    this._eventBus.trigger('changed', ++this.value);
+  }
+}
 
-// Notify all subscribers
-userUpdates.notifyData({id: 1, name: 'Alice'});
-
-// Unsubscribe
-userUpdates.unsubscribe(subscriptionId);
+const counter = new Counter();
+counter.on('changed', (value) => console.log(value));
+counter.increment(); // 1
+await counter.dispose(); // removes every handler
 ```
 
 **Key Features:**
-- Type-safe data passing
-- Multiple subscribers support
-- Numeric subscription IDs for management
-- Automatic subscription tracking
+- Type-safe events and arguments
+- Multiple events per bus, multiple handlers per event
+- Disposable subscriptions
+- `MultiTabEventBus` to deliver events to the other browser tabs
 
 ### Delays & Alarms
 
@@ -262,8 +297,12 @@ const saveToServer = (data: string) => {
   console.log('Saving:', data);
 };
 
-// Create a debounced version (300ms delay)
-const debouncedSave = new DebouncedDelegate(saveToServer, 300);
+// Create a debounced version (300ms delay). The delegate receives the
+// arguments of the last call as `unknown`.
+const debouncedSave = new DebouncedDelegate(
+  (data) => saveToServer(data as string),
+  300
+);
 
 // Simulate rapid calls
 debouncedSave.call('v1');
@@ -316,15 +355,15 @@ console.log(guidManager.lastValue);
 Create type-safe keys with identity:
 
 ```typescript
-import { TypedKey } from '@mantlebee/ts-core';
+import { createTypedKey, TypedKey } from '@mantlebee/ts-core';
 
 interface User {
   id: number;
   name: string;
 }
 
-const userKey = new TypedKey<User>('user');
-// Keys are guaranteed to be type-safe
+// A unique Symbol, tagged at the type level with the type it stands for
+const userKey: TypedKey<User> = createTypedKey<User>();
 ```
 
 ### Loggers
@@ -369,7 +408,7 @@ import { SubscribableLogger, LogTypes } from '@mantlebee/ts-core';
 
 const logger = new SubscribableLogger();
 
-logger.subscribe(({type, message, data}) => {
+logger.on('log', ({type, message, data}) => {
   if (type === LogTypes.error) {
     sendToErrorTracker(message, data);
   }
@@ -392,11 +431,15 @@ Manage complex multi-step workflows with state and validation.
 ```typescript
 import { Wizard, IWizardStep } from '@mantlebee/ts-core';
 
-// Define wizard steps
+// Define wizard steps: each one says whether the wizard can leave it
 const steps: IWizardStep[] = [
-  { name: 'step1', validate: () => true },
-  { name: 'step2', validate: () => true },
-  { name: 'step3', validate: () => true }
+  { canGoBack: false, canGoForward: true },
+  { canGoBack: true, canGoForward: true },
+  {
+    canGoBack: true,
+    canGoForward: false,
+    beforeEnter: async () => console.log('Last step')
+  }
 ];
 
 // Create wizard context
@@ -410,14 +453,15 @@ const context = {
 // Initialize wizard
 const wizard = new Wizard(context, steps);
 
+// Navigate through steps
+await wizard.start();
+
 // Check current state
-console.log(wizard.step.name);      // Current step
+console.log(wizard.step);           // Current step
 console.log(wizard.status);         // Current status
 console.log(wizard.canGoForward);   // Can advance?
 console.log(wizard.canGoBack);      // Can go back?
 
-// Navigate through steps
-await wizard.start();
 await wizard.goForward();
 await wizard.goBack();
 await wizard.complete();
@@ -425,8 +469,9 @@ await wizard.complete();
 
 **Wizard Statuses:**
 - `needToStart` - Wizard not yet started
+- `starting` - Being started
 - `idle` - Ready for action
-- `running` - Currently executing a step
+- `goingForward` / `goingBack` - Moving to another step
 - `aborting` - Being aborted
 - `aborted` - Aborted state
 - `completing` - Being completed
@@ -493,33 +538,43 @@ const fromName = Color.fromWebColorName('red');
 Parse and tokenize text with flexible rule-based system.
 
 ```typescript
-import { Tokenizer } from '@mantlebee/ts-core';
+import { Tokenizer, TokenizerRule } from '@mantlebee/ts-core';
 
-// Define tokenization rules
-const rules = [
-  { match: /\d+/, type: 'number' },
-  { match: /\+|-|\*|\//, type: 'operator' },
-  { match: /\s+/, type: 'whitespace' }
-];
+// A rule decides whether something matches at a given position
+const regexRule = (regex: RegExp, value: string): TokenizerRule => ({
+  match(text, index) {
+    const sticky = new RegExp(regex.source, 'y');
+    sticky.lastIndex = index;
+    const found = sticky.exec(text);
+    return found
+      ? { endIndex: index + found[0].length - 1, match: found[0], value }
+      : null;
+  }
+});
 
-// Create tokenizer
-const tokenizer = new Tokenizer(rules);
+// Create tokenizer: rules are tried in order at each position
+const tokenizer = new Tokenizer([
+  regexRule(/\d+/, 'number'),
+  regexRule(/[+\-*\/]/, 'operator')
+]);
 
 // Tokenize text
-const result = tokenizer.tokenize('1 + 2 * 3');
+const { tokens } = tokenizer.tokenize('1 + 2 * 1');
 // [
-//   { type: 'number', value: '1' },
-//   { type: 'whitespace', value: ' ' },
-//   { type: 'operator', value: '+' },
-//   ...
+//   { match: '1', value: 'number', occurrences: [
+//     { startIndex: 0, endIndex: 0 }, { startIndex: 8, endIndex: 8 }
+//   ] },
+//   { match: '+', value: 'operator', occurrences: [{ startIndex: 2, endIndex: 2 }] },
+//   { match: '2', value: 'number', occurrences: [{ startIndex: 4, endIndex: 4 }] },
+//   { match: '*', value: 'operator', occurrences: [{ startIndex: 6, endIndex: 6 }] }
 // ]
 ```
 
 **Tokenizer Features:**
-- Rule-based pattern matching
-- Support for regex patterns
-- Token type classification
-- Sequential token extraction
+- Rule-based matching: a rule is any object with a `match(text, index)` method
+- Rules applied in order, the first match wins
+- Positions no rule matches are skipped
+- Repeated matches collapsed into one token with all its occurrences
 
 ### Scheduling
 
@@ -583,7 +638,9 @@ const condition = MonthWeekConditions.first; // First occurrence
 
 ### Exceptions
 
-Custom exception handling with codes.
+Custom exception handling with codes. Every exception of the library extends
+`BaseException` (an `Error` with an optional `code` and `cause`); `Exception`
+is the variant with a required `code`.
 
 ```typescript
 import { Exception } from '@mantlebee/ts-core';
@@ -592,6 +649,7 @@ import { Exception } from '@mantlebee/ts-core';
 class ValidationException extends Exception {
   constructor(message: string) {
     super('VALIDATION_ERROR', message);
+    this.name = 'ValidationException'; // class names don't survive minification
   }
 }
 
@@ -636,10 +694,51 @@ if (DebugMode.isEnabled) {
 import { Builder, DebugMode } from '@mantlebee/ts-core';
 
 DebugMode.enable();
-const obj = builder.build(); // Uses createDebug()
+const debugObj = builder.build(); // Uses createDebug()
 
 DebugMode.disable();
-const obj = builder.build(); // Uses createRelease()
+const releaseObj = builder.build(); // Uses createRelease()
+```
+
+### Validators, Storage, Cache & More
+
+Version 1.0 adds validators, storages, caches, an HTTP client, notifications,
+clipboard and file helpers. Each folder under [`src/`](https://github.com/mantlebee/ts-core/tree/main/src) has a `README.md`
+describing its content.
+
+#### Validators
+
+Validators are asynchronous and return the keys of the failed checks, ready to
+be translated:
+
+```typescript
+import { EmailValidator, PasswordValidator } from '@mantlebee/ts-core';
+
+const email = new EmailValidator({ required: true });
+await email.validate('');          // { isValid: false, messages: ['empty'] }
+await email.validate('a@b.com');   // { isValid: true }
+
+// Default policy: 8-30 chars, lowercase, uppercase, number, symbol, no spaces
+const password = new PasswordValidator({ required: true });
+await password.validate('Secret!1');  // { isValid: true }
+```
+
+Empty values are valid unless `required` is `true`.
+
+#### Storage & Cache
+
+```typescript
+import { InMemoryExpirableCache, LocalStorage } from '@mantlebee/ts-core';
+
+// JSON-serialized values in localStorage (browser only)
+const storage = new LocalStorage();
+storage.set('settings', { theme: 'dark' });
+storage.get<{ theme: string }>('settings'); // { theme: 'dark' }
+
+// Values expiring 60 seconds after their last write
+const cache = new InMemoryExpirableCache<string, number>(60);
+cache.write(1, 'Alice');
+cache.read(1); // 'Alice', or null once expired
 ```
 
 ## API Reference
@@ -651,20 +750,20 @@ For detailed API documentation, please visit: [https://mantlebee.github.io/ts-co
 ### Example 1: Event-Driven Logger
 
 ```typescript
-import { SubscribableLogger, Subscribable, LogTypes } from '@mantlebee/ts-core';
+import { SubscribableLogger, EventBus, LogTypes } from '@mantlebee/ts-core';
 
 const logger = new SubscribableLogger();
-const errorAlert = new Subscribable<string>();
+const alerts = new EventBus<{ error: [message: string] }>();
 
 // Forward errors to alert system
-logger.subscribe(({type, message}) => {
+logger.on('log', ({type, message}) => {
   if (type === LogTypes.error) {
-    errorAlert.notifyData(message);
+    alerts.trigger('error', message);
   }
 });
 
 // Subscribe to alerts
-errorAlert.subscribe((message) => {
+alerts.on('error', (message) => {
   console.error('🚨 ALERT:', message);
   // Send to error tracking service
 });
@@ -706,7 +805,10 @@ const searchAPI = (query: string) => {
   // Perform actual search
 };
 
-const debouncedSearch = new DebouncedDelegate(searchAPI, 500);
+const debouncedSearch = new DebouncedDelegate(
+  (query) => searchAPI(query as string),
+  500
+);
 
 // Simulate user typing
 const input = 'typescript';
@@ -723,10 +825,18 @@ input.split('').forEach((char, i) => {
 ```typescript
 import { Wizard, IWizardStep } from '@mantlebee/ts-core';
 
+// A step can go forward once its data is valid
+const createStep = (isValid: () => boolean): IWizardStep => ({
+  canGoBack: true,
+  get canGoForward() {
+    return isValid();
+  }
+});
+
 const steps: IWizardStep[] = [
-  { name: 'login', validate: () => validateCredentials() },
-  { name: 'mfa', validate: () => validateMFA() },
-  { name: 'profile', validate: () => validateProfile() }
+  createStep(() => validateCredentials()),
+  createStep(() => validateMFA()),
+  createStep(() => validateProfile())
 ];
 
 const wizard = new Wizard(
@@ -742,9 +852,8 @@ const wizard = new Wizard(
 await wizard.start();
 while (wizard.canGoForward) {
   await wizard.goForward();
-  console.log('Completed:', wizard.previousSteps.length);
 }
-await wizard.complete();
+if (wizard.canComplete) await wizard.complete();
 ```
 
 ## Contributing

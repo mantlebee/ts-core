@@ -37,7 +37,7 @@ export type FilePickerOptionsGetter = (
  * Options of {@link WritableStreamHttpResponseReader}.
  */
 export type WritableStreamHttpResponseReaderOptions = {
-  /** Creates the options of the save file picker, default {@link FilePickerOptionsDefault}. */
+  /** Creates the options of the save file picker, default only the suggested name. */
   getFilePickerOptions?: FilePickerOptionsGetter;
   /** Called with every chunk written to the file (e.g. to show the progress). */
   onStreamWrite?: (chunk: Uint8Array) => void;
