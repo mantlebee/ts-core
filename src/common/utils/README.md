@@ -20,6 +20,6 @@ library.
 - **`functions.ts`** — `isFunction`.
 - **`chars.ts`** — character-range builders (`getLowercaseChars`,
   `getUppercaseChars`, `getNumberChars`, `getSpecialChars`, …).
-- **[`dates/`](./dates)** — `isDate`.
+- **[`dates/`](./dates)** — `isDate`, `dateAsUtc` and the `DateOffset`.
 - **[`promises/`](./promises)** — the deferred-promise abstraction and its
   implementations.
