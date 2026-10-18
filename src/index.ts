@@ -12,6 +12,7 @@ export * from "./identities";
 export * from "./loggers";
 export * from "./parsers";
 export * from "./scheduling";
+export * from "./storage";
 export * from "./subscriptions";
 export * from "./units";
 export * from "./validators";

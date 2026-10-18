@@ -27,6 +27,7 @@ concrete implementations.
 | [`loggers/`](./loggers) | Logging abstraction with pluggable sinks |
 | [`parsers/`](./parsers) | Turning text into structured data |
 | [`scheduling/`](./scheduling) | Describing recurring executions (daily, weekly, monthly…) |
+| [`storage/`](./storage) | Key/value storages: in memory, `localStorage`, `sessionStorage` |
 | [`subscriptions/`](./subscriptions) | Publish/subscribe primitives |
 | [`units/`](./units) | Formatting measures for humans (file sizes) |
 | [`validators/`](./validators) | Asynchronous validators of values (strings, numbers, emails, URLs, IPv4…) |
