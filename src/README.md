@@ -28,6 +28,7 @@ concrete implementations.
 | [`parsers/`](./parsers) | Turning text into structured data |
 | [`scheduling/`](./scheduling) | Describing recurring executions (daily, weekly, monthly…) |
 | [`subscriptions/`](./subscriptions) | Publish/subscribe primitives |
+| [`web-sockets/`](./web-sockets) | Contract of a WebSocket exposed as a typed event bus |
 | [`wizards/`](./wizards) | Driving a multi-step flow through its lifecycle |
 
 ## Conventions
