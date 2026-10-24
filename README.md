@@ -64,6 +64,7 @@ yarn add @mantlebee/ts-core
 
 Version 1.0.0 contains breaking changes (`Subscribable`, `SubscribableLogger`,
 `Exception`, no deep imports). See the [1.0.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.0.0.md) for the migration guide.
+Version 1.1.0 fixes bugs that may change behaviour: see the [1.1.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.1.0.md).
 
 ## Quick Start
 
