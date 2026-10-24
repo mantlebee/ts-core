@@ -37,7 +37,6 @@ export class FetchApiHttpRequestor
     const init = this.getRequestInit();
     if (body) {
       init.body = createHttpPostBody(body);
-      // JSON bodies must be declared as such, or many servers won't parse them.
       // `URLSearchParams` bodies get their content type from `fetch` itself.
       const headers = init.headers as Headers;
       if (!(body instanceof URLSearchParams) && !headers.has("Content-Type"))
@@ -58,7 +57,6 @@ export class FetchApiHttpRequestor
   }
 
   private getRequestInit(): RequestInit {
-    // A copy, so per-request headers never leak into the requestor's headers.
     const init: RequestInit = { headers: new Headers(this.getHeaders()) };
     this.options?.abortController?.onRequestInit(init);
     return init;

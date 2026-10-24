@@ -1,6 +1,6 @@
 import { Any, Dictionary, isObject } from "@/common";
 
-import { isUnsafeKey } from "../nested/utils";
+import { isUnsafeObjectKey } from "../utils";
 
 /**
  * Recursively copies plain objects and arrays; returns anything else as-is.
@@ -12,7 +12,7 @@ export function deepClone<T>(value: T): T {
   if (isObject(value)) {
     const clone: Dictionary = {};
     for (const key of Object.keys(value as Dictionary)) {
-      if (isUnsafeKey(key)) continue;
+      if (isUnsafeObjectKey(key)) continue;
       clone[key] = deepClone((value as Dictionary)[key]);
     }
     return clone as T;

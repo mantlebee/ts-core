@@ -6,6 +6,8 @@ import {
   NestedObjectOptions,
 } from "@/common";
 
+import { isUnsafeObjectKey } from "../utils";
+
 //#region Private
 
 //#region Options
@@ -34,14 +36,6 @@ function canTraverse(value: Any): value is Dictionary {
  */
 function hasOwn(obj: Dictionary, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
-}
-
-/**
- * True when a write to `key` would reach the object's prototype instead of an
- * own property (prototype pollution).
- */
-export function isUnsafeKey(key: string): boolean {
-  return key === "__proto__";
 }
 
 /** True when `key` reads as a non-negative integer, i.e. an array index. */
@@ -183,7 +177,7 @@ export function setNestedPropertyValue<TValue = Any>(
   const pathSeparator = getPathSeparator(options);
   const replaceIfExists = getReplaceIfExists(options);
   const { leaf, parents } = parsePath(path, pathSeparator);
-  if (isUnsafeKey(leaf) || parents.some(isUnsafeKey)) return;
+  if (isUnsafeObjectKey(leaf) || parents.some(isUnsafeObjectKey)) return;
 
   // Phase 1 — make sure every parent segment can be reached (by descending,
   // creating or replacing, as the options permit) without touching `obj`, so a

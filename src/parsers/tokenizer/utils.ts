@@ -27,8 +27,6 @@ export function tokenize(
   text: string,
   rules: List<TokenizerRule>
 ): TokenizerResult {
-  // A Map, not a plain object: matches such as "constructor" or "toString"
-  // would otherwise hit the inherited members of Object.prototype.
   const tokensMap = new Map<string, Token>();
   const tokens: List<Token> = [];
   let currentIndex = 0;

@@ -60,8 +60,6 @@ export class KeyedDeferred<
         resolve: settle(resolve),
       };
       KeyedDeferredPendingResolvers.set(key, resolvers);
-      // The timer is bound to this promise only, so it can never reject a
-      // promise registered later for the same key.
       if (timeoutAfter !== undefined)
         timeout = setTimeout(() => resolvers.reject(key), timeoutAfter);
     });

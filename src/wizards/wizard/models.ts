@@ -158,7 +158,6 @@ export class Wizard implements IWizard {
           await this.performGoForward();
         }
     } catch (error) {
-      // Back to the initial state, so `start` can be called again.
       this.currentStep = firstStep;
       this.previousSteps = [];
       this.setCurrentStatus(WizardStatuses.needToStart);

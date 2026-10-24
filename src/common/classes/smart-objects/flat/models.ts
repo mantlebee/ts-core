@@ -1,7 +1,7 @@
 import { Any, Dictionary, List } from "@/common";
 
 import { ISmartObject } from "../interfaces";
-import { isUnsafeKey } from "../nested/utils";
+import { isUnsafeObjectKey } from "../utils";
 
 /**
  * Simplest {@link ISmartObject} implementation: a flat key/value store with no
@@ -43,7 +43,7 @@ export class FlatObject implements ISmartObject {
   }
   /** A `__proto__` key is ignored: writing it would replace the object's prototype. */
   public set<TValue = Any>(key: string, value: TValue): void {
-    if (isUnsafeKey(key)) return;
+    if (isUnsafeObjectKey(key)) return;
     this.obj[key] = value;
   }
   public unset(key: string): void {
