@@ -1,0 +1,275 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>1.0.0 | @mantlebee/ts-core</title><meta name="description" content="Documentation for @mantlebee/ts-core"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">@mantlebee/ts-core</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="" aria-current="page">1.0.0</a></li></ul></div>
+<div class="tsd-panel tsd-typography"><h1 id="100-upgrading-from-0320" class="tsd-anchor-link">1.0.0 — upgrading from 0.32.0<a href="#100-upgrading-from-0320" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>Version 1.0.0 adds a set of new modules (HTTP client, validators, passwords,
+storages, caches, notifications, …), redesigns <code>Subscribable</code> on top of
+<code>EventBus</code> and makes the package tree-shakable. Most of the release is
+<strong>additive</strong>; the breaking changes are listed first.</p>
+<ul>
+<li><a href="#1-breaking-changes-for-0320-consumers">1. Breaking changes for 0.32.0 consumers</a>
+<ul>
+<li><a href="#11-isubscribable-and-subscribable-redesigned">1.1 <code>ISubscribable</code> and <code>Subscribable</code> redesigned</a></li>
+<li><a href="#12-subscribablelogger-uses-events">1.2 <code>SubscribableLogger</code> uses events</a></li>
+<li><a href="#13-exception-extends-baseexception">1.3 <code>Exception</code> extends <code>BaseException</code></a></li>
+<li><a href="#14-new-names-in-the-public-barrel">1.4 New names in the public barrel</a></li>
+<li><a href="#15-package-entry-points">1.5 Package entry points</a></li>
+</ul>
+</li>
+<li><a href="#2-whats-new">2. What's new</a></li>
+<li><a href="#3-checklist">3. Checklist</a></li>
+</ul>
+<hr>
+<h2 id="1-breaking-changes-for-0320-consumers" class="tsd-anchor-link">1. Breaking changes for 0.32.0 consumers<a href="#1-breaking-changes-for-0320-consumers" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="11-isubscribable-and-subscribable-redesigned" class="tsd-anchor-link">1.1 ISubscribable and Subscribable redesigned<a href="#11-isubscribable-and-subscribable-redesigned" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>The single-channel subscribable, with numeric ids, is replaced by a typed,
+multi-event one built on <code>EventBus</code>.</p>
+<table>
+<thead>
+<tr>
+<th>0.32.0</th>
+<th>1.0.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ISubscribable&lt;TData, TId = number&gt;</code></td>
+<td><code>ISubscribable&lt;TEvents extends EventsDefinition&gt;</code></td>
+</tr>
+<tr>
+<td><code>subscribe(subscription): TId</code></td>
+<td><code>on(event, handler): EventSubscription</code></td>
+</tr>
+<tr>
+<td><code>unsubscribe(id): void</code></td>
+<td><code>subscription.dispose(): Promise&lt;void&gt;</code></td>
+</tr>
+<tr>
+<td><code>Subscribable&lt;TData&gt;.notifyData(data)</code></td>
+<td><code>this._eventBus.trigger(event, ...args)</code> (protected, from a subclass)</td>
+</tr>
+<tr>
+<td><code>Subscription&lt;TData&gt;</code> type</td>
+<td><strong>removed</strong>, use <code>EventHandler&lt;TEvents, TKey&gt;</code></td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>dispose(): Promise&lt;void&gt;</code> removes every handler</td>
+</tr>
+</tbody>
+</table>
+<p><code>ISubscribable</code> now extends <code>IDisposable</code> and exposes only <code>on()</code>: raising the
+events is up to the implementation.</p>
+<p><strong>Before</strong></p>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">Subscribable</span><span class="hl-1">, </span><span class="hl-4">Subscription</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">counterChanged</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Subscribable</span><span class="hl-1">&lt;</span><span class="hl-9">number</span><span class="hl-1">&gt;();</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">id</span><span class="hl-1"> = </span><span class="hl-4">counterChanged</span><span class="hl-1">.</span><span class="hl-0">subscribe</span><span class="hl-1">((</span><span class="hl-4">value</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><span class="hl-1"> </span><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-4">value</span><span class="hl-1">));</span><br/><span class="hl-4">counterChanged</span><span class="hl-1">.</span><span class="hl-0">notifyData</span><span class="hl-1">(</span><span class="hl-10">1</span><span class="hl-1">);</span><br/><span class="hl-4">counterChanged</span><span class="hl-1">.</span><span class="hl-0">unsubscribe</span><span class="hl-1">(</span><span class="hl-4">id</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<p><strong>After</strong> — declare the events and raise them from a subclass:</p>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">Subscribable</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">type</span><span class="hl-1"> </span><span class="hl-9">CounterEvents</span><span class="hl-1"> = { </span><span class="hl-4">changed</span><span class="hl-1">: [</span><span class="hl-8">value</span><span class="hl-1">: </span><span class="hl-9">number</span><span class="hl-1">] };</span><br/><br/><span class="hl-6">class</span><span class="hl-1"> </span><span class="hl-9">Counter</span><span class="hl-1"> </span><span class="hl-6">extends</span><span class="hl-1"> </span><span class="hl-9">Subscribable</span><span class="hl-1">&lt;</span><span class="hl-9">CounterEvents</span><span class="hl-1">&gt; {</span><br/><span class="hl-1">  </span><span class="hl-6">private</span><span class="hl-1"> </span><span class="hl-4">value</span><span class="hl-1"> = </span><span class="hl-10">0</span><span class="hl-1">;</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-0">increment</span><span class="hl-1">(): </span><span class="hl-9">void</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">_eventBus</span><span class="hl-1">.</span><span class="hl-0">trigger</span><span class="hl-1">(</span><span class="hl-2">&quot;changed&quot;</span><span class="hl-1">, ++</span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">value</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">counter</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Counter</span><span class="hl-1">();</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">subscription</span><span class="hl-1"> = </span><span class="hl-4">counter</span><span class="hl-1">.</span><span class="hl-0">on</span><span class="hl-1">(</span><span class="hl-2">&quot;changed&quot;</span><span class="hl-1">, (</span><span class="hl-4">value</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><span class="hl-1"> </span><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-4">value</span><span class="hl-1">));</span><br/><span class="hl-4">counter</span><span class="hl-1">.</span><span class="hl-0">increment</span><span class="hl-1">();</span><br/><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">subscription</span><span class="hl-1">.</span><span class="hl-0">dispose</span><span class="hl-1">(); </span><span class="hl-5">// was: unsubscribe(id)</span><br/><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">counter</span><span class="hl-1">.</span><span class="hl-0">dispose</span><span class="hl-1">(); </span><span class="hl-5">// removes every handler</span>
+</code><button type="button">Copy</button></pre>
+
+<p>If you just need a standalone channel, without a subclass, use <code>EventBus</code>
+directly:</p>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">EventBus</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">bus</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">EventBus</span><span class="hl-1">&lt;{ </span><span class="hl-4">changed</span><span class="hl-1">: [</span><span class="hl-8">value</span><span class="hl-1">: </span><span class="hl-9">number</span><span class="hl-1">] }&gt;();</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">subscription</span><span class="hl-1"> = </span><span class="hl-4">bus</span><span class="hl-1">.</span><span class="hl-0">on</span><span class="hl-1">(</span><span class="hl-2">&quot;changed&quot;</span><span class="hl-1">, (</span><span class="hl-4">value</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><span class="hl-1"> </span><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-4">value</span><span class="hl-1">));</span><br/><span class="hl-4">bus</span><span class="hl-1">.</span><span class="hl-0">trigger</span><span class="hl-1">(</span><span class="hl-2">&quot;changed&quot;</span><span class="hl-1">, </span><span class="hl-10">1</span><span class="hl-1">); </span><span class="hl-5">// was: notifyData(1)</span><br/><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">subscription</span><span class="hl-1">.</span><span class="hl-0">dispose</span><span class="hl-1">();</span>
+</code><button type="button">Copy</button></pre>
+
+<p><strong>Classes implementing <code>ISubscribable</code></strong> must switch to the new contract.
+Composition with an <code>EventBus</code> is the simplest way, when the class already
+extends something else:</p>
+<pre><code class="ts"><span class="hl-5">// Before</span><br/><span class="hl-6">class</span><span class="hl-1"> </span><span class="hl-9">Store</span><span class="hl-1"> </span><span class="hl-6">implements</span><span class="hl-1"> </span><span class="hl-9">ISubscribable</span><span class="hl-1">&lt;</span><span class="hl-9">State</span><span class="hl-1">&gt; {</span><br/><span class="hl-1">  </span><span class="hl-6">private</span><span class="hl-1"> </span><span class="hl-4">subscribable</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Subscribable</span><span class="hl-1">&lt;</span><span class="hl-9">State</span><span class="hl-1">&gt;();</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-0">subscribe</span><span class="hl-1">(</span><span class="hl-4">subscription</span><span class="hl-1">: </span><span class="hl-9">Subscription</span><span class="hl-1">&lt;</span><span class="hl-9">State</span><span class="hl-1">&gt;): </span><span class="hl-9">number</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-3">return</span><span class="hl-1"> </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">subscribable</span><span class="hl-1">.</span><span class="hl-0">subscribe</span><span class="hl-1">(</span><span class="hl-4">subscription</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-0">unsubscribe</span><span class="hl-1">(</span><span class="hl-4">id</span><span class="hl-1">: </span><span class="hl-9">number</span><span class="hl-1">): </span><span class="hl-9">void</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">subscribable</span><span class="hl-1">.</span><span class="hl-0">unsubscribe</span><span class="hl-1">(</span><span class="hl-4">id</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-5">// After</span><br/><span class="hl-3">import</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-4">EventBus</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">EventHandler</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">EventSubscription</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">ISubscribable</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">KeyOf</span><span class="hl-1">,</span><br/><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">type</span><span class="hl-1"> </span><span class="hl-9">StoreEvents</span><span class="hl-1"> = { </span><span class="hl-4">changed</span><span class="hl-1">: [</span><span class="hl-8">state</span><span class="hl-1">: </span><span class="hl-9">State</span><span class="hl-1">] };</span><br/><br/><span class="hl-6">class</span><span class="hl-1"> </span><span class="hl-9">Store</span><span class="hl-1"> </span><span class="hl-6">implements</span><span class="hl-1"> </span><span class="hl-9">ISubscribable</span><span class="hl-1">&lt;</span><span class="hl-9">StoreEvents</span><span class="hl-1">&gt; {</span><br/><span class="hl-1">  </span><span class="hl-6">private</span><span class="hl-1"> </span><span class="hl-4">eventBus</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">EventBus</span><span class="hl-1">&lt;</span><span class="hl-9">StoreEvents</span><span class="hl-1">&gt;();</span><br/><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-0">dispose</span><span class="hl-1">(): </span><span class="hl-9">Promise</span><span class="hl-1">&lt;</span><span class="hl-9">void</span><span class="hl-1">&gt; {</span><br/><span class="hl-1">    </span><span class="hl-3">return</span><span class="hl-1"> </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">eventBus</span><span class="hl-1">.</span><span class="hl-0">dispose</span><span class="hl-1">();</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-0">on</span><span class="hl-1">&lt;</span><span class="hl-9">TKey</span><span class="hl-1"> </span><span class="hl-6">extends</span><span class="hl-1"> </span><span class="hl-9">KeyOf</span><span class="hl-1">&lt;</span><span class="hl-9">StoreEvents</span><span class="hl-1">&gt;&gt;(</span><br/><span class="hl-1">    </span><span class="hl-4">event</span><span class="hl-1">: </span><span class="hl-9">TKey</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">handler</span><span class="hl-1">: </span><span class="hl-9">EventHandler</span><span class="hl-1">&lt;</span><span class="hl-9">StoreEvents</span><span class="hl-1">, </span><span class="hl-9">TKey</span><span class="hl-1">&gt;,</span><br/><span class="hl-1">  ): </span><span class="hl-9">EventSubscription</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-3">return</span><span class="hl-1"> </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">eventBus</span><span class="hl-1">.</span><span class="hl-0">on</span><span class="hl-1">(</span><span class="hl-4">event</span><span class="hl-1">, </span><span class="hl-4">handler</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">  </span><span class="hl-6">private</span><span class="hl-1"> </span><span class="hl-0">setState</span><span class="hl-1">(</span><span class="hl-4">state</span><span class="hl-1">: </span><span class="hl-9">State</span><span class="hl-1">): </span><span class="hl-9">void</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">eventBus</span><span class="hl-1">.</span><span class="hl-0">trigger</span><span class="hl-1">(</span><span class="hl-2">&quot;changed&quot;</span><span class="hl-1">, </span><span class="hl-4">state</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="12-subscribablelogger-uses-events" class="tsd-anchor-link">1.2 SubscribableLogger uses events<a href="#12-subscribablelogger-uses-events" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p><code>SubscribableLogger</code> now implements <code>ISubscribable&lt;SubscribableLoggerEvents&gt;</code>:
+every entry raises the <code>log</code> event with a <code>SubscribableLoggerData</code> payload
+(unchanged: <code>type</code>, <code>message</code>, <code>data</code>).</p>
+<table>
+<thead>
+<tr>
+<th>0.32.0</th>
+<th>1.0.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subscribe(subscription): number</code></td>
+<td><code>on(&quot;log&quot;, handler): EventSubscription</code></td>
+</tr>
+<tr>
+<td><code>unsubscribe(id): void</code></td>
+<td><code>subscription.dispose()</code></td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>dispose()</code> removes every handler</td>
+</tr>
+<tr>
+<td>—</td>
+<td>new type <code>SubscribableLoggerEvents</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="ts"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">logger</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">SubscribableLogger</span><span class="hl-1">();</span><br/><br/><span class="hl-5">// Before</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">id</span><span class="hl-1"> = </span><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">subscribe</span><span class="hl-1">(({ </span><span class="hl-4">type</span><span class="hl-1">, </span><span class="hl-4">message</span><span class="hl-1"> }) </span><span class="hl-6">=&gt;</span><span class="hl-1"> </span><span class="hl-0">show</span><span class="hl-1">(</span><span class="hl-4">type</span><span class="hl-1">, </span><span class="hl-4">message</span><span class="hl-1">));</span><br/><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">unsubscribe</span><span class="hl-1">(</span><span class="hl-4">id</span><span class="hl-1">);</span><br/><br/><span class="hl-5">// After</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">subscription</span><span class="hl-1"> = </span><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">on</span><span class="hl-1">(</span><span class="hl-2">&quot;log&quot;</span><span class="hl-1">, ({ </span><span class="hl-4">type</span><span class="hl-1">, </span><span class="hl-4">message</span><span class="hl-1"> }) </span><span class="hl-6">=&gt;</span><br/><span class="hl-1">  </span><span class="hl-0">show</span><span class="hl-1">(</span><span class="hl-4">type</span><span class="hl-1">, </span><span class="hl-4">message</span><span class="hl-1">),</span><br/><span class="hl-1">);</span><br/><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">subscription</span><span class="hl-1">.</span><span class="hl-0">dispose</span><span class="hl-1">();</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="13-exception-extends-baseexception" class="tsd-anchor-link">1.3 Exception extends BaseException<a href="#13-exception-extends-baseexception" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p><code>Exception</code> keeps its <code>(code, message)</code> constructor and its required <code>code</code>,
+so existing subclasses compile unchanged. What changes:</p>
+<ul>
+<li>it extends the new <code>BaseException</code> (which extends <code>Error</code>), so
+<code>error instanceof BaseException</code> is true for every library exception;</li>
+<li><code>name</code> is now <code>&quot;Exception&quot;</code> instead of <code>&quot;Error&quot;</code>;</li>
+<li>the constructor accepts an optional third argument, <code>cause</code>.</li>
+</ul>
+<p>Only code that checks <code>error.name === &quot;Error&quot;</code> needs an update. Subclasses
+should set their own <code>name</code>, because class names don't survive minification:</p>
+<pre><code class="ts"><span class="hl-6">class</span><span class="hl-1"> </span><span class="hl-9">OrderException</span><span class="hl-1"> </span><span class="hl-6">extends</span><span class="hl-1"> </span><span class="hl-9">Exception</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-6">constructor</span><span class="hl-1">(</span><span class="hl-4">code</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">, </span><span class="hl-4">message</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">, </span><span class="hl-4">cause</span><span class="hl-1">?: </span><span class="hl-9">unknown</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-6">super</span><span class="hl-1">(</span><span class="hl-4">code</span><span class="hl-1">, </span><span class="hl-4">message</span><span class="hl-1">, </span><span class="hl-4">cause</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">name</span><span class="hl-1"> = </span><span class="hl-2">&quot;OrderException&quot;</span><span class="hl-1">;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-5">// Branch on the type or the code, never on the message</span><br/><span class="hl-3">if</span><span class="hl-1"> (</span><span class="hl-4">error</span><span class="hl-1"> </span><span class="hl-6">instanceof</span><span class="hl-1"> </span><span class="hl-9">BaseException</span><span class="hl-1"> &amp;&amp; </span><span class="hl-4">error</span><span class="hl-1">.</span><span class="hl-4">code</span><span class="hl-1"> === </span><span class="hl-2">&quot;ORD-1&quot;</span><span class="hl-1">) ...</span>
+</code><button type="button">Copy</button></pre>
+
+<p>New code that doesn't need a mandatory code can extend <code>BaseException</code> directly:</p>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">BaseException</span><span class="hl-1">, </span><span class="hl-4">ExceptionOptions</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">class</span><span class="hl-1"> </span><span class="hl-9">QuotaExceededException</span><span class="hl-1"> </span><span class="hl-6">extends</span><span class="hl-1"> </span><span class="hl-9">BaseException</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-6">constructor</span><span class="hl-1">(</span><span class="hl-4">message</span><span class="hl-1"> = </span><span class="hl-2">&quot;Quota exceeded&quot;</span><span class="hl-1">, </span><span class="hl-4">options</span><span class="hl-1">?: </span><span class="hl-9">ExceptionOptions</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-6">super</span><span class="hl-1">(</span><span class="hl-4">message</span><span class="hl-1">, </span><span class="hl-4">options</span><span class="hl-1">); </span><span class="hl-5">// options: { code?, cause? }</span><br/><span class="hl-1">    </span><span class="hl-6">this</span><span class="hl-1">.</span><span class="hl-4">name</span><span class="hl-1"> = </span><span class="hl-2">&quot;QuotaExceededException&quot;</span><span class="hl-1">;</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="14-new-names-in-the-public-barrel" class="tsd-anchor-link">1.4 New names in the public barrel<a href="#14-new-names-in-the-public-barrel" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Everything is still re-exported flat from <code>@mantlebee/ts-core</code>, which now
+includes many new names (see <a href="#2-whats-new">What's new</a>). If your project
+re-exports the library (<code>export * from &quot;@mantlebee/ts-core&quot;</code>) next to its own
+modules, TypeScript reports a conflict (<code>TS2308</code>) for every name defined on both
+sides, e.g. <code>Validator</code>, <code>Validation</code>, <code>Notifier</code>, <code>LocalStorage</code>, <code>getHumanFileSize</code>.
+Fix it by removing your duplicate or by re-exporting explicitly:</p>
+<pre><code class="ts"><span class="hl-3">export</span><span class="hl-1"> </span><span class="hl-6">*</span><span class="hl-1"> </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><span class="hl-3">export</span><span class="hl-1"> { </span><span class="hl-4">Validator</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;./my-validators&quot;</span><span class="hl-1">; </span><span class="hl-5">// explicit export wins</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="15-package-entry-points" class="tsd-anchor-link">1.5 Package entry points<a href="#15-package-entry-points" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>The package now declares its entry points in <code>exports</code>: <code>import</code> resolves to
+an ES modules build (one file per module, so bundlers can drop what you don't
+use) and <code>require</code> to the CommonJS bundle. Only the package root and
+<code>@mantlebee/ts-core/package.json</code> can be imported: deep imports such as
+<code>@mantlebee/ts-core/dist/index.js</code> no longer resolve.</p>
+<pre><code class="ts"><span class="hl-5">// Before</span><br/><span class="hl-6">const</span><span class="hl-1"> { </span><span class="hl-7">Color</span><span class="hl-1"> } = </span><span class="hl-0">require</span><span class="hl-1">(</span><span class="hl-2">&quot;@mantlebee/ts-core/dist/index.js&quot;</span><span class="hl-1">);</span><br/><br/><span class="hl-5">// After</span><br/><span class="hl-6">const</span><span class="hl-1"> { </span><span class="hl-7">Color</span><span class="hl-1"> } = </span><span class="hl-0">require</span><span class="hl-1">(</span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<p>The package no longer contains the API documentation, which is published at
+<a href="https://mantlebee.github.io/ts-core/">mantlebee.github.io/ts-core</a>.</p>
+<hr>
+<h2 id="2-whats-new" class="tsd-anchor-link">2. What's new<a href="#2-whats-new" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>All additive: no change is required to adopt them. The library also ships as
+tree-shakable ES modules (see <a href="#15-package-entry-points">1.5</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Exports</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common/utils</code></td>
+<td><code>addLeadingZeros</code>, <code>escapeHtml</code>, <code>escapeRegexSpecialChars</code>, <code>getFirstItemIfSingle</code>, <code>sortListByKey</code>, <code>getEnumKeyByValue</code>, <code>dateAsUtc</code>, <code>DateOffset</code></td>
+</tr>
+<tr>
+<td><code>exceptions</code></td>
+<td><code>BaseException</code>, <code>ExceptionOptions</code>, <code>GenericException</code>, <code>MethodNotImplementedException</code>, <code>UnmanagedCaseException</code></td>
+</tr>
+<tr>
+<td><code>subscriptions</code></td>
+<td><code>MultiTabEventBus</code>, <code>MultiTabEventBusOptions</code> (browser only)</td>
+</tr>
+<tr>
+<td><code>cache</code></td>
+<td><code>ICache</code>, <code>InMemoryCache</code>, <code>InMemoryExpirableCache</code></td>
+</tr>
+<tr>
+<td><code>storage</code></td>
+<td><code>IStorage</code>, <code>IStorer</code>, <code>Storer</code>, <code>InMemoryStorage</code>, <code>InMemoryStorer</code>, <code>WebStorage</code>, <code>LocalStorage</code>, <code>SessionStorage</code>, <code>IGlobalsStore</code>, <code>createGlobalsStore</code></td>
+</tr>
+<tr>
+<td><code>clipboard</code></td>
+<td><code>IClipboard</code>, <code>WebClipboard</code> (browser only)</td>
+</tr>
+<tr>
+<td><code>files</code></td>
+<td><code>readFileAsDataUrl</code>, <code>readFileAsText</code> (browser only)</td>
+</tr>
+<tr>
+<td><code>units</code></td>
+<td><code>HumanFileSize</code>, <code>getHumanFileSize</code></td>
+</tr>
+<tr>
+<td><code>notifications</code></td>
+<td><code>INotifier</code>, <code>Notifier</code>, <code>NotifierDelegate</code></td>
+</tr>
+<tr>
+<td><code>validators</code></td>
+<td><code>Validation</code>, <code>ValidatorDelegate</code>, <code>ValidatorOptions</code>, <code>IValidator</code>, <code>Validator</code>, <code>createValidationCollector</code>, <code>mergeValidations</code>, requirements, string, number, email, url, IPv4, IPv4 range and confirm-string validators</td>
+</tr>
+<tr>
+<td><code>passwords</code></td>
+<td><code>IPasswordRequirement</code>, <code>PasswordRequirement</code>, the built-in requirements, <code>PasswordRequirementsDefault</code>, <code>validatePassword</code>, <code>PasswordValidator</code></td>
+</tr>
+<tr>
+<td><code>http</code></td>
+<td><code>IHttpRequestor</code>, <code>FetchApiHttpRequestor</code>, <code>ProxyHttpRequestor</code>, <code>WithExtraHeadersHttpRequestor</code>, <code>InterceptorHttpRequestor</code>, <code>HttpAbortController</code>, response readers, HTTP exceptions, <code>createHttpRelativePath</code>, <code>createHttpGetQuery</code>, <code>createHttpPostBody</code></td>
+</tr>
+<tr>
+<td><code>web-sockets</code></td>
+<td><code>IWebSocket</code>, <code>WebSocketEvents</code></td>
+</tr>
+</tbody>
+</table>
+<p>See the <code>README.md</code> of each folder under <a href="https://github.com/mantlebee/ts-core/tree/main/src"><code>src/</code></a> for details.</p>
+<hr>
+<h2 id="3-checklist" class="tsd-anchor-link">3. Checklist<a href="#3-checklist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ol>
+<li>Update the dependency: <code>npm install @mantlebee/ts-core@^1.0.0</code>.</li>
+<li>Replace <code>subscribe</code>/<code>unsubscribe</code>/<code>notifyData</code> with <code>on</code>/<code>dispose</code>/<code>trigger</code>
+(<a href="#11-isubscribable-and-subscribable-redesigned">1.1</a>,
+<a href="#12-subscribablelogger-uses-events">1.2</a>).</li>
+<li>Look for <code>error.name === &quot;Error&quot;</code> checks on library exceptions
+(<a href="#13-exception-extends-baseexception">1.3</a>).</li>
+<li>Run the type checker (<code>tsc --noEmit</code>): name conflicts and the removed
+<code>Subscription</code> type show up here.</li>
+<li>Replace deep imports (<code>@mantlebee/ts-core/dist/...</code>) with the package root
+(<a href="#15-package-entry-points">1.5</a>).</li>
+</ol>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#100-upgrading-from-0320"><span>1.0.0 — upgrading from 0.32.0</span></a>
+<ul>
+<li><a href="#1-breaking-changes-for-0320-consumers"><span>1. <wbr/>Breaking changes for 0.32.0 consumers</span></a></li>
+<li>
+<ul>
+<li><a href="#11-isubscribable-and-subscribable-redesigned"><span>1.1 <wbr/>I<wbr/>Subscribable and <wbr/>Subscribable redesigned</span></a></li>
+<li><a href="#12-subscribablelogger-uses-events"><span>1.2 <wbr/>Subscribable<wbr/>Logger uses events</span></a></li>
+<li><a href="#13-exception-extends-baseexception"><span>1.3 <wbr/>Exception extends <wbr/>Base<wbr/>Exception</span></a></li>
+<li><a href="#14-new-names-in-the-public-barrel"><span>1.4 <wbr/>New names in the public barrel</span></a></li>
+<li><a href="#15-package-entry-points"><span>1.5 <wbr/>Package entry points</span></a></li></ul></li>
+<li><a href="#2-whats-new"><span>2. <wbr/>What&#39;s new</span></a></li>
+<li><a href="#3-checklist"><span>3. <wbr/>Checklist</span></a></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">@mantlebee/ts-core</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

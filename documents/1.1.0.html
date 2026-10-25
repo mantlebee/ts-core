@@ -1,0 +1,179 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>1.1.0 | @mantlebee/ts-core</title><meta name="description" content="Documentation for @mantlebee/ts-core"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">@mantlebee/ts-core</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="" aria-current="page">1.1.0</a></li></ul></div>
+<div class="tsd-panel tsd-typography"><h1 id="110-upgrading-from-100" class="tsd-anchor-link">1.1.0 — upgrading from 1.0.0<a href="#110-upgrading-from-100" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>Version 1.1.0 fixes the bugs found by a quality review of 1.0.0. There are no
+new modules; a few fixes change behaviour or types that code may rely on, and
+they are listed below.</p>
+<ul>
+<li><a href="#1-bug-fixes-that-change-behaviour">1. Bug fixes that change behaviour</a></li>
+<li><a href="#2-multitabeventbus-storage-keys">2. MultiTabEventBus storage keys</a></li>
+<li><a href="#3-checklist">3. Checklist</a></li>
+</ul>
+<hr>
+<h2 id="1-bug-fixes-that-change-behaviour" class="tsd-anchor-link">1. Bug fixes that change behaviour<a href="#1-bug-fixes-that-change-behaviour" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>These are fixes, but code that relied on the old behaviour may notice them.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>1.0.0</th>
+<th>1.1.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TypedKey&lt;T&gt;</code></td>
+<td>an empty interface: keys of any type were assignable to each other</td>
+<td>a branded <code>symbol</code>: <code>TypedKey&lt;string&gt;</code> is not assignable to <code>TypedKey&lt;number&gt;</code></td>
+</tr>
+<tr>
+<td><code>isFunction</code> / <code>getValue</code></td>
+<td><code>function () {}</code> was not a function, so <code>getValue</code> returned it uncalled</td>
+<td><code>function () {}</code> is a function and <code>getValue</code> calls it; constructors still aren't</td>
+</tr>
+<tr>
+<td><code>firstOrDefault</code></td>
+<td>a falsy match (<code>0</code>, <code>&quot;&quot;</code>, <code>false</code>) returned the default item</td>
+<td>the match is returned</td>
+</tr>
+<tr>
+<td><code>roundNumber</code></td>
+<td>wrong for numbers in exponential notation (<code>1.23e-7</code>, <code>1e21</code>)</td>
+<td>correct</td>
+</tr>
+<tr>
+<td><code>Wizard.abort</code></td>
+<td>threw a <code>TypeError</code> when the context had no <code>abort</code>, stuck in <code>aborting</code></td>
+<td>resolves</td>
+</tr>
+<tr>
+<td><code>Wizard.goForward</code> / <code>goBack</code></td>
+<td>a rejected <code>beforeEnter</code> left the step history changed</td>
+<td>the history changes only once the step is entered</td>
+</tr>
+<tr>
+<td><code>Wizard.start</code></td>
+<td>a rejected hook left the wizard in <code>starting</code></td>
+<td>back to <code>needToStart</code>, so <code>start</code> can be retried</td>
+</tr>
+<tr>
+<td><code>Wizard.canGoForward</code></td>
+<td>a step outside the steps list, without <code>nextStep</code>, went back to the first one</td>
+<td>it can't go forward</td>
+</tr>
+<tr>
+<td><code>Alarm.snooze</code> / <code>stop</code></td>
+<td>a snooze before the alarm went off fired twice, and <code>stop</code> didn't cancel it</td>
+<td>a snooze replaces the pending alert; <code>stop</code> cancels everything</td>
+</tr>
+<tr>
+<td><code>Alarm</code></td>
+<td>expirations beyond ~24.8 days went off immediately</td>
+<td>they go off on time</td>
+</tr>
+<tr>
+<td><code>KeyedDeferred</code></td>
+<td>a timeout could reject a later <code>wait()</code> with the same key; never cleaned up</td>
+<td>timers are bound to their own promise and settled promises leave the registry; <code>timeoutAfter: 0</code> is honoured</td>
+</tr>
+<tr>
+<td><code>NestedObject</code> / <code>FlatObject</code></td>
+<td><code>__proto__</code> paths polluted <code>Object.prototype</code>; <code>has(&quot;toString&quot;)</code> was <code>true</code></td>
+<td><code>__proto__</code> writes are ignored; only own keys are read or reported</td>
+</tr>
+<tr>
+<td><code>ImmutableObject</code></td>
+<td>writes to a version after <code>clone()</code> were visible in the fork</td>
+<td>versions are independent; the third constructor argument (<code>parent</code>) is removed</td>
+</tr>
+<tr>
+<td><code>rgbaToHsla</code> / <code>Color.hsl()</code></td>
+<td>saturation <code>NaN</code> for grays (<code>hsl(0,NaN%,0%)</code>)</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>textToHsl</code> / <code>Color.fromText</code></td>
+<td>the hue could be negative</td>
+<td>always between 0 and 359 (a different color for the texts that were negative)</td>
+</tr>
+<tr>
+<td><code>WebColorNamesHexMap</code> / <code>WebColorName</code></td>
+<td><code>&quot;indianred &quot;</code> (with a space); wrong <code>mediumpurple</code> and <code>palevioletred</code></td>
+<td><code>indianred</code>; CSS values; adds <code>rebeccapurple</code> and the <code>grey</code>/<code>gray</code> variants</td>
+</tr>
+<tr>
+<td><code>tokenize</code></td>
+<td>crashed on matches such as <code>&quot;constructor&quot;</code>; looped on a backward <code>endIndex</code></td>
+<td>regular tokens; always moves forward</td>
+</tr>
+<tr>
+<td><code>FetchApiHttpRequestor.post</code></td>
+<td>JSON bodies were sent without <code>Content-Type</code></td>
+<td><code>Content-Type: application/json</code>, unless already set</td>
+</tr>
+<tr>
+<td><code>FetchApiHttpRequestor.withOptions</code></td>
+<td>shared the same <code>Headers</code> instance</td>
+<td>copies the headers</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-multitabeventbus-storage-keys" class="tsd-anchor-link">2. MultiTabEventBus storage keys<a href="#2-multitabeventbus-storage-keys" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><code>MultiTabEventBus</code> now writes every event under a prefixed key
+(<code>multi-tab-event-bus:&lt;event&gt;</code> by default, see the new <code>keyPrefix</code> option)
+together with a unique id, so repeated events with the same arguments reach
+the other tabs too. In 1.0.0 the key was the bare event name and a repeated
+event with the same arguments was lost.</p>
+<p>New exports: <code>MultiTabEventBusMessage</code> (the stored payload) and
+<code>MultiTabEventBusKeyPrefixDefault</code>.</p>
+<p>Tabs running 1.0.0 and tabs running 1.1.0 don't see each other's events:
+deploy the update to every tab of the application at once. Code that listens
+to the <code>storage</code> event directly must look for the prefixed keys.</p>
+<hr>
+<h2 id="3-checklist" class="tsd-anchor-link">3. Checklist<a href="#3-checklist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ol>
+<li>Update the dependency: <code>npm install @mantlebee/ts-core@^1.1.0</code>.</li>
+<li>Run the type checker (<code>tsc --noEmit</code>): mixed <code>TypedKey</code> types and
+<code>ImmutableObject</code> constructed with a <code>parent</code> show up here.</li>
+<li>Look for <code>getValue</code> with <code>function</code> getters and for <code>firstOrDefault</code> calls
+that relied on the default item for falsy matches.</li>
+<li>Check stored or compared colors that come from <code>WebColorName</code>,
+<code>textToHsl</code>/<code>Color.fromText</code> or <code>Color.hsl()</code> on grays.</li>
+<li>If you use <code>MultiTabEventBus</code>, see <a href="#2-multitabeventbus-storage-keys">2</a>.</li>
+</ol>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#110-upgrading-from-100"><span>1.1.0 — upgrading from 1.0.0</span></a>
+<ul>
+<li><a href="#1-bug-fixes-that-change-behaviour"><span>1. <wbr/>Bug fixes that change behaviour</span></a></li>
+<li><a href="#2-multitabeventbus-storage-keys"><span>2. <wbr/>Multi<wbr/>Tab<wbr/>Event<wbr/>Bus storage keys</span></a></li>
+<li><a href="#3-checklist"><span>3. <wbr/>Checklist</span></a></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">@mantlebee/ts-core</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>
