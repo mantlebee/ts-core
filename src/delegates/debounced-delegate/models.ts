@@ -5,7 +5,8 @@ import { IDebouncedDelegate } from "./interfaces";
 /**
  * Prevents multiple and repetitive executions of a function, in a specific time range.
  * Delays the execution of the delegate while the {@link call} method keeps being
- * called within the configured time range.
+ * called within the configured time range. A scheduled execution can be
+ * cancelled with {@link abort}.
  */
 export class DebouncedDelegate implements IDebouncedDelegate {
   /** Milliseconds of quiet time to wait before the delegate is executed. */
@@ -25,6 +26,16 @@ export class DebouncedDelegate implements IDebouncedDelegate {
     this._delay = delay;
     this._delegate = delegate;
   }
+  public get isPending(): boolean {
+    return this._timeout !== null;
+  }
+  /**
+   * Cancels the pending execution, if any. The arguments of the cancelled
+   * call are discarded; a following {@link call} starts a new wait.
+   */
+  public abort(): void {
+    this.clearTimeout();
+  }
   /**
    * Resets the timeout every time the method is run.
    * When the timeout expires the delegate is executed.
@@ -40,7 +51,7 @@ export class DebouncedDelegate implements IDebouncedDelegate {
    * Stops and clears the pending timeout, if any.
    */
   private clearTimeout(): void {
-    if (this._timeout) {
+    if (this._timeout !== null) {
       clearTimeout(this._timeout);
       this._timeout = null;
     }

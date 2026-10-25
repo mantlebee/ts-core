@@ -7,4 +7,5 @@ Wrappers around a function that **control how or when it runs**.
 - **`debounced-delegate/`** — `IDebouncedDelegate` / `DebouncedDelegate`:
   collapses bursts of calls into one. Each `call(...args)` restarts a timer; the
   wrapped function runs once the calls stop for the configured delay, with the
-  arguments of the last call.
+  arguments of the last call. `abort()` cancels a scheduled run, `isPending`
+  tells whether one is scheduled.
