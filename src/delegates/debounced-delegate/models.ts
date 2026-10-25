@@ -15,9 +15,10 @@ export class DebouncedDelegate implements IDebouncedDelegate {
   private readonly _delegate!: (...args: List<unknown>) => void;
   /**
    * Timeout that is set and reset every time the {@link call} method is called.
-   * When it expires, the delegate is executed.
+   * When it expires, the delegate is executed. Typed after the global
+   * `setTimeout`, so the class works in browsers, Node and jsdom alike.
    */
-  private _timeout: Nullable<number> = null;
+  private _timeout: Nullable<ReturnType<typeof setTimeout>> = null;
   /**
    * @param delegate Function to execute once the calls stop.
    * @param delay Milliseconds of quiet time to wait before executing.
@@ -42,7 +43,7 @@ export class DebouncedDelegate implements IDebouncedDelegate {
    */
   public call(...args: List<unknown>): void {
     this.clearTimeout();
-    this._timeout = window.setTimeout(() => {
+    this._timeout = setTimeout(() => {
       this.clearTimeout();
       this._delegate(...args);
     }, this._delay);
