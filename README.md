@@ -70,6 +70,7 @@ Version 1.1.0 fixes bugs that may change behaviour: see the [1.1.0 release notes
 Version 1.2.0 adds `abort()` and `isPending` to `DebouncedDelegate`: see the [1.2.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.2.0.md).
 Version 1.2.1 makes `DebouncedDelegate` work in Node (no `window` dependency): see the [1.2.1 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.2.1.md).
 Version 1.3.0 adds `AbortableDelegate` and `AsyncLock`: see the [1.3.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.0.md).
+Version 1.3.1 makes `AbortableDelegate` work when read through a proxy: see the [1.3.1 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.1.md).
 
 ## Quick Start
 
@@ -329,7 +330,9 @@ the running call: its `AbortSignal` is aborted and its promise rejects with
 `AbortedException` right away, without waiting for its function to end. When
 the function of a superseded call settles later, its result is discarded and
 its rejection is swallowed, so even a reader that cannot cancel its request is
-safe to wrap.
+safe to wrap. The delegate tells the latest call apart by a sequence number,
+not by object identity, so it behaves the same when the instance is read
+through a proxy that wraps the objects it returns.
 
 ```typescript
 import { AbortableDelegate, isAbortedException } from '@mantlebee/ts-core';

@@ -268,6 +268,61 @@ describe("delegates", () => {
           await expect(b).resolves.toBe("B");
           expect(settled).not.toHaveBeenCalled();
         });
+        describe("read through a membrane proxy", () => {
+          // A membrane wraps every object it returns in a proxy of its own,
+          // as reactive and observable libraries do: a raw object kept in a
+          // closure is never identical to the same object read back from `this`.
+          const membrane = <T extends object>(target: T): T =>
+            new Proxy(target, {
+              get(obj, key, receiver) {
+                const value = Reflect.get(obj, key, receiver);
+                return typeof value === "object" && value !== null ? membrane(value) : value;
+              },
+            });
+          it("a call settles and isRunning goes back to false", async () => {
+            const delegate = membrane(new AbortableDelegate(async () => "ok"));
+            await expect(delegate.call()).resolves.toBe("ok");
+            expect(delegate.isRunning).toBe(false);
+          });
+          it("latest wins: a new call aborts the running one and rejects its promise immediately", async () => {
+            const deferreds = { a: defer<string>(), b: defer<string>() };
+            const signals: AbortSignal[] = [];
+            const delegate = membrane(
+              new AbortableDelegate(async (signal, name: "a" | "b") => {
+                signals.push(signal);
+                return deferreds[name].promise;
+              }),
+            );
+            const a = delegate.call("a");
+            const b = delegate.call("b");
+            const rejection = await a.then(
+              () => undefined,
+              (error: unknown) => error,
+            );
+            expect(rejection).toBeInstanceOf(AbortedException);
+            expect(signals[0].aborted).toBe(true);
+            expect(signals[1].aborted).toBe(false);
+            expect(delegate.isRunning).toBe(true);
+            deferreds.b.resolve("B");
+            await expect(b).resolves.toBe("B");
+            expect(delegate.isRunning).toBe(false);
+          });
+          it("a rejection of the function rejects the call and the delegate is reusable", async () => {
+            const error = new Error("failure");
+            let shouldFail = true;
+            const delegate = membrane(
+              new AbortableDelegate(async () => {
+                if (shouldFail) throw error;
+                return "ok";
+              }),
+            );
+            await expect(delegate.call()).rejects.toBe(error);
+            expect(delegate.isRunning).toBe(false);
+            shouldFail = false;
+            await expect(delegate.call()).resolves.toBe("ok");
+            expect(delegate.isRunning).toBe(false);
+          });
+        });
       });
       describe("isAbortedException", () => {
         it("is true for an AbortedException", () => {

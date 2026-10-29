@@ -5,13 +5,17 @@ import { IAbortableDelegate } from "./interfaces";
 import { AbortableDelegateFunction } from "./types";
 
 /**
- * A call in progress: the controller of its signal and the rejecter of the
- * promise returned by `call`, so that the call can be settled before the
- * function ends.
+ * A call in progress: the token that identifies the call and the function
+ * that aborts it, so that the call can be settled before its function ends.
+ * The controller of the signal and the rejecter of the promise stay in the
+ * closure of `abort` instead of being stored here: an instance read through a
+ * proxy that wraps the objects it returns would hand back a proxied
+ * controller, and a platform object cannot be operated through a proxy.
  */
 type Run = {
-  controller: AbortController;
-  reject: (reason: AbortedException) => void;
+  /** Aborts the signal of the call and rejects its promise with `exception`. */
+  abort: (exception: AbortedException) => void;
+  token: number;
 };
 
 /**
@@ -66,6 +70,15 @@ export class AbortableDelegate<TArgs extends List<unknown>, TResult>
   private readonly _delegate: AbortableDelegateFunction<TArgs, TResult>;
   /** The running call, `null` when none is running. */
   private _current: Nullable<Run> = null;
+  /**
+   * Sequence number of the last call. Each call keeps its own token and,
+   * when its function settles, compares it with the token of the running
+   * call to know whether it is still the latest one. The comparison is on a
+   * primitive on purpose: an instance read through a proxy that wraps the
+   * objects it returns (a reactive or observable membrane) would never find
+   * the raw `Run` of a call equal to the proxied one read back from `this`.
+   */
+  private _token = 0;
 
   /**
    * @param delegate Function to run on each {@link call}; it receives the
@@ -86,9 +99,7 @@ export class AbortableDelegate<TArgs extends List<unknown>, TResult>
     const current = this._current;
     if (current === null) return;
     this._current = null;
-    const exception = new AbortedException();
-    current.controller.abort(exception);
-    current.reject(exception);
+    current.abort(new AbortedException());
   }
   /**
    * Aborts the running call, if any, then runs the function with a fresh
@@ -104,16 +115,22 @@ export class AbortableDelegate<TArgs extends List<unknown>, TResult>
     // call made by one of them is newer than this one, so this one is
     // superseded before it runs.
     if (this._current !== null) return Promise.reject(new AbortedException());
+    const token = ++this._token;
     const controller = new AbortController();
     return new Promise<TResult>((resolve, reject) => {
-      const run: Run = { controller, reject };
-      this._current = run;
+      this._current = {
+        abort: (exception) => {
+          controller.abort(exception);
+          reject(exception);
+        },
+        token,
+      };
       // Settles the call only while it is still the latest one: a superseded
       // call was already rejected by abort(), so its outcome is discarded.
       const settle =
         <TValue>(settler: (value: TValue) => void) =>
         (value: TValue): void => {
-          if (this._current !== run) return;
+          if (this._current?.token !== token) return;
           this._current = null;
           settler(value);
         };
