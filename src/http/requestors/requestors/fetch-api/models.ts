@@ -5,7 +5,12 @@ import {
   IHttpResponseReader,
   JsonHttpResponseReader,
 } from "../../response-readers";
-import { HttpBody, HttpRequestorOptions, HttpSearchParams } from "../../types";
+import {
+  HttpBody,
+  HttpRequestorOptions,
+  HttpSearchParams,
+  HttpSearchParamsSerializer,
+} from "../../types";
 import { createHttpGetQuery, createHttpPostBody } from "../../utils";
 
 /**
@@ -25,7 +30,13 @@ export class FetchApiHttpRequestor
     url: string,
     searchParams?: HttpSearchParams
   ): Promise<TResponse> {
-    const query = searchParams && createHttpGetQuery(searchParams);
+    let query: string | undefined;
+    try {
+      query = searchParams && this.getSearchParamsSerializer()(searchParams);
+    } catch (error) {
+      // A value the serializer can't handle rejects, like every other failure.
+      return Promise.reject(error);
+    }
     if (query) url += `?${query}`;
     const init = this.getRequestInit();
     return fetch(url, init).then((a) => this.onFetch<TResponse>(a));
@@ -63,6 +74,9 @@ export class FetchApiHttpRequestor
   }
   private getResponseReader(): IHttpResponseReader {
     return this.options?.responseReader || new JsonHttpResponseReader();
+  }
+  private getSearchParamsSerializer(): HttpSearchParamsSerializer {
+    return this.options?.searchParamsSerializer || createHttpGetQuery;
   }
   private onFetch<TResponse>(response: Response): Promise<TResponse> {
     if (response.status === 401)

@@ -71,6 +71,7 @@ Version 1.2.0 adds `abort()` and `isPending` to `DebouncedDelegate`: see the [1.
 Version 1.2.1 makes `DebouncedDelegate` work in Node (no `window` dependency): see the [1.2.1 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.2.1.md).
 Version 1.3.0 adds `AbortableDelegate` and `AsyncLock`: see the [1.3.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.0.md).
 Version 1.3.1 makes `AbortableDelegate` work when read through a proxy: see the [1.3.1 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.1.md).
+Version 1.4.0 serializes query string lists as repeated keys, rejects objects and makes the serializer pluggable: see the [1.4.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.4.0.md).
 
 ## Quick Start
 

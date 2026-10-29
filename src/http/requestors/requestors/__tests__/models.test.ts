@@ -2,9 +2,13 @@
 import { Notifier } from "@/notifications";
 
 import { HttpAbortController } from "../../controllers";
-import { HttpResponseException, NotAuthorizedException } from "../../exceptions";
+import {
+  BadRequestException,
+  HttpResponseException,
+  NotAuthorizedException,
+} from "../../exceptions";
 import { BlobHttpResponseReader } from "../../response-readers";
-import { HttpHeaders } from "../../types";
+import { HttpHeaders, HttpSearchParams } from "../../types";
 import { FetchApiHttpRequestor } from "../fetch-api";
 import { InterceptorHttpRequestor } from "../interceptor";
 import { WithExtraHeadersHttpRequestor } from "../with-extra-headers";
@@ -97,6 +101,32 @@ describe("http", () => {
           body: '{"a":1}',
           method: "POST",
         });
+      });
+      it("Sends lists as repeated keys and rejects values it can't serialize", async () => {
+        const fetchMock = mockFetch(() => new Response("{}"));
+        const requestor = new FetchApiHttpRequestor();
+        await requestor.get("/x", { ids: [1, 2] });
+        expect(fetchMock.mock.calls[0][0]).toBe("/x?ids=1&ids=2");
+        const params = { filter: { a: 1 } } as unknown as HttpSearchParams;
+        await expect(requestor.get("/x", params)).rejects.toBeInstanceOf(
+          BadRequestException
+        );
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+      it("Uses the 'searchParamsSerializer' option, when given", async () => {
+        const fetchMock = mockFetch(() => new Response("{}"));
+        const searchParamsSerializer = jest.fn((params: HttpSearchParams) =>
+          Object.entries(params)
+            .map(([key, value]) => `${key}[]=${value}`)
+            .join("&")
+        );
+        const requestor = new FetchApiHttpRequestor({ searchParamsSerializer });
+        await requestor.get("/x", { ids: 1 });
+        expect(fetchMock.mock.calls[0][0]).toBe("/x?ids[]=1");
+        expect(searchParamsSerializer).toHaveBeenCalledWith({ ids: 1 });
+        await requestor.get("/y");
+        expect(fetchMock.mock.calls[1][0]).toBe("/y");
+        expect(searchParamsSerializer).toHaveBeenCalledTimes(1);
       });
       it("'withOptions' keeps the headers and uses the given options", async () => {
         const fetchMock = mockFetch(() => new Response("abc"));
