@@ -16,6 +16,7 @@ A comprehensive library providing foundational components, design patterns, and 
   - [Subscriptions & Observables](#subscriptions--observables)
   - [Delays & Alarms](#delays--alarms)
   - [Delegates](#delegates)
+  - [Async Lock](#async-lock)
   - [Identities & Identity Management](#identities--identity-management)
   - [Loggers](#loggers)
   - [Wizards](#wizards)
@@ -36,6 +37,7 @@ A comprehensive library providing foundational components, design patterns, and 
 - 🏗️ **Design Patterns**: Builder, Factory, and Wizard patterns
 - 🔔 **Event Management**: Typed event buses and subscribable objects
 - ⏱️ **Time Management**: Alarms, delays, and scheduling capabilities
+- 🔁 **Async Control**: Debounced and abortable delegates ("the latest call wins"), async lock ("one at a time")
 - 📝 **Logging**: Flexible logging system with multiple output strategies
 - 🎨 **Color Utilities**: Comprehensive color manipulation and conversion
 - 🔑 **Identity Management**: Numeric and GUID-based identity generators
@@ -67,6 +69,7 @@ Version 1.0.0 contains breaking changes (`Subscribable`, `SubscribableLogger`,
 Version 1.1.0 fixes bugs that may change behaviour: see the [1.1.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.1.0.md).
 Version 1.2.0 adds `abort()` and `isPending` to `DebouncedDelegate`: see the [1.2.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.2.0.md).
 Version 1.2.1 makes `DebouncedDelegate` work in Node (no `window` dependency): see the [1.2.1 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.2.1.md).
+Version 1.3.0 adds `AbortableDelegate` and `AsyncLock`: see the [1.3.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.0.md).
 
 ## Quick Start
 
@@ -318,6 +321,149 @@ debouncedSave.call('v3'); // Only this one will execute after 300ms
 - Auto-save functionality
 - Window resize handlers
 - API call throttling
+
+#### Abortable Delegate
+
+Run an async function so that **the latest call wins**. Each `call()` aborts
+the running call: its `AbortSignal` is aborted and its promise rejects with
+`AbortedException` right away, without waiting for its function to end. When
+the function of a superseded call settles later, its result is discarded and
+its rejection is swallowed, so even a reader that cannot cancel its request is
+safe to wrap.
+
+```typescript
+import { AbortableDelegate, isAbortedException } from '@mantlebee/ts-core';
+
+// The function receives the signal first, then the arguments of the call.
+const search = new AbortableDelegate(async (signal, query: string) => {
+  // Cooperative: the signal is passed to fetch, so the request is cancelled.
+  const response = await fetch(`/api/users?q=${query}`, { signal });
+  const users: User[] = await response.json();
+  // Apply the result only while this call is still the latest one.
+  if (!signal.aborted) render(users);
+  return users;
+});
+
+// Superseded by the next call: each rejects with AbortedException, which must
+// be handled like any other rejection.
+search.call('t').catch(() => undefined);
+search.call('ts').catch(() => undefined);
+const users = await search.call('tsc'); // the result of 'tsc'
+
+// A caller that awaits a call ignores the rejection of a superseded one.
+try {
+  await search.call('type');
+} catch (error) {
+  if (!isAbortedException(error)) throw error;
+}
+```
+
+A function that cannot cancel its work checks the signal after each `await`
+and skips its side effects:
+
+```typescript
+const load = new AbortableDelegate(async (signal, id: number) => {
+  const item = await repository.get(id); // no cancellation support
+  if (signal.aborted) return item;       // superseded: do not touch the state
+  selected = item;
+  return item;
+});
+```
+
+A superseded call **rejects**: it does not resolve with the result of the call
+that replaced it, because its caller awaited a result for *its* arguments.
+`abort()` aborts the running call with the same rejection; `isRunning` is
+`true` from the first `call()` until the latest call settles. A `call()` made
+from inside the function supersedes the outer call like any other.
+
+`AbortableDelegate` does not debounce. Compose it with `DebouncedDelegate`
+when a quiet time is wanted: type, wait, then the latest search wins.
+
+```typescript
+import { AbortableDelegate, DebouncedDelegate } from '@mantlebee/ts-core';
+
+const search = new AbortableDelegate(async (signal, query: string) => {
+  const response = await fetch(`/api/users?q=${query}`, { signal });
+  if (!signal.aborted) render(await response.json());
+});
+const debouncedSearch = new DebouncedDelegate(
+  (query) => search.call(query as string).catch(() => undefined),
+  300
+);
+
+input.addEventListener('input', () => debouncedSearch.call(input.value));
+```
+
+**Use Cases:**
+- Search-as-you-type where only the latest query matters
+- A data source whose `read()` must expose the latest request only
+- Reloading a view while a previous load is in flight
+- Pages of a virtual scroller superseded by a new filter
+
+### Async Lock
+
+Run async functions **one at a time** on a shared resource. `AsyncLock` is an
+exclusive, non-reentrant, FIFO lock: `run(fn)` runs `fn` once every function
+enqueued before it has settled, and resolves or rejects with the outcome of
+`fn`. A failure releases the lock like a success does, so the next function
+starts anyway.
+
+```typescript
+import { AsyncLock } from '@mantlebee/ts-core';
+
+const lock = new AsyncLock();
+
+// Both reads write the same filter of the same source: they never overlap.
+const suggestions = lock.run(async () => {
+  source.filter = { name: { contains: 'a' } };
+  return source.read();
+});
+const selected = lock.run(async () => {
+  source.filter = { id: { equal: 42 } };
+  return source.read();
+});
+
+console.log(lock.isLocked);     // true: the first read is running
+console.log(lock.pendingCount); // 1: the second read is waiting
+```
+
+Combined with `AbortableDelegate`, a call that was superseded while waiting
+for the lock checks its signal as soon as it starts and returns at once. A
+combobox, for example, shares one lock between its three kinds of reads and
+gives each kind its own delegate:
+
+```typescript
+import { AbortableDelegate, AsyncLock } from '@mantlebee/ts-core';
+
+const lock = new AsyncLock();
+const search = new AbortableDelegate(async (signal, query: string) =>
+  lock.run(async () => {
+    if (signal.aborted) return; // superseded while waiting: nothing to do
+    applyQueryFilter(query);
+    await dataSource.read();
+    if (!signal.aborted) suggestions = dataSource.items;
+  })
+);
+const resolveValue = new AbortableDelegate(async (signal, value: number) =>
+  lock.run(async () => {
+    if (signal.aborted) return;
+    applyValueFilter(value);
+    await dataSource.read();
+    removeValueFilter();
+    if (!signal.aborted) selected = dataSource.items[0];
+  })
+);
+```
+
+The lock is **not reentrant**: a `run()` called from inside a running function
+waits for that function, which waits for the inner `run()`, so it never
+completes. Run the inner work directly instead.
+
+**Use Cases:**
+- Several readers writing the same filter of one data source
+- Serializing writes to a file, a storage key or a connection
+- Queueing the pages of a scroller behind the search that produced them
+- Making an initialization step run once before its dependants
 
 ### Identities & Identity Management
 
@@ -823,7 +969,79 @@ input.split('').forEach((char, i) => {
 // Only one search call will be made after user stops typing
 ```
 
-### Example 4: Multi-Step Workflow
+### Example 4: Latest Read Wins
+
+A data source whose `read()` exposes the latest request only: `items` comes
+from the read requested last, not from the one that resolves last, and
+`isReading` stays `true` until that read settles.
+
+```typescript
+import { AbortableDelegate, isAbortedException } from '@mantlebee/ts-core';
+
+class DataSource<TItem> {
+  public items: TItem[] = [];
+  private readonly _read = new AbortableDelegate(async (signal) => {
+    const items = await this.reader(this.buildPayload(), signal);
+    // A reader that ignores the signal still resolves: assign only while this
+    // read is the latest one.
+    if (!signal.aborted) this.items = items;
+    return items;
+  });
+
+  public constructor(
+    private readonly reader: (payload: unknown, signal: AbortSignal) => Promise<TItem[]>
+  ) {}
+
+  public get isReading(): boolean {
+    return this._read.isRunning;
+  }
+  /** Rejects with `AbortedException` when a newer read supersedes it. */
+  public read(): Promise<TItem[]> {
+    return this._read.call();
+  }
+  private buildPayload(): unknown {
+    return {};
+  }
+}
+
+const source = new DataSource((payload, signal) =>
+  fetch('/api/items', { method: 'POST', body: JSON.stringify(payload), signal })
+    .then((response) => response.json())
+);
+
+source.read().catch((error) => { if (!isAbortedException(error)) throw error; });
+await source.read(); // the only read that assigns `items`
+```
+
+### Example 5: Search Query with a Debounce
+
+A search box: the query is debounced, then given to an abortable delegate, so
+that a new query supersedes the previous one and `isSearching` mirrors the
+latest call only.
+
+```typescript
+import { AbortableDelegate, DebouncedDelegate, isAbortedException } from '@mantlebee/ts-core';
+
+let results: string[] = [];
+
+const search = new AbortableDelegate(async (signal, query: string) => {
+  const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal });
+  const found: string[] = await response.json();
+  if (!signal.aborted) results = found; // apply only when still the latest
+});
+const debounced = new DebouncedDelegate((query) => {
+  search.call(query as string).catch((error) => {
+    if (!isAbortedException(error)) console.error(error);
+  });
+}, 250);
+
+const isSearching = () => search.isRunning;
+
+debounced.call('t');
+debounced.call('ts'); // only this query runs, 250ms after the last keystroke
+```
+
+### Example 6: Multi-Step Workflow
 
 ```typescript
 import { Wizard, IWizardStep } from '@mantlebee/ts-core';

@@ -26,6 +26,7 @@ concrete implementations.
 | [`files/`](./files) | Reading files and blobs (browser) |
 | [`http/`](./http) | Pluggable HTTP client on top of the Fetch API |
 | [`identities/`](./identities) | Generating ids and building type-safe keys |
+| [`locks/`](./locks) | Coordinating async work on a shared resource (one at a time) |
 | [`loggers/`](./loggers) | Logging abstraction with pluggable sinks |
 | [`notifications/`](./notifications) | Sending notifications to the user through a pluggable sink |
 | [`parsers/`](./parsers) | Turning text into structured data |

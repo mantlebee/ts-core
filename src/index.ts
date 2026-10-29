@@ -11,6 +11,7 @@ export * from "./exceptions";
 export * from "./files";
 export * from "./http";
 export * from "./identities";
+export * from "./locks";
 export * from "./loggers";
 export * from "./notifications";
 export * from "./parsers";
