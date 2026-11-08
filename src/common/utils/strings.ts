@@ -87,11 +87,15 @@ const HtmlEscapes: Dictionary<string> = {
  * escapeHtml(`<a title="x">&</a>`)
  * // "&lt;a title=&quot;x&quot;&gt;&amp;&lt;/a&gt;"
  * ```
- * @param str Text to escape.
+ *
+ * Every other char is left untouched, so text without those five chars is
+ * returned unchanged. Text that already contains entities is escaped again
+ * (`&amp;` becomes `&amp;amp;`): escape raw text once, right before inserting it.
+ * @param value Text to escape.
  * @returns the text with `& < > " '` replaced by their HTML entities.
  */
-export function escapeHtml(str: string): string {
-  return str.replace(/[&<>"']/g, (a) => HtmlEscapes[a]);
+export function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (a) => HtmlEscapes[a]);
 }
 
 /**

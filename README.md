@@ -8,7 +8,7 @@ A comprehensive library providing foundational components, design patterns, and 
 
 - [Features](#features)
 - [Installation](#installation)
-- [Upgrading to 1.0](#upgrading-to-10)
+- [Upgrading](#upgrading)
 - [Quick Start](#quick-start)
 - [Core Concepts](#core-concepts)
   - [Common Types & Utilities](#common-types--utilities)
@@ -62,7 +62,7 @@ Or with yarn:
 yarn add @mantlebee/ts-core
 ```
 
-## Upgrading to 1.0
+## Upgrading
 
 Version 1.0.0 contains breaking changes (`Subscribable`, `SubscribableLogger`,
 `Exception`, no deep imports). See the [1.0.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.0.0.md) for the migration guide.
@@ -72,6 +72,7 @@ Version 1.2.1 makes `DebouncedDelegate` work in Node (no `window` dependency): s
 Version 1.3.0 adds `AbortableDelegate` and `AsyncLock`: see the [1.3.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.0.md).
 Version 1.3.1 makes `AbortableDelegate` work when read through a proxy: see the [1.3.1 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.3.1.md).
 Version 1.4.0 serializes query string lists as repeated keys, rejects objects and makes the serializer pluggable: see the [1.4.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.4.0.md).
+Version 1.5.0 adds `JsonValue`, `IsoDateTime` and their checks, ships ESM type declarations (`.d.mts`) and compiles to ES2020 (browsers since 2020, Node.js 14+): see the [1.5.0 release notes](https://github.com/mantlebee/ts-core/blob/main/docs/release-notes/1.5.0.md).
 
 ## Quick Start
 
@@ -111,14 +112,18 @@ The **common** module provides fundamental types and utility functions used thro
 
 #### Types
 
-- `List<T>` - Array type alias
-- `Dictionary<TValue, TKey>` - Object mapping keys (strings by default) to `TValue`
-- `Nullable<T>` - Type that can be T or null
-- `Undefinable<T>` - Type that can be T or undefined
-- `Any` - Any type alias
-- `KeyOf<T>` - Union of all keys of type T
-- `ConstructorOf<T>` - Constructor function type
-- `ValueOrGetter<TValue, TArg>` - A value, or a function returning it
+| Type | Description |
+| --- | --- |
+| `List<T>` | Array type alias |
+| `Dictionary<TValue, TKey>` | Object mapping keys (strings by default) to `TValue` |
+| `Nullable<T>` | `T` or `null` |
+| `Undefinable<T>` | `T` or `undefined` |
+| `Any` | Documented `any` alias |
+| `KeyOf<T>` | Union of all keys of type `T` |
+| `ConstructorOf<T>` | Constructor function type |
+| `ValueOrGetter<TValue, TArg>` | A value, or a function returning it |
+| `JsonValue` | A value that survives a `JSON.stringify` / `JSON.parse` round trip; check it with `isJsonValue` |
+| `IsoDateTime` | ISO 8601 date time in UTC (`YYYY-MM-DDTHH:mm:ss.sssZ`, milliseconds optional); check it with `isIsoDateTime` |
 
 #### Utility Functions
 
@@ -152,6 +157,27 @@ isObject(null) // false
 
 objectHasKey({name: 'John'}, 'name') // true
 objectHasKey({name: 'John'}, 'age') // false
+```
+
+**JSON, Date Time and HTML Utilities:**
+```typescript
+import { escapeHtml, isIsoDateTime, isJsonValue, JsonValue } from '@mantlebee/ts-core';
+
+// Recursive check of JSON-serializable values (narrows unknown to JsonValue)
+const payload: unknown = { tags: ['a', 'b'], count: 2 };
+if (isJsonValue(payload)) {
+  const json: JsonValue = payload;
+}
+isJsonValue({ at: new Date() }) // false: dates, undefined, NaN, functions and cycles are rejected
+
+// ISO 8601 in UTC, shape and calendar
+isIsoDateTime('2024-02-29T23:59:59.999Z') // true
+isIsoDateTime('2023-02-29T00:00:00Z')     // false, not a leap year
+isIsoDateTime('2026-01-01T00:00:00+01:00') // false, only Z is accepted
+
+// Escape & < > " ' before inserting text into HTML
+escapeHtml(`<b title="x">Tom & 'Jerry'</b>`)
+// "&lt;b title=&quot;x&quot;&gt;Tom &amp; &#39;Jerry&#39;&lt;/b&gt;"
 ```
 
 **String, Number, and Date Utilities:**

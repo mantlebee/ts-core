@@ -35,6 +35,27 @@ describe("common", () => {
         });
         it("Leaves text without special chars unchanged", () => {
           expect(escapeHtml("hello")).toBe("hello");
+          expect(escapeHtml("")).toBe("");
+        });
+        it("Replaces every occurrence of each char", () => {
+          expect(escapeHtml("&&<<>>\"\"''")).toBe(
+            "&amp;&amp;&lt;&lt;&gt;&gt;&quot;&quot;&#39;&#39;"
+          );
+        });
+        it("Leaves every other char untouched, including whitespace, unicode and backticks", () => {
+          const text = "àèì € 😀 `x` / \\ = \n\t #;";
+          expect(escapeHtml(text)).toBe(text);
+          expect(escapeHtml(`a<${text}>`)).toBe(`a&lt;${text}&gt;`);
+        });
+        it("Is idempotent on text without special chars", () => {
+          const escaped = escapeHtml("Tom & Jerry");
+          expect(escapeHtml(escapeHtml("plain text"))).toBe("plain text");
+          expect(escapeHtml(escaped.replace(/&/g, "and"))).toBe(
+            escaped.replace(/&/g, "and")
+          );
+        });
+        it("Escapes again the & of existing entities", () => {
+          expect(escapeHtml("&amp;")).toBe("&amp;amp;");
         });
       });
       describe("escapeRegexSpecialChars", () => {

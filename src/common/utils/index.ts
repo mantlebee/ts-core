@@ -4,6 +4,7 @@ export * from "./chars";
 export * from "./dates";
 export * from "./enums";
 export * from "./functions";
+export * from "./json";
 export * from "./numbers";
 export * from "./objects";
 export * from "./promises";

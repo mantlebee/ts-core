@@ -18,8 +18,10 @@ library.
   `createSlug`, `escapeHtml`, `escapeRegexSpecialChars`, `formatString`,
   `generateGuid`, `createHash`.
 - **`functions.ts`** — `isFunction`.
+- **`json.ts`** — `isJsonValue` (recursive check of `JsonValue`).
 - **`chars.ts`** — character-range builders (`getLowercaseChars`,
   `getUppercaseChars`, `getNumberChars`, `getSpecialChars`, …).
-- **[`dates/`](./dates)** — `isDate`, `dateAsUtc` and the `DateOffset`.
+- **[`dates/`](./dates)** — `isDate`, `dateAsUtc`, the `DateOffset`, the
+  `IsoDateTime` type and `isIsoDateTime`.
 - **[`promises/`](./promises)** — the deferred-promise abstraction and its
   implementations.

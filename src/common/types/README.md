@@ -8,11 +8,15 @@ are the aliases and utility types the rest of the library is written in terms of
 - **`data.ts`** — `Any` (an intentional, documented `any`), `Nullable<T>`,
   `Undefinable<T>`.
 - **`arrays.ts`** — `List<TItem>`.
+- **`json.ts`** — `JsonValue`, checked at runtime by `isJsonValue`.
 - **`objects.ts`** — `Dictionary<TValue, TKey>`, `KeyOf`, `KeysOf`,
   `OptionalKeysOf`, `WithRequiredKey`.
 - **`classes.ts`** — `ConstructorOf<TClass>`.
 - **`strings.ts`** — `Stringable`.
 - **`values.ts`** — `ValueOrGetter<TValue, TArg>`.
+
+`IsoDateTime` lives with the date utilities, in
+[`common/utils/dates`](../utils/dates).
 
 The lifecycle interfaces live with their implementations:
 [`IDisposable`](../classes/disposable) and
