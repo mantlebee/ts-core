@@ -11,12 +11,14 @@
 <li><a href="../modules/index.html">index</a></li>
 <li><a href="" aria-current="page">HttpSearchParams</a></li></ul>
 <h1>Type Alias HttpSearchParams</h1></div>
-<div class="tsd-signature"><span class="tsd-kind-type-alias">HttpSearchParams</span><span class="tsd-signature-symbol">:</span> <a href="index.Dictionary.html" class="tsd-signature-type tsd-kind-type-alias">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></div>
-<div class="tsd-comment tsd-typography"><p>Query string parameters of a GET request. <code>null</code> and <code>undefined</code> values are
-skipped.</p>
+<div class="tsd-signature"><span class="tsd-kind-type-alias">HttpSearchParams</span><span class="tsd-signature-symbol">:</span> <a href="index.Dictionary.html" class="tsd-signature-type tsd-kind-type-alias">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><br/>    <span class="tsd-signature-symbol">|</span> <a href="index.HttpSearchParamValue.html" class="tsd-signature-type tsd-kind-type-alias">HttpSearchParamValue</a><br/>    <span class="tsd-signature-symbol">|</span> <a href="index.List.html" class="tsd-signature-type tsd-kind-type-alias">List</a><span class="tsd-signature-symbol">&lt;</span><a href="index.HttpSearchParamValue.html" class="tsd-signature-type tsd-kind-type-alias">HttpSearchParamValue</a> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">null</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span><br/>    <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">null</span><br/>    <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">&gt;</span></div>
+<div class="tsd-comment tsd-typography"><p>Query string parameters of a GET request: <a href="index.HttpSearchParamValue.html" class="tsd-kind-type-alias">HttpSearchParamValue</a>s, or
+lists of them sent as repeated keys (<code>a=1&amp;a=2</code>). <code>null</code> and <code>undefined</code>
+values are skipped, inside lists too. Other objects and nested lists are
+not supported by the default serializer, see <a href="../functions/index.createHttpGetQuery.html" class="tsd-kind-function">createHttpGetQuery</a>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/05f241bfa0732924d38b9189cba55d6cc7a5fd09/src/http/requestors/types.ts#L30">src/http/requestors/types.ts:30</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/mantlebee/ts-core/blob/00a865973163415cfed99fb5ea4e5e83a46314fd/src/http/requestors/types.ts#L44">src/http/requestors/types.ts:44</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

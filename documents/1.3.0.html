@@ -1,0 +1,201 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>1.3.0 | @mantlebee/ts-core</title><meta name="description" content="Documentation for @mantlebee/ts-core"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">@mantlebee/ts-core</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="" aria-current="page">1.3.0</a></li></ul></div>
+<div class="tsd-panel tsd-typography"><h1 id="130-upgrading-from-121" class="tsd-anchor-link">1.3.0 — upgrading from 1.2.1<a href="#130-upgrading-from-121" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>Version 1.3.0 adds two primitives for async calls that overlap:
+<code>AbortableDelegate</code> (&quot;the latest call wins&quot;) and <code>AsyncLock</code> (&quot;one call at a
+time on a shared resource&quot;). There are no breaking changes and no changes to
+existing APIs: existing code keeps compiling and behaving the same.</p>
+<ul>
+<li><a href="#1-abortabledelegate">1. AbortableDelegate</a></li>
+<li><a href="#2-asynclock">2. AsyncLock</a></li>
+<li><a href="#3-checklist">3. Checklist</a></li>
+</ul>
+<hr>
+<h2 id="1-abortabledelegate" class="tsd-anchor-link">1. AbortableDelegate<a href="#1-abortabledelegate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Running the same async function repeatedly (a search as the user types, a
+reload while a filtered read is in flight) needs a rule for the calls that
+overlap. Without one, the state ends up with the result of the call that
+<strong>resolves</strong> last instead of the one <strong>requested</strong> last, and a &quot;loading&quot; flag
+goes off when the first call ends while the second is still running.</p>
+<p><code>AbortableDelegate</code> wraps an async function so that <strong>the latest call wins</strong>.
+It sits next to <code>DebouncedDelegate</code> in <code>delegates/</code> and uses the standard
+<code>AbortController</code> / <code>AbortSignal</code>, already used by <code>HttpAbortController</code>.
+Browsers and Node ≥ 17.3 support everything described below; on Node 15 to
+17.2 the class works, but <code>signal.reason</code> is <code>undefined</code> and
+<code>signal.throwIfAborted()</code> does not exist.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>1.2.1</th>
+<th>1.3.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AbortableDelegate&lt;TArgs, TResult&gt;</code></td>
+<td>—</td>
+<td>runs <code>(signal, ...args) =&gt; Promise&lt;TResult&gt;</code>; a new <code>call()</code> aborts the running one</td>
+</tr>
+<tr>
+<td><code>AbortableDelegate.call(...args)</code></td>
+<td>—</td>
+<td>resolves with the result of this call; rejects with <code>AbortedException</code> when superseded or aborted</td>
+</tr>
+<tr>
+<td><code>AbortableDelegate.abort()</code></td>
+<td>—</td>
+<td>aborts the running call, if any; no-op otherwise</td>
+</tr>
+<tr>
+<td><code>AbortableDelegate.isRunning</code></td>
+<td>—</td>
+<td><code>true</code> from a <code>call()</code> until the <strong>latest</strong> call settles</td>
+</tr>
+<tr>
+<td><code>IAbortableDelegate&lt;TArgs, TResult&gt;</code></td>
+<td>—</td>
+<td>the contract of the class</td>
+</tr>
+<tr>
+<td><code>AbortableDelegateFunction&lt;TArgs, TResult&gt;</code></td>
+<td>—</td>
+<td>the type of the wrapped function: <code>(signal: AbortSignal, ...args: TArgs) =&gt; Promise&lt;TResult&gt;</code></td>
+</tr>
+<tr>
+<td><code>AbortedException</code></td>
+<td>—</td>
+<td>rejection of a superseded or aborted call; also the <code>reason</code> of its signal</td>
+</tr>
+<tr>
+<td><code>isAbortedException(error)</code></td>
+<td>—</td>
+<td>type guard, so callers can ignore the rejection of a superseded call in one line</td>
+</tr>
+</tbody>
+</table>
+<p>The semantics, in short:</p>
+<ul>
+<li>A <code>call()</code> aborts the running call: its signal is aborted with the
+<code>AbortedException</code> as <code>reason</code>, and its promise rejects with that exception
+<strong>immediately</strong>, not when its function eventually settles.</li>
+<li>A function that ignores the signal still cannot win: when the function of a
+superseded call settles later, its result is discarded and its rejection is
+swallowed. A reader that cannot cancel its request is therefore safe to wrap.</li>
+<li>A cooperative function passes the signal to <code>fetch</code>, or checks
+<code>signal.aborted</code> (or calls <code>signal.throwIfAborted()</code>) after each <code>await</code> and
+skips its side effects.</li>
+<li>A rejection or a synchronous throw of the function rejects the call with that
+error; the delegate is reusable afterwards.</li>
+<li>A <code>call()</code> made from inside the function supersedes the outer call.</li>
+<li>There is no implicit debounce: compose with <code>DebouncedDelegate</code> for a quiet
+time.</li>
+</ul>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">AbortableDelegate</span><span class="hl-1">, </span><span class="hl-4">isAbortedException</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">search</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">AbortableDelegate</span><span class="hl-1">(</span><span class="hl-6">async</span><span class="hl-1"> (</span><span class="hl-4">signal</span><span class="hl-1">, </span><span class="hl-4">query</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">response</span><span class="hl-1"> = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-0">fetch</span><span class="hl-1">(</span><span class="hl-2">`/api/users?q=</span><span class="hl-6">${</span><span class="hl-4">query</span><span class="hl-6">}</span><span class="hl-2">`</span><span class="hl-1">, { </span><span class="hl-4">signal</span><span class="hl-1"> });</span><br/><span class="hl-1">  </span><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">users</span><span class="hl-1">: </span><span class="hl-9">User</span><span class="hl-1">[] = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">response</span><span class="hl-1">.</span><span class="hl-0">json</span><span class="hl-1">();</span><br/><span class="hl-1">  </span><span class="hl-3">if</span><span class="hl-1"> (!</span><span class="hl-4">signal</span><span class="hl-1">.</span><span class="hl-4">aborted</span><span class="hl-1">) </span><span class="hl-0">render</span><span class="hl-1">(</span><span class="hl-4">users</span><span class="hl-1">);</span><br/><span class="hl-1">  </span><span class="hl-3">return</span><span class="hl-1"> </span><span class="hl-4">users</span><span class="hl-1">;</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-4">search</span><span class="hl-1">.</span><span class="hl-0">call</span><span class="hl-1">(</span><span class="hl-2">&quot;t&quot;</span><span class="hl-1">).</span><span class="hl-0">catch</span><span class="hl-1">((</span><span class="hl-4">error</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-3">if</span><span class="hl-1"> (!</span><span class="hl-0">isAbortedException</span><span class="hl-1">(</span><span class="hl-4">error</span><span class="hl-1">)) </span><span class="hl-3">throw</span><span class="hl-1"> </span><span class="hl-4">error</span><span class="hl-1">; </span><span class="hl-5">// superseded: ignore</span><br/><span class="hl-1">});</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">users</span><span class="hl-1"> = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">search</span><span class="hl-1">.</span><span class="hl-0">call</span><span class="hl-1">(</span><span class="hl-2">&quot;ts&quot;</span><span class="hl-1">); </span><span class="hl-5">// the result of &quot;ts&quot;</span>
+</code><button type="button">Copy</button></pre>
+
+<p>A superseded call <strong>rejects</strong> rather than resolving with the result of the
+call that replaced it: the caller awaited a result for <em>its</em> arguments and must
+not take another's for it. <code>isAbortedException</code> keeps the <code>catch</code> to one line.</p>
+<hr>
+<h2 id="2-asynclock" class="tsd-anchor-link">2. AsyncLock<a href="#2-asynclock" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>When several independent delegates share one resource (three kinds of reads
+writing the same filter of one data source), &quot;the latest call wins&quot; is the
+wrong rule between them: each must complete, one after the other.</p>
+<p><code>AsyncLock</code> is an exclusive, non-reentrant, FIFO lock, in the new <code>locks/</code>
+folder: <code>run(fn)</code> runs <code>fn</code> once every function enqueued before it has
+settled. The lock is held for the duration of <code>fn</code> and released whatever its
+outcome, so a failure does not block the next function. The folder is new
+because a lock is shared by many callers, while <code>delegates/</code> wraps one
+function.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>1.2.1</th>
+<th>1.3.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AsyncLock</code></td>
+<td>—</td>
+<td>exclusive, non-reentrant, FIFO lock</td>
+</tr>
+<tr>
+<td><code>AsyncLock.run(fn)</code></td>
+<td>—</td>
+<td>runs <code>fn</code> once every function enqueued before it has settled; resolves or rejects with its outcome</td>
+</tr>
+<tr>
+<td><code>AsyncLock.isLocked</code></td>
+<td>—</td>
+<td><code>true</code> while a function is running</td>
+</tr>
+<tr>
+<td><code>AsyncLock.pendingCount</code></td>
+<td>—</td>
+<td>number of functions waiting for the lock</td>
+</tr>
+<tr>
+<td><code>IAsyncLock</code></td>
+<td>—</td>
+<td>the contract of the class</td>
+</tr>
+</tbody>
+</table>
+<p>Reentrancy is a deadlock: a <code>run()</code> called from inside a running function
+waits for that function, which waits for the inner <code>run()</code>. An async caller
+has no identity, so it cannot be detected cheaply; it is a caller error.</p>
+<p>Combined with <code>AbortableDelegate</code>, a function enqueued by a call that was
+superseded while waiting for the lock checks its signal as soon as it starts
+and returns at once:</p>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">AbortableDelegate</span><span class="hl-1">, </span><span class="hl-4">AsyncLock</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@mantlebee/ts-core&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">lock</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">AsyncLock</span><span class="hl-1">();</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">search</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">AbortableDelegate</span><span class="hl-1">(</span><span class="hl-6">async</span><span class="hl-1"> (</span><span class="hl-4">signal</span><span class="hl-1">, </span><span class="hl-4">query</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><br/><span class="hl-1">  </span><span class="hl-4">lock</span><span class="hl-1">.</span><span class="hl-0">run</span><span class="hl-1">(</span><span class="hl-6">async</span><span class="hl-1"> () </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-3">if</span><span class="hl-1"> (</span><span class="hl-4">signal</span><span class="hl-1">.</span><span class="hl-4">aborted</span><span class="hl-1">) </span><span class="hl-3">return</span><span class="hl-1">; </span><span class="hl-5">// superseded while waiting</span><br/><span class="hl-1">    </span><span class="hl-0">applyQueryFilter</span><span class="hl-1">(</span><span class="hl-4">query</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">dataSource</span><span class="hl-1">.</span><span class="hl-0">read</span><span class="hl-1">();</span><br/><span class="hl-1">    </span><span class="hl-3">if</span><span class="hl-1"> (!</span><span class="hl-4">signal</span><span class="hl-1">.</span><span class="hl-4">aborted</span><span class="hl-1">) </span><span class="hl-4">suggestions</span><span class="hl-1"> = </span><span class="hl-4">dataSource</span><span class="hl-1">.</span><span class="hl-4">items</span><span class="hl-1">;</span><br/><span class="hl-1">  })</span><br/><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="3-checklist" class="tsd-anchor-link">3. Checklist<a href="#3-checklist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ol>
+<li>Update the dependency: <code>npm install @mantlebee/ts-core@^1.3.0</code>.</li>
+<li>Where a state must reflect the <strong>latest</strong> of overlapping async calls (a
+data source <code>read()</code>, a search as you type), wrap the function in an
+<code>AbortableDelegate</code> and ignore the rejection of superseded calls with
+<code>isAbortedException</code>.</li>
+<li>Where several delegates write the <strong>same</strong> resource, run their functions
+under one <code>AsyncLock</code> and check the signal as the first thing inside.</li>
+</ol>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#130-upgrading-from-121"><span>1.3.0 — upgrading from 1.2.1</span></a>
+<ul>
+<li><a href="#1-abortabledelegate"><span>1. <wbr/>Abortable<wbr/>Delegate</span></a></li>
+<li><a href="#2-asynclock"><span>2. <wbr/>Async<wbr/>Lock</span></a></li>
+<li><a href="#3-checklist"><span>3. <wbr/>Checklist</span></a></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">@mantlebee/ts-core</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>
